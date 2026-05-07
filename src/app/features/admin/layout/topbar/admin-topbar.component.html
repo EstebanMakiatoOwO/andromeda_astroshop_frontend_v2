@@ -1,0 +1,52 @@
+<header class="flex items-center h-[52px] px-6 bg-surface-3 border-b border-line shrink-0">
+
+  <!-- Breadcrumbs -->
+  <nav aria-label="Breadcrumb">
+    <ol class="flex items-center gap-1 text-sm">
+      @for (crumb of crumbs(); track crumb.label; let last = $last) {
+        <li class="flex items-center gap-1">
+          @if (!last) {
+            @if (crumb.route) {
+              <a [routerLink]="crumb.route" class="font-mono text-xs text-ink-3 hover:text-ink-1 transition-colors">
+                {{ crumb.label }}
+              </a>
+            } @else {
+              <span class="font-mono text-xs text-ink-3">{{ crumb.label }}</span>
+            }
+            <span class="font-mono text-xs text-ink-3 select-none" aria-hidden="true">/</span>
+          } @else {
+            <h2 class="text-sm font-semibold text-ink-1 m-0">{{ crumb.label }}</h2>
+          }
+        </li>
+      }
+    </ol>
+  </nav>
+
+  <div class="flex-1"></div>
+
+  <!-- Theme toggle -->
+  <button
+    (click)="themeService.toggle()"
+    class="p-2 rounded-lg text-ink-3 hover:text-ink-1 hover:bg-surface-4 transition-colors"
+    [attr.aria-label]="themeService.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+  >
+    @if (themeService.isDark()) {
+      <!-- Sun icon — switch to light -->
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    } @else {
+      <!-- Moon icon — switch to dark -->
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+    }
+  </button>
+
+  <!-- Extra actions slot -->
+  <div class="flex items-center gap-2 ml-2">
+    <ng-content />
+  </div>
+
+</header>

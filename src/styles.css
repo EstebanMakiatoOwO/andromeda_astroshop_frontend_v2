@@ -1,3 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  /* Surfaces */
+  --color-surface-1: oklch(9% 0.015 280);
+  --color-surface-2: oklch(12% 0.018 280);
+  --color-surface-3: oklch(16% 0.022 280);
+  --color-surface-4: oklch(20% 0.025 280);
+
+  /* Borders */
+  --color-line: oklch(22% 0.02 280);
+  --color-line-strong: oklch(30% 0.03 280);
+
+  /* Text hierarchy */
+  --color-ink-1: oklch(96% 0.01 280);
+  --color-ink-2: oklch(75% 0.015 280);
+  --color-ink-3: oklch(50% 0.015 280);
+
+  /* Accent — cosmic purple */
+  --color-accent: oklch(62% 0.22 295);
+  --color-accent-soft: oklch(62% 0.22 295 / 15%);
+  --color-accent-hover: oklch(68% 0.22 295);
+
+  /* Warn — amber */
+  --color-warn: oklch(78% 0.17 80);
+  --color-warn-soft: oklch(78% 0.17 80 / 15%);
+
+  /* Error — red */
+  --color-error: oklch(62% 0.22 25);
+  --color-error-soft: oklch(62% 0.22 25 / 15%);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Sidebar widths */
+  --spacing-sidebar-expanded: 15rem;
+  --spacing-sidebar-collapsed: 3.5rem;
+}
+
+/* ── Light mode overrides ── */
+:root.light {
+  --color-surface-1: oklch(97% 0.005 280);
+  --color-surface-2: oklch(94% 0.008 280);
+  --color-surface-3: oklch(100% 0 0);
+  --color-surface-4: oklch(90% 0.01 280);
+
+  --color-line: oklch(86% 0.012 280);
+  --color-line-strong: oklch(78% 0.015 280);
+
+  --color-ink-1: oklch(12% 0.015 280);
+  --color-ink-2: oklch(32% 0.015 280);
+  --color-ink-3: oklch(55% 0.015 280);
+
+  --color-accent: oklch(55% 0.22 295);
+  --color-accent-soft: oklch(55% 0.22 295 / 12%);
+  --color-accent-hover: oklch(60% 0.22 295);
+
+  --color-warn: oklch(62% 0.17 70);
+  --color-warn-soft: oklch(62% 0.17 70 / 12%);
+
+  --color-error: oklch(52% 0.22 25);
+  --color-error-soft: oklch(52% 0.22 25 / 12%);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    background-color: var(--color-surface-1);
+    color: var(--color-ink-2);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
