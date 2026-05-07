@@ -47,26 +47,61 @@ function buildSparkline(values: number[]): string {
     .join(' ');
 }
 
+const CHART_W = 600;
+const CHART_PAD = 3;
+
 function buildSalesLinePoints(points: SalesPoint[]): string {
   if (points.length === 0) return '';
-  if (points.length === 1) return `0,70 600,70`;
+  if (points.length === 1) return `${CHART_PAD},70 ${CHART_W - CHART_PAD},70`;
   const amounts = points.map(p => p.amount);
   const min = Math.min(...amounts);
   const max = Math.max(...amounts);
   const range = max - min || 1;
   return points
     .map((p, i) => {
-      const x = ((i / (points.length - 1)) * 600).toFixed(1);
+      const x = (CHART_PAD + (i / (points.length - 1)) * (CHART_W - 2 * CHART_PAD)).toFixed(1);
       const y = (140 - ((p.amount - min) / range) * 120).toFixed(1);
       return `${x},${y}`;
     })
     .join(' ');
 }
 
+interface ChartPoint {
+  x: number;
+  y: number;
+  date: string;
+  amount: string;
+}
+
+interface TipPos {
+  cx: number;
+  cy: number;
+  point: ChartPoint;
+}
+
+function buildChartPoints(points: SalesPoint[]): ChartPoint[] {
+  if (points.length === 0) return [];
+  if (points.length === 1) return [{
+    x: CHART_W / 2, y: 70, date: points[0].date, amount: pipe.transform(points[0].amount),
+  }];
+  const amounts = points.map(p => p.amount);
+  const min = Math.min(...amounts);
+  const max = Math.max(...amounts);
+  const range = max - min || 1;
+  return points.map((p, i) => ({
+    x: CHART_PAD + (i / (points.length - 1)) * (CHART_W - 2 * CHART_PAD),
+    y: 140 - ((p.amount - min) / range) * 120,
+    date:   p.date,
+    amount: pipe.transform(p.amount),
+  }));
+}
+
 function buildSalesAreaPath(linePoints: string): string {
   if (!linePoints) return '';
   const parts = linePoints.split(' ');
-  return `M0,160 L${parts.join(' L')} L600,160 Z`;
+  const firstX = parts[0].split(',')[0];
+  const lastX  = parts[parts.length - 1].split(',')[0];
+  return `M${firstX},160 L${parts.join(' L')} L${lastX},160 Z`;
 }
 
 function orderStatusLabel(status: string): string {
@@ -116,6 +151,9 @@ export class DashboardComponent implements OnInit {
   protected readonly salesLinePoints = signal('');
   protected readonly salesAreaPath   = signal('');
   protected readonly salesDates      = signal({ start: '', end: '' });
+  protected readonly chartPoints     = signal<ChartPoint[]>([]);
+  protected readonly hoveredPoint    = signal<ChartPoint | null>(null);
+  protected readonly tipPos          = signal<TipPos | null>(null);
   protected lowStockCount   = 0;
 
   ngOnInit(): void {
@@ -205,9 +243,21 @@ export class DashboardComponent implements OnInit {
     const line = buildSalesLinePoints(points);
     this.salesLinePoints.set(line);
     this.salesAreaPath.set(buildSalesAreaPath(line));
+    this.chartPoints.set(buildChartPoints(points));
+    this.hoveredPoint.set(null);
     if (points.length) {
       this.salesDates.set({ start: points[0].date, end: points[points.length - 1].date });
     }
+  }
+
+  protected onPointEnter(e: MouseEvent, pt: ChartPoint): void {
+    this.hoveredPoint.set(pt);
+    this.tipPos.set({ cx: e.clientX, cy: e.clientY, point: pt });
+  }
+
+  protected onPointLeave(): void {
+    this.hoveredPoint.set(null);
+    this.tipPos.set(null);
   }
 
   protected trackKpi(_i: number, k: KpiCard): string          { return k.label;   }

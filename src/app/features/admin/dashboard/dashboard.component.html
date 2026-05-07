@@ -67,13 +67,65 @@
             <stop offset="0%"   stop-color="var(--color-accent)" stop-opacity="0.3" />
             <stop offset="100%" stop-color="var(--color-accent)" stop-opacity="0"   />
           </linearGradient>
+          <filter id="tipShadow" x="-20%" y="-30%" width="140%" height="160%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4"
+                          flood-color="var(--color-accent)" flood-opacity="0.35"/>
+          </filter>
+          <filter id="dotGlow" x="-120%" y="-120%" width="340%" height="340%">
+            <feDropShadow dx="0" dy="0" stdDeviation="4"
+                          flood-color="var(--color-accent)" flood-opacity="1"/>
+          </filter>
         </defs>
         <line x1="0" x2="600" y1="40"  y2="40"  stroke="var(--color-line)" stroke-dasharray="2 4" />
         <line x1="0" x2="600" y1="80"  y2="80"  stroke="var(--color-line)" stroke-dasharray="2 4" />
         <line x1="0" x2="600" y1="120" y2="120" stroke="var(--color-line)" stroke-dasharray="2 4" />
         <path [attr.d]="salesAreaPath()" fill="url(#salesGradient)" />
         <polyline fill="none" stroke="var(--color-accent)" stroke-width="2" [attr.points]="salesLinePoints()" />
+
+        <!-- puntos interactivos -->
+        @for (pt of chartPoints(); track pt.date) {
+          @if (hoveredPoint()?.date === pt.date) {
+            <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="9"   fill="var(--color-accent)" opacity="0.18" />
+            <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="4.5" fill="var(--color-accent)" filter="url(#dotGlow)" />
+          } @else {
+            <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="3" fill="var(--color-accent)" />
+          }
+          <circle
+            [attr.cx]="pt.x" [attr.cy]="pt.y" r="12"
+            fill="transparent"
+            (mouseenter)="onPointEnter($event, pt)"
+            (mouseleave)="onPointLeave()"
+          />
+        }
+
+        <!-- línea vertical indicadora -->
+        @if (hoveredPoint(); as pt) {
+          <line
+            [attr.x1]="pt.x" [attr.x2]="pt.x"
+            [attr.y1]="pt.y" y2="160"
+            stroke="var(--color-accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"
+          />
+        }
       </svg>
+
+      <!-- tooltip HTML flotante -->
+      @if (tipPos(); as tip) {
+        <div
+          class="fixed z-9999 pointer-events-none flex flex-col items-center"
+          [style.left.px]="tip.cx"
+          [style.top.px]="tip.cy - 14"
+          style="transform: translate(-50%, -100%)"
+        >
+          <div class="rounded-xl px-3.5 py-2.5 shadow-xl shadow-black/20 border border-white/10"
+               style="background: var(--color-accent)">
+            <p class="font-mono text-[10px] leading-none mb-1.5" style="color: rgba(255,255,255,0.6)">{{ tip.point.date }}</p>
+            <p class="text-sm font-bold leading-none text-white">{{ tip.point.amount }}</p>
+          </div>
+          <div class="w-0 h-0"
+               style="border-left:7px solid transparent;border-right:7px solid transparent;border-top:8px solid var(--color-accent)">
+          </div>
+        </div>
+      }
 
       <div class="flex justify-between mt-2">
         <small class="font-mono text-[11px] text-ink-3">{{ salesDates().start }}</small>
