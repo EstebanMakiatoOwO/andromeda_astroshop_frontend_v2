@@ -29,6 +29,10 @@
   --color-error: oklch(62% 0.22 25);
   --color-error-soft: oklch(62% 0.22 25 / 15%);
 
+  /* Success — green */
+  --color-success: oklch(55% 0.15 150);
+  --color-success-soft: oklch(55% 0.15 150 / 15%);
+
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
@@ -60,6 +64,9 @@
 
   --color-error: oklch(52% 0.22 25);
   --color-error-soft: oklch(52% 0.22 25 / 12%);
+
+  --color-success: oklch(48% 0.15 150);
+  --color-success-soft: oklch(48% 0.15 150 / 12%);
 }
 
 @layer base {
