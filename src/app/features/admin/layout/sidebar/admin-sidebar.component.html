@@ -2,9 +2,26 @@
   class="flex flex-col h-full bg-surface-2 border-r border-line transition-all duration-300 overflow-hidden"
   [class]="widthClass()"
 >
-  <!-- Logo -->
-  <div class="flex items-center px-3 h-14 border-b border-line shrink-0">
-    <app-logo [compact]="collapsed()" />
+  <!-- Logo + toggle -->
+  <div class="flex items-center h-14 border-b border-line shrink-0 px-3 overflow-hidden">
+    @if (!collapsed()) {
+      <app-logo [compact]="false" />
+    }
+    <button
+      (click)="toggleCollapse()"
+      class="shrink-0 p-1.5 rounded-md text-ink-3 hover:text-ink-1 hover:bg-surface-4 transition-colors"
+      [class.ml-auto]="!collapsed()"
+      [class.mx-auto]="collapsed()"
+    >
+      <svg
+        class="w-4 h-4 transition-transform duration-300"
+        [class.rotate-180]="collapsed()"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
   </div>
 
   <!-- Navigation -->
@@ -40,7 +57,7 @@
                 @if (!collapsed()) {
                   <span class="flex-1 truncate">{{ item.label }}</span>
 
-                  @if (item.badgeCount && item.badgeCount > 0) {
+                  @if ((item.id === 'orders' && pendingCount > 0) || (item.badgeCount && item.badgeCount > 0)) {
                     <span
                       class="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-5 text-center leading-none"
                       [class.bg-warn-soft]="item.badgeType === 'warn'"
@@ -48,7 +65,7 @@
                       [class.bg-error-soft]="item.badgeType === 'error'"
                       [class.text-error]="item.badgeType === 'error'"
                     >
-                      {{ item.badgeCount }}
+                      {{ item.id === 'orders' ? pendingCount : item.badgeCount }}
                     </span>
                   }
                 }
