@@ -7,6 +7,7 @@ import {
   AdminOrder,
   DashboardStats,
   LowStockProduct,
+  Notifications,
   SalesPoint,
   SalesPeriod,
   TopCategory,
@@ -47,5 +48,25 @@ export class DashboardService {
     return this.http
       .get<ApiResponse<LowStockProduct[]>>(`${this.base}/products/low-stock`)
       .pipe(map(r => r.data));
+  }
+
+  getNotifications(): Observable<Notifications> {
+    return this.http
+      .get<ApiResponse<Notifications>>(`${this.base}/notifications`)
+      .pipe(map(r => r.data));
+  }
+
+  markNotificationsSeen(): Observable<void> {
+    return this.http.patch<void>(`${this.base}/notifications/seen`, {});
+  }
+
+  markOneNotificationSeen(reviewId: number): Observable<void> {
+    return this.http.patch<void>(`${this.base}/notifications/${reviewId}/seen`, {});
+  }
+
+  getPendingOrdersCount(): Observable<number> {
+    return this.http
+      .get<ApiResponse<AdminOrder[]>>(`${environment.apiBase}/api/v1/orders/status/PAID`)
+      .pipe(map(r => r.data.length));
   }
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, inject, signal } from '@angular/core';
+import { Component, Input, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AUTH_SERVICE_TOKEN } from '../../../../core/tokens/auth.tokens';
 import { LogoComponent } from '../../../../shared/components/logo/logo.component';
@@ -21,7 +21,6 @@ const NAV_GROUPS: NavGroup[] = [
         icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
         route: '/admin/orders',
         badgeType: 'warn',
-        badgeCount: 12,
       },
     ],
   },
@@ -108,6 +107,8 @@ export class AdminSidebarComponent {
   protected readonly authService = inject(AUTH_SERVICE_TOKEN);
   protected readonly navGroups = NAV_GROUPS;
 
+  @Input() pendingCount = 0;
+
   private readonly _collapsed = signal<boolean>(true);
   protected readonly collapsed = this._collapsed.asReadonly();
 
@@ -115,14 +116,8 @@ export class AdminSidebarComponent {
     this._collapsed() ? 'w-sidebar-collapsed' : 'w-sidebar-expanded',
   );
 
-  @HostListener('mouseenter')
-  onEnter(): void {
-    this._collapsed.set(false);
-  }
-
-  @HostListener('mouseleave')
-  onLeave(): void {
-    this._collapsed.set(true);
+  protected toggleCollapse(): void {
+    this._collapsed.update(v => !v);
   }
 
   protected onLogout(): void {

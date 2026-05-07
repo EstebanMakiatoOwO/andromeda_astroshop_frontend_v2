@@ -12,7 +12,7 @@ export interface SalesPoint {
   amount: number;
 }
 
-export type SalesPeriod = '1d' | '7d' | '30d' | '90d';
+export type SalesPeriod = '1h' | '1d' | '7d' | '30d' | '90d';
 
 // GET /api/v1/admin/dashboard/top-categories
 export interface TopCategory {
@@ -46,6 +46,22 @@ export interface AdminOrder {
   items: AdminOrderItem[];
   createdAt: string;
   updatedAt: string;
+}
+
+// GET /api/v1/admin/notifications
+export interface NotificationReview {
+  id: number;
+  userName: string;
+  productName: string;
+  rating: number;
+  comment: string;
+  adminReply: string | null;
+  createdAt: string;
+}
+
+export interface Notifications {
+  unrepliedReviews: number;
+  reviews: NotificationReview[];
 }
 
 // GET /api/v1/admin/products/low-stock

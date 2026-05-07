@@ -21,7 +21,7 @@ interface RecentOrderRow {
   client: string;
   total: string;
   status: string;
-  kind: 'warn' | 'ok' | 'err';
+  badgeClass: string;
   hasMP: boolean;
 }
 
@@ -33,7 +33,8 @@ interface LowStockRow {
 }
 
 function buildSparkline(values: number[]): string {
-  if (values.length < 2) return '';
+  if (values.length === 0) return '';
+  if (values.length === 1) return `0,15 200,15`;
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
@@ -47,7 +48,8 @@ function buildSparkline(values: number[]): string {
 }
 
 function buildSalesLinePoints(points: SalesPoint[]): string {
-  if (points.length < 2) return '';
+  if (points.length === 0) return '';
+  if (points.length === 1) return `0,70 600,70`;
   const amounts = points.map(p => p.amount);
   const min = Math.min(...amounts);
   const max = Math.max(...amounts);
@@ -70,6 +72,7 @@ function buildSalesAreaPath(linePoints: string): string {
 function orderStatusLabel(status: string): string {
   const map: Record<string, string> = {
     PENDING:   'pendiente',
+    PAID:      'pagado',
     PREPARING: 'preparando',
     SHIPPED:   'enviado',
     DELIVERED: 'entregado',
@@ -78,10 +81,17 @@ function orderStatusLabel(status: string): string {
   return map[status] ?? status.toLowerCase();
 }
 
-function orderKind(status: string): 'warn' | 'ok' | 'err' {
-  if (status === 'CANCELLED') return 'err';
-  if (status === 'DELIVERED' || status === 'SHIPPED') return 'ok';
-  return 'warn';
+const STATUS_BADGE: Record<string, string> = {
+  PENDING:   'bg-warn-soft text-warn',
+  PAID:      'bg-success-soft text-success',
+  PREPARING: 'bg-accent-soft text-accent',
+  SHIPPED:   'bg-line text-ink-1',
+  DELIVERED: 'bg-success-soft text-success',
+  CANCELLED: 'bg-error-soft text-error',
+};
+
+function orderBadgeClass(status: string): string {
+  return STATUS_BADGE[status] ?? 'bg-surface-4 text-ink-2';
 }
 
 const pipe = new CurrencyArsPipe();
@@ -96,16 +106,16 @@ export class DashboardComponent implements OnInit {
 
   protected readonly isLoading = signal(true);
   protected readonly hasError  = signal(false);
-  protected readonly period    = signal<SalesPeriod>('1d');
-  protected readonly periods: SalesPeriod[] = ['1d', '7d', '30d', '90d'];
+  protected readonly period    = signal<SalesPeriod>('1h');
+  protected readonly periods: SalesPeriod[] = [ '1h', '1d', '7d', '30d', '90d'];
 
   protected kpis:          KpiCard[]        = [];
   protected topCategories: TopCategoryRow[] = [];
   protected recentOrders:  RecentOrderRow[] = [];
   protected lowStock:      LowStockRow[]    = [];
-  protected salesLinePoints = '';
-  protected salesAreaPath   = '';
-  protected salesDates      = { start: '', end: '' };
+  protected readonly salesLinePoints = signal('');
+  protected readonly salesAreaPath   = signal('');
+  protected readonly salesDates      = signal({ start: '', end: '' });
   protected lowStockCount   = 0;
 
   ngOnInit(): void {
@@ -169,8 +179,8 @@ export class DashboardComponent implements OnInit {
           number: `#A-${o.id}`,
           client: o.guestName ?? o.guestEmail ?? `Usuario #${o.userId}`,
           total:  pipe.transform(o.total),
-          status: orderStatusLabel(o.status),
-          kind:   orderKind(o.status),
+          status:     orderStatusLabel(o.status),
+          badgeClass: orderBadgeClass(o.status),
           hasMP:  !!o.mpPreferenceId,
         }));
 
@@ -192,10 +202,11 @@ export class DashboardComponent implements OnInit {
   }
 
   private updateChart(points: SalesPoint[]): void {
-    this.salesLinePoints = buildSalesLinePoints(points);
-    this.salesAreaPath   = buildSalesAreaPath(this.salesLinePoints);
+    const line = buildSalesLinePoints(points);
+    this.salesLinePoints.set(line);
+    this.salesAreaPath.set(buildSalesAreaPath(line));
     if (points.length) {
-      this.salesDates = { start: points[0].date, end: points[points.length - 1].date };
+      this.salesDates.set({ start: points[0].date, end: points[points.length - 1].date });
     }
   }
 

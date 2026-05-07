@@ -43,7 +43,7 @@
     <div class="rounded-xl border border-line bg-surface-3 p-4">
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-sm font-semibold text-ink-1">
-          Ventas · últimos {{ period() === '1d' ? '1' : period() === '7d' ? '7' : period() === '30d' ? '30' :  '90' }} días
+          Ventas · últimos {{ period() === '1h' ? '1' : period() === '1d' ? '1' : period() === '7d' ? '7' : period() === '30d' ? '30' :  '90' }} días
         </h3>
         <div class="flex gap-1">
           @for (p of periods; track p) {
@@ -71,13 +71,13 @@
         <line x1="0" x2="600" y1="40"  y2="40"  stroke="var(--color-line)" stroke-dasharray="2 4" />
         <line x1="0" x2="600" y1="80"  y2="80"  stroke="var(--color-line)" stroke-dasharray="2 4" />
         <line x1="0" x2="600" y1="120" y2="120" stroke="var(--color-line)" stroke-dasharray="2 4" />
-        <path [attr.d]="salesAreaPath" fill="url(#salesGradient)" />
-        <polyline fill="none" stroke="var(--color-accent)" stroke-width="2" [attr.points]="salesLinePoints" />
+        <path [attr.d]="salesAreaPath()" fill="url(#salesGradient)" />
+        <polyline fill="none" stroke="var(--color-accent)" stroke-width="2" [attr.points]="salesLinePoints()" />
       </svg>
 
       <div class="flex justify-between mt-2">
-        <small class="font-mono text-[11px] text-ink-3">{{ salesDates.start }}</small>
-        <small class="font-mono text-[11px] text-ink-3">{{ salesDates.end }}</small>
+        <small class="font-mono text-[11px] text-ink-3">{{ salesDates().start }}</small>
+        <small class="font-mono text-[11px] text-ink-3">{{ salesDates().end }}</small>
       </div>
     </div>
 
@@ -132,15 +132,7 @@
                 {{ order.hasMP ? 'vinculado' : '—' }}
               </td>
               <td class="px-4 py-3">
-                <span
-                  class="px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                  [class.bg-warn-soft]="order.kind === 'warn'"
-                  [class.text-warn]="order.kind === 'warn'"
-                  [class.bg-success-soft]="order.kind === 'ok'"
-                  [class.text-success]="order.kind === 'ok'"
-                  [class.bg-error-soft]="order.kind === 'err'"
-                  [class.text-error]="order.kind === 'err'"
-                >
+                <span [class]="'px-2 py-0.5 rounded-full text-[10px] font-semibold ' + order.badgeClass">
                   {{ order.status }}
                 </span>
               </td>
