@@ -12,6 +12,7 @@ import {
   SalesPeriod,
   TopCategory,
 } from '../models/dashboard.model';
+import { PagedOrders } from '../models/order.model';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
@@ -37,11 +38,13 @@ export class DashboardService {
       .pipe(map(r => r.data));
   }
 
-  getRecentOrders(): Observable<AdminOrder[]> {
-    const params = new HttpParams().set('size', '5');
+  getRecentOrders(dateFrom?: string, dateTo?: string): Observable<AdminOrder[]> {
+    let params = new HttpParams().set('size', '5');
+    if (dateFrom) params = params.set('dateFrom', dateFrom);
+    if (dateTo)   params = params.set('dateTo',   dateTo);
     return this.http
-      .get<ApiResponse<AdminOrder[]>>(`${this.base}/orders`, { params })
-      .pipe(map(r => r.data));
+      .get<ApiResponse<PagedOrders>>(`${this.base}/orders`, { params })
+      .pipe(map(r => r.data.content as unknown as AdminOrder[]));
   }
 
   getLowStock(): Observable<LowStockProduct[]> {

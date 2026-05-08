@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CurrencyArsPipe } from '../../../shared/pipes/currency-ars.pipe';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { AdminOrder, LowStockProduct, SalesPeriod, SalesPoint, TopCategory } from '../../../core/models/dashboard.model';
 
 interface KpiCard {
@@ -33,8 +35,7 @@ interface LowStockRow {
 }
 
 function buildSparkline(values: number[]): string {
-  if (values.length === 0) return '';
-  if (values.length === 1) return `0,15 200,15`;
+  if (values.length <= 1) return '0,15 200,15';
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
@@ -51,8 +52,7 @@ const CHART_W = 600;
 const CHART_PAD = 3;
 
 function buildSalesLinePoints(points: SalesPoint[]): string {
-  if (points.length === 0) return '';
-  if (points.length === 1) return `${CHART_PAD},70 ${CHART_W - CHART_PAD},70`;
+  if (points.length <= 1) return `${CHART_PAD},70 ${CHART_W - CHART_PAD},70`;
   const amounts = points.map(p => p.amount);
   const min = Math.min(...amounts);
   const max = Math.max(...amounts);
@@ -81,7 +81,7 @@ interface TipPos {
 
 function buildChartPoints(points: SalesPoint[]): ChartPoint[] {
   if (points.length === 0) return [];
-  if (points.length === 1) return [{
+  if (points.length <= 1) return [{
     x: CHART_W / 2, y: 70, date: points[0].date, amount: pipe.transform(points[0].amount),
   }];
   const amounts = points.map(p => p.amount);
@@ -138,11 +138,15 @@ const pipe = new CurrencyArsPipe();
 })
 export class DashboardComponent implements OnInit {
   private readonly svc = inject(DashboardService);
+  private readonly bc  = inject(BreadcrumbService);
 
-  protected readonly isLoading = signal(true);
-  protected readonly hasError  = signal(false);
-  protected readonly period    = signal<SalesPeriod>('1h');
+  protected readonly isLoading       = signal(true);
+  protected readonly hasError        = signal(false);
+  protected readonly period          = signal<SalesPeriod>('1h');
   protected readonly periods: SalesPeriod[] = [ '1h', '1d', '7d', '30d', '90d'];
+  protected readonly dashDatePreset  = signal('all');
+  protected readonly dashDateFrom    = signal<string | undefined>(undefined);
+  protected readonly dashDateTo      = signal<string | undefined>(undefined);
 
   protected kpis:          KpiCard[]        = [];
   protected topCategories: TopCategoryRow[] = [];
@@ -157,7 +161,46 @@ export class DashboardComponent implements OnInit {
   protected lowStockCount   = 0;
 
   ngOnInit(): void {
+    this.bc.set([{ label: 'Dashboard' }]);
     this.loadAll();
+  }
+
+  protected onDashDateChange(preset: string): void {
+    this.dashDatePreset.set(preset);
+    const today = new Date();
+    const iso   = (d: Date) => d.toISOString().slice(0, 10);
+    const todayStr = iso(today);
+    if (preset === 'today') {
+      this.dashDateFrom.set(todayStr);
+      this.dashDateTo.set(todayStr);
+    } else if (preset === '7d') {
+      const from = new Date(today); from.setDate(today.getDate() - 6);
+      this.dashDateFrom.set(iso(from));
+      this.dashDateTo.set(todayStr);
+    } else if (preset === '30d') {
+      const from = new Date(today); from.setDate(today.getDate() - 29);
+      this.dashDateFrom.set(iso(from));
+      this.dashDateTo.set(todayStr);
+    } else {
+      this.dashDateFrom.set(undefined);
+      this.dashDateTo.set(undefined);
+    }
+    this.loadRecentOrders();
+  }
+
+  private loadRecentOrders(): void {
+    this.svc.getRecentOrders(this.dashDateFrom(), this.dashDateTo()).subscribe({
+      next: orders => {
+        this.recentOrders = orders.map((o: AdminOrder) => ({
+          number:     `#A-${o.id}`,
+          client:     o.guestName ?? o.guestEmail ?? `Usuario #${o.userId}`,
+          total:      pipe.transform(o.total),
+          status:     orderStatusLabel(o.status),
+          badgeClass: orderBadgeClass(o.status),
+          hasMP:      !!o.mpPreferenceId,
+        }));
+      },
+    });
   }
 
   protected changePeriod(p: SalesPeriod): void {
@@ -173,11 +216,11 @@ export class DashboardComponent implements OnInit {
     this.hasError.set(false);
 
     forkJoin({
-      stats:      this.svc.getStats(),
-      sales:      this.svc.getSales(this.period()),
-      categories: this.svc.getTopCategories(),
-      orders:     this.svc.getRecentOrders(),
-      stock:      this.svc.getLowStock(),
+      stats:      this.svc.getStats()           .pipe(catchError(() => of({ totalSales: 0, totalOrders: 0, avgTicket: 0, conversionRate: 0 }))),
+      sales:      this.svc.getSales(this.period()).pipe(catchError(() => of([]))),
+      categories: this.svc.getTopCategories()   .pipe(catchError(() => of([]))),
+      orders:     this.svc.getRecentOrders()    .pipe(catchError(() => of([]))),
+      stock:      this.svc.getLowStock()        .pipe(catchError(() => of([]))),
     }).subscribe({
       next: ({ stats, sales, categories, orders, stock }) => {
         const salesValues = sales.map(p => p.amount);
@@ -214,12 +257,12 @@ export class DashboardComponent implements OnInit {
         }));
 
         this.recentOrders = orders.map((o: AdminOrder) => ({
-          number: `#A-${o.id}`,
-          client: o.guestName ?? o.guestEmail ?? `Usuario #${o.userId}`,
-          total:  pipe.transform(o.total),
+          number:     `#A-${o.id}`,
+          client:     o.guestName ?? o.guestEmail ?? `Usuario #${o.userId}`,
+          total:      pipe.transform(o.total),
           status:     orderStatusLabel(o.status),
           badgeClass: orderBadgeClass(o.status),
-          hasMP:  !!o.mpPreferenceId,
+          hasMP:      !!o.mpPreferenceId,
         }));
 
         this.lowStockCount = stock.length;

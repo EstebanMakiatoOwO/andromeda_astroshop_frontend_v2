@@ -11,7 +11,7 @@ export interface AdminOrderItem {
 
 export interface AdminOrder {
   id: number;
-  userId: number;
+  userId: number | null;
   guestEmail: string | null;
   guestName: string | null;
   status: OrderStatus;
@@ -21,6 +21,11 @@ export interface AdminOrder {
   mpPreferenceId: string | null;
   notes: string | null;
   items: AdminOrderItem[];
+  shippingStreet: string | null;
+  shippingCity: string | null;
+  shippingState: string | null;
+  shippingZipCode: string | null;
+  shippingCountry: string | null;
   createdAt: string;
   updatedAt: string;
 }

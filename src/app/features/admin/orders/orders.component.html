@@ -1,0 +1,151 @@
+<div class="flex flex-col h-full">
+
+  <!-- Status tabs ──────────────────────────────────────────────── -->
+  <div class="flex items-center border-b border-line bg-surface-3 overflow-x-auto shrink-0">
+    @for (tab of tabs; track tab.key) {
+      <button
+        (click)="setTab(tab.status)"
+        class="flex items-center gap-1.5 px-4 py-2.5 text-xs font-medium border-b-2
+               whitespace-nowrap transition-colors"
+        [class.border-accent]="activeStatus() === tab.status"
+        [class.text-ink-1]="activeStatus() === tab.status"
+        [class.border-transparent]="activeStatus() !== tab.status"
+        [class.text-ink-3]="activeStatus() !== tab.status"
+        [class.hover:text-ink-2]="activeStatus() !== tab.status"
+      >
+        {{ tab.label }}
+        <span class="font-mono text-[10px] text-ink-3">{{ tabCount(tab.countKey) }}</span>
+      </button>
+    }
+  </div>
+
+  <!-- Filter bar ───────────────────────────────────────────────── -->
+  <div class="flex items-center gap-2 px-6 py-2.5 border-b border-line bg-surface-3 shrink-0">
+    <input
+      (input)="onSearch($any($event.target).value)"
+      placeholder="Buscar por # orden, email, nombre…"
+      class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+             placeholder:text-ink-3 outline-none focus:border-accent focus:ring-1
+             focus:ring-accent w-72"
+    />
+    <select
+      [value]="datePreset()"
+      (change)="onDateChange($any($event.target).value)"
+      class="h-7 px-2 rounded border border-line bg-surface-4 text-xs text-ink-2
+             outline-none focus:border-accent cursor-pointer">
+      <option value="all">Cualquier fecha</option>
+      <option value="today">Hoy</option>
+      <option value="7d">Últimos 7 días</option>
+      <option value="30d">Últimos 30 días</option>
+    </select>
+    <select class="h-7 px-2 rounded border border-line bg-surface-4 text-xs text-ink-2
+                   outline-none focus:border-accent cursor-pointer">
+      <option>MP: cualquier estado</option>
+      <option>Aprobado</option>
+      <option>Pendiente</option>
+      <option>Rechazado</option>
+    </select>
+  </div>
+
+  <!-- Table ────────────────────────────────────────────────────── -->
+  <div class="flex-1 overflow-auto">
+    @if (isLoading()) {
+      <div class="flex items-center justify-center h-40 text-ink-3 text-sm font-mono">
+        Cargando órdenes…
+      </div>
+    } @else if (orders().length === 0) {
+      <div class="flex flex-col items-center justify-center h-40 gap-2">
+        <p class="text-ink-3 text-sm">Sin resultados</p>
+        <p class="text-ink-3 text-xs">Probá con otro filtro o término de búsqueda</p>
+      </div>
+    } @else {
+      <table class="w-full text-xs">
+        <thead class="sticky top-0 z-10 bg-surface-3">
+          <tr class="border-b border-line">
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">#</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">Fecha</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">Cliente</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">Productos</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">Total</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">MP</th>
+            <th class="px-4 py-2.5 text-left font-medium text-ink-3">Estado</th>
+            <th class="px-4 py-2.5"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of orders(); track order.id) {
+            <tr class="border-b border-line last:border-0 hover:bg-surface-4 transition-colors">
+              <td class="px-4 py-3 font-semibold text-ink-1">#A-{{ order.id }}</td>
+              <td class="px-4 py-3 font-mono text-ink-3">{{ fmtDate(order.createdAt) }}</td>
+              <td class="px-4 py-3">
+                <div class="flex flex-col gap-0">
+                  <span class="font-medium text-ink-1">
+                    {{ order.guestName ?? 'Invitado' }}
+                    @if (!order.guestName) {
+                      <span class="ml-1 px-1 py-0.5 rounded text-[9px] font-semibold bg-surface-4 text-ink-3">guest</span>
+                    }
+                  </span>
+                  <span class="text-[11px] text-ink-3">{{ order.guestEmail ?? '' }}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-ink-2">
+                {{ order.items.length }} ítem{{ order.items.length !== 1 ? 's' : '' }}
+              </td>
+              <td class="px-4 py-3 font-semibold text-ink-1">{{ ars(order.total) }}</td>
+              <td class="px-4 py-3 font-mono text-ink-3">
+                {{ order.mpPreferenceId ? 'vinculado' : '—' }}
+              </td>
+              <td class="px-4 py-3">
+                <span [class]="badgeClass(order.status)">{{ statusLabel(order.status) }}</span>
+              </td>
+              <td class="px-4 py-3">
+                <a [routerLink]="['/admin/orders', order.id]"
+                   class="font-mono text-[11px] text-accent hover:underline cursor-pointer">
+                  Ver →
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+  <!-- Pagination ───────────────────────────────────────────────── -->
+  <div class="flex items-center justify-between px-6 py-3 border-t border-line shrink-0">
+    <small class="font-mono text-[11px] text-ink-3">
+      {{ totalElems() }} orden{{ totalElems() !== 1 ? 'es' : '' }} en total
+    </small>
+    @if (totalPages() > 1) {
+      <div class="flex items-center gap-1">
+        <button
+          (click)="setPage(page() - 1)"
+          [disabled]="page() === 0"
+          class="h-6 px-2 rounded border border-line bg-surface-4 text-[11px] text-ink-2
+                 hover:text-ink-1 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >‹</button>
+
+        @for (p of pageNumbers(); track p) {
+          <button
+            (click)="setPage(p)"
+            class="h-6 min-w-6 px-1.5 rounded border text-[11px] transition-colors"
+            [class.border-accent]="page() === p"
+            [class.bg-accent]="page() === p"
+            [class.text-white]="page() === p"
+            [class.border-line]="page() !== p"
+            [class.bg-surface-4]="page() !== p"
+            [class.text-ink-2]="page() !== p"
+          >{{ p + 1 }}</button>
+        }
+
+        <button
+          (click)="setPage(page() + 1)"
+          [disabled]="page() >= totalPages() - 1"
+          class="h-6 px-2 rounded border border-line bg-surface-4 text-[11px] text-ink-2
+                 hover:text-ink-1 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >›</button>
+      </div>
+    }
+  </div>
+
+</div>

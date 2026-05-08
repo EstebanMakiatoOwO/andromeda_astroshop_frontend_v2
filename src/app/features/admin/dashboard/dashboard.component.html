@@ -19,7 +19,7 @@
 @if (!isLoading() && !hasError()) {
 
   <!-- KPIs ─────────────────────────────────────────────────────── -->
-  <div class="grid grid-cols-4 gap-3 mb-5">
+  <div class="grid grid-cols-4 gap-3 mb-5 pt-5">
     @for (kpi of kpis; track trackKpi($index, kpi)) {
       <div class="rounded-xl border border-line bg-surface-3 p-4">
         <small class="font-mono text-xs text-ink-3">{{ kpi.label }}</small>
@@ -160,9 +160,21 @@
 
     <!-- Órdenes recientes -->
     <div class="rounded-xl border border-line bg-surface-3 overflow-hidden">
-      <div class="flex items-center justify-between px-4 py-3.5 border-b border-line">
+      <div class="flex items-center justify-between px-4 py-3.5 border-b border-line gap-3">
         <h3 class="text-sm font-semibold text-ink-1">Órdenes recientes</h3>
-        <a class="font-mono text-[11px] text-accent cursor-pointer hover:underline">ver todas →</a>
+        <div class="flex items-center gap-2">
+          <select
+            [value]="dashDatePreset()"
+            (change)="onDashDateChange($any($event.target).value)"
+            class="h-6 px-2 rounded border border-line bg-surface-4 text-[11px] text-ink-2
+                   outline-none focus:border-accent cursor-pointer">
+            <option value="all">Cualquier fecha</option>
+            <option value="today">Hoy</option>
+            <option value="7d">Últimos 7 días</option>
+            <option value="30d">Últimos 30 días</option>
+          </select>
+          <a class="font-mono text-[11px] text-accent cursor-pointer hover:underline">ver todas →</a>
+        </div>
       </div>
       <table class="w-full text-xs">
         <thead>

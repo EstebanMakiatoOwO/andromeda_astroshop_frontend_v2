@@ -1,25 +1,11 @@
 <div class="flex h-screen overflow-hidden bg-surface-1">
 
-  <app-admin-sidebar [pendingCount]="pendingCount()" />
+  <app-admin-sidebar />
 
   <div class="flex flex-col flex-1 min-w-0">
-    <app-admin-topbar [crumbs]="breadcrumbs">
-      <app-search-bar />
-      <button
-        class="flex items-center gap-1.5 h-[30px] px-3 rounded-lg border border-line
-               bg-surface-4 text-xs text-ink-2 hover:text-ink-1 hover:bg-surface-3
-               transition-colors whitespace-nowrap"
-      >
-        📦 Pagadas · {{ pendingCount() }}
-      </button>
-      <app-notifications-bell
-        [count]="unrepliedReviews()"
-        [reviews]="notifReviews()"
-        (seen)="unrepliedReviews.set(0)"
-      />
-    </app-admin-topbar>
+    <app-admin-topbar [crumbs]="bc.crumbs()" />
 
-    <main class="flex-1 overflow-y-auto p-6">
+    <main class="flex-1 overflow-y-auto">
       <router-outlet />
     </main>
   </div>
