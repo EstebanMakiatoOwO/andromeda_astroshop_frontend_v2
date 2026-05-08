@@ -78,11 +78,11 @@ export class OrderDetailComponent implements OnInit {
     ];
 
     if (p) {
-      const approved = p.status === 'approved';
+      const approved = p.status === 'approved' || ['PAID', 'SHIPPED', 'REFUNDED'].includes(o.status);
       events.push({
         label: approved ? 'Pago aprobado (MercadoPago)' : 'Pago pendiente',
         sub: `ID: ${p.mpPaymentId}`,
-        timestamp: approved ? p.paidAt : null,
+        timestamp: approved ? (p.paidAt ?? o.updatedAt) : null,
         done: approved,
       });
     }

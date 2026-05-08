@@ -1,56 +1,19 @@
 import { Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OrdersService } from '../../../core/services/orders.service';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { AdminOrder, OrderCounts } from '../../../core/models/order.model';
-
-const STATUS_LABEL: Record<string, string> = {
-  PENDING:   'pendiente',
-  PAID:      'pagado',
-  SHIPPED:   'enviado',
-  CANCELLED: 'cancelado',
-  REFUNDED:  'reembolsado',
-};
-
-const STATUS_BADGE: Record<string, string> = {
-  PENDING:   'bg-warn-soft text-warn',
-  PAID:      'bg-success-soft text-success',
-  SHIPPED:   'bg-accent-soft text-accent',
-  CANCELLED: 'bg-error-soft text-error',
-  REFUNDED:  'bg-error-soft text-error',
-};
-
-function ars(n: number): string {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency', currency: 'ARS',
-    minimumFractionDigits: 0, maximumFractionDigits: 0,
-  }).format(n);
-}
-
-function fmtDate(iso: string): string {
-  const d   = new Date(iso);
-  const now = new Date();
-  const ms  = now.getTime() - d.getTime();
-  const time = d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-  if (ms < 86_400_000)  return `hoy ${time}`;
-  if (ms < 172_800_000) return `ayer ${time}`;
-  return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
-}
-
-interface Tab {
-  key:      string;
-  label:    string;
-  status:   string | null;
-  countKey: keyof OrderCounts;
-}
+import { OrdersTabsComponent, Tab } from './components/orders-tabs.component';
+import { OrdersFiltersComponent } from './components/orders-filters.component';
+import { OrdersTableComponent } from './components/orders-table.component';
+import { OrdersPaginationComponent } from './components/orders-pagination.component';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [RouterLink],
+  imports: [OrdersTabsComponent, OrdersFiltersComponent, OrdersTableComponent, OrdersPaginationComponent],
   templateUrl: './orders.component.html',
 })
 export class OrdersComponent {
@@ -121,23 +84,30 @@ export class OrdersComponent {
     this.searchInput$.next(value);
   }
 
-  protected onDateChange(preset: string): void {
+  protected onDatePresetChange(preset: string): void {
     this.datePreset.set(preset);
     this.page.set(0);
-    const today = new Date();
-    const iso   = (d: Date) => d.toISOString().slice(0, 10);
-    const todayStr = iso(today);
+
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const toLocalDate = (d: Date) =>
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const toLocalEnd = (d: Date) =>
+      `${toLocalDate(d)}T23:59:59`;
+
     if (preset === 'today') {
-      this.dateFrom.set(todayStr);
-      this.dateTo.set(todayStr);
+      this.dateFrom.set(toLocalDate(now));
+      this.dateTo.set(toLocalEnd(now));
     } else if (preset === '7d') {
-      const from = new Date(today); from.setDate(today.getDate() - 6);
-      this.dateFrom.set(iso(from));
-      this.dateTo.set(todayStr);
+      const from = new Date(now);
+      from.setDate(now.getDate() - 6);
+      this.dateFrom.set(toLocalDate(from));
+      this.dateTo.set(toLocalEnd(now));
     } else if (preset === '30d') {
-      const from = new Date(today); from.setDate(today.getDate() - 29);
-      this.dateFrom.set(iso(from));
-      this.dateTo.set(todayStr);
+      const from = new Date(now);
+      from.setDate(now.getDate() - 29);
+      this.dateFrom.set(toLocalDate(from));
+      this.dateTo.set(toLocalEnd(now));
     } else {
       this.dateFrom.set(undefined);
       this.dateTo.set(undefined);
@@ -152,22 +122,6 @@ export class OrdersComponent {
   protected setPage(p: number): void {
     this.page.set(p);
   }
-
-  protected tabCount(key: keyof OrderCounts): number {
-    return this.counts()?.[key] ?? 0;
-  }
-
-  protected statusLabel(s: string): string {
-    return STATUS_LABEL[s] ?? s.toLowerCase();
-  }
-
-  protected badgeClass(s: string): string {
-    const base = 'px-2 py-0.5 rounded-full text-[10px] font-semibold ';
-    return base + (STATUS_BADGE[s] ?? 'bg-surface-4 text-ink-2');
-  }
-
-  protected ars   = ars;
-  protected fmtDate = fmtDate;
 
   private loadOrders(
     status: string | null, page: number, q: string,

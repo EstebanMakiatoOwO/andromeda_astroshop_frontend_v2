@@ -165,29 +165,36 @@ export class DashboardComponent implements OnInit {
     this.loadAll();
   }
 
-  protected onDashDateChange(preset: string): void {
-    this.dashDatePreset.set(preset);
-    const today = new Date();
-    const iso   = (d: Date) => d.toISOString().slice(0, 10);
-    const todayStr = iso(today);
+  protected onDashDateChange(preset: string): void {                                               
+    this.dashDatePreset.set(preset);                                                               
+                                                                                                   
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');                                         
+    const toLocalDate = (d: Date) =>
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const toLocalEnd = (d: Date) =>                                                                
+      `${toLocalDate(d)}T23:59:59`;
+                                                                                                   
     if (preset === 'today') {
-      this.dashDateFrom.set(todayStr);
-      this.dashDateTo.set(todayStr);
+      this.dashDateFrom.set(toLocalDate(now));                                                     
+      this.dashDateTo.set(toLocalEnd(now));
     } else if (preset === '7d') {
-      const from = new Date(today); from.setDate(today.getDate() - 6);
-      this.dashDateFrom.set(iso(from));
-      this.dashDateTo.set(todayStr);
-    } else if (preset === '30d') {
-      const from = new Date(today); from.setDate(today.getDate() - 29);
-      this.dashDateFrom.set(iso(from));
-      this.dashDateTo.set(todayStr);
+      const from = new Date(now);                                                                  
+      from.setDate(now.getDate() - 6);
+      this.dashDateFrom.set(toLocalDate(from));                                                    
+      this.dashDateTo.set(toLocalEnd(now));
+    } else if (preset === '30d') {                                                                 
+      const from = new Date(now);
+      from.setDate(now.getDate() - 29);                                                            
+      this.dashDateFrom.set(toLocalDate(from));
+      this.dashDateTo.set(toLocalEnd(now));                                                        
     } else {
-      this.dashDateFrom.set(undefined);
+      this.dashDateFrom.set(undefined);                                                            
       this.dashDateTo.set(undefined);
     }
+                                                                                                   
     this.loadRecentOrders();
-  }
-
+  }  
   private loadRecentOrders(): void {
     this.svc.getRecentOrders(this.dashDateFrom(), this.dashDateTo()).subscribe({
       next: orders => {
