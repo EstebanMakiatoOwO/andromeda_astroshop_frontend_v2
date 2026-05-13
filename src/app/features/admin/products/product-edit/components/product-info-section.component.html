@@ -1,0 +1,69 @@
+<div class="rounded-xl border border-line bg-surface-3 p-4">
+  <h4 class="text-sm font-semibold text-ink-1 mb-3">Información básica</h4>
+  <div class="flex flex-col gap-3">
+
+    <label class="flex flex-col gap-1">
+      <small class="text-xs text-ink-3">Nombre</small>
+      <input
+        [value]="name()"
+        (input)="nameChange.emit($any($event.target).value)"
+        class="h-8 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+               outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+        placeholder="Nombre del producto"
+      />
+    </label>
+
+    <div class="grid grid-cols-2 gap-3">
+      <label class="flex flex-col gap-1">
+        <small class="text-xs text-ink-3">SKU</small>
+        <input
+          [value]="sku()"
+          (input)="skuChange.emit($any($event.target).value)"
+          class="h-8 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+                 font-mono outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+          placeholder="TEL-CEL-00001"
+        />
+      </label>
+      <label class="flex flex-col gap-1">
+        <small class="text-xs text-ink-3">Código de barras</small>
+        <input
+          [value]="barcode()"
+          (input)="barcodeChange.emit($any($event.target).value)"
+          class="h-8 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+                 font-mono outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+          placeholder="7791234567890"
+        />
+      </label>
+    </div>
+
+    <label class="flex flex-col gap-1">
+      <small class="text-xs text-ink-3">Descripción corta</small>
+      <textarea
+        [value]="shortDescription()"
+        (input)="shortDescriptionChange.emit($any($event.target).value)"
+        rows="3"
+        class="px-3 py-2 rounded border border-line bg-surface-4 text-xs text-ink-1
+               placeholder:text-ink-3 outline-none focus:border-accent focus:ring-1
+               focus:ring-accent resize-none"
+        placeholder="Breve descripción visible en listados y previews…"
+      ></textarea>
+    </label>
+
+    <label class="flex flex-col gap-1">
+      <small class="text-xs text-ink-3">
+        Descripción completa
+        <span class="text-ink-3 font-mono ml-1">· markdown</span>
+      </small>
+      <textarea
+        [value]="longDescription()"
+        (input)="longDescriptionChange.emit($any($event.target).value)"
+        rows="6"
+        class="px-3 py-2 rounded border border-line bg-surface-4 text-xs text-ink-1
+               font-mono placeholder:text-ink-3 outline-none focus:border-accent
+               focus:ring-1 focus:ring-accent resize-none"
+        placeholder="## Características&#10;- Apertura: ..."
+      ></textarea>
+    </label>
+
+  </div>
+</div>

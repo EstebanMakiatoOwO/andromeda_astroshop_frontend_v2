@@ -1,0 +1,106 @@
+<!-- Botones que se proyectan al topbar global -->
+<ng-template #pageActions>
+  <a routerLink="/admin/products"
+     class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-2
+            hover:text-ink-1 transition-colors flex items-center">
+    Cancelar
+  </a>
+  @if (!isNew()) {
+    <button
+      (click)="saveDraft()"
+      [disabled]="isSaving()"
+      class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-2
+             hover:text-ink-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+      {{ isSaving() ? 'Guardando…' : 'Guardar borrador' }}
+    </button>
+  }
+  <button
+    (click)="publish()"
+    [disabled]="isSaving()"
+    class="h-7 px-3 rounded bg-accent text-white text-xs font-medium
+           hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+    {{ isSaving() ? 'Guardando…' : isNew() ? 'Crear producto' : 'Publicar cambios' }}
+  </button>
+</ng-template>
+
+@if (isLoading()) {
+  <div class="flex items-center justify-center h-64 text-ink-3 text-sm font-mono">
+    Cargando producto…
+  </div>
+}
+
+@if (hasError() && !isLoading()) {
+  <div class="flex flex-col items-center justify-center h-64 gap-3">
+    <p class="text-error text-sm font-semibold">No se pudo cargar el producto</p>
+    <a routerLink="/admin/products" class="font-mono text-xs text-accent hover:underline">← Volver a productos</a>
+  </div>
+}
+
+@if (!isLoading() && !hasError()) {
+  <!-- 2-column layout ──────────────────────────────────────── -->
+  <div class="grid grid-cols-[1.8fr_1fr] flex-1 overflow-hidden">
+
+    <!-- Columna izquierda: form ──────────────────────────── -->
+    <div class="overflow-auto p-6 border-r border-line">
+      <div class="flex flex-col gap-4 max-w-[800px]">
+
+        <app-product-info-section
+          [name]="formName()"
+          [sku]="formSku()"
+          [barcode]="formBarcode()"
+          [shortDescription]="formShortDesc()"
+          [longDescription]="formLongDesc()"
+          (nameChange)="formName.set($event)"
+          (skuChange)="formSku.set($event)"
+          (barcodeChange)="formBarcode.set($event)"
+          (shortDescriptionChange)="formShortDesc.set($event)"
+          (longDescriptionChange)="formLongDesc.set($event)"
+        />
+
+        <app-product-images-section
+          [images]="formImages()"
+          (imagesChange)="formImages.set($event)"
+          (fileChange)="formImageFile.set($event)"
+        />
+
+        <app-product-stock-section
+          [price]="formPrice()"
+          [costPrice]="formCostPrice()"
+          [stock]="formStock()"
+          [stockAlertThreshold]="formThreshold()"
+          [isActive]="formIsActive()"
+          [isCatalog]="formIsCatalog()"
+          (priceChange)="formPrice.set($event)"
+          (costPriceChange)="formCostPrice.set($event)"
+          (stockChange)="formStock.set($event)"
+          (stockAlertThresholdChange)="formThreshold.set($event)"
+          (isActiveChange)="formIsActive.set($event)"
+          (isCatalogChange)="formIsCatalog.set($event)"
+        />
+
+        <app-product-category-section
+          [categories]="categories()"
+          [categoryIds]="formCategoryIds()"
+          [brandId]="formBrandId()"
+          (categoryIdsChange)="formCategoryIds.set($event)"
+          (brandIdChange)="formBrandId.set($event)"
+        />
+
+      </div>
+    </div>
+
+    <!-- Columna derecha: preview ─────────────────────────── -->
+    <div class="overflow-auto p-6 bg-surface-2">
+      <small class="font-mono text-[11px] text-ink-3 block mb-3">// preview · vista cliente</small>
+      <app-product-preview
+        [name]="formName()"
+        [shortDescription]="formShortDesc()"
+        [price]="formPrice()"
+        [stock]="formStock()"
+        [isCatalog]="formIsCatalog()"
+        [images]="formImages()"
+      />
+    </div>
+
+  </div>
+}

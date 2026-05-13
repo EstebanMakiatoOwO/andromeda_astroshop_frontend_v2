@@ -1,0 +1,60 @@
+<div class="flex items-center gap-2 px-6 py-2.5 border-b border-line bg-surface-3 shrink-0 flex-wrap">
+
+  <input
+    (input)="searchChange.emit($any($event.target).value)"
+    placeholder="Buscar por SKU, nombre…"
+    class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+           placeholder:text-ink-3 outline-none focus:border-accent focus:ring-1
+           focus:ring-accent w-60"
+  />
+
+  <select
+    [value]="statusFilter()"
+    (change)="statusChange.emit($any($event.target).value)"
+    class="h-7 px-2 rounded border border-line bg-surface-4 text-xs text-ink-2
+           outline-none focus:border-accent cursor-pointer">
+    <option value="">Todos los estados</option>
+    <option value="ACTIVE">Activos</option>
+    <option value="DRAFT">Borradores</option>
+    <option value="LOW_STOCK">Stock bajo</option>
+    <option value="ON_REQUEST">A pedido</option>
+    <option value="OUT_OF_STOCK">Sin stock</option>
+  </select>
+
+  <select
+    [value]="availabilityFilter()"
+    (change)="availabilityChange.emit($any($event.target).value)"
+    class="h-7 px-2 rounded border border-line bg-surface-4 text-xs text-ink-2
+           outline-none focus:border-accent cursor-pointer">
+    <option value="">Disponibilidad</option>
+    <option value="IN_STOCK">En stock</option>
+    <option value="ON_REQUEST">A pedido</option>
+  </select>
+
+  <select
+    [value]="stockFilter()"
+    (change)="stockChange.emit($any($event.target).value)"
+    class="h-7 px-2 rounded border border-line bg-surface-4 text-xs text-ink-2
+           outline-none focus:border-accent cursor-pointer">
+    <option value="">Stock</option>
+    <option value="low">Bajo</option>
+    <option value="none">Sin stock</option>
+  </select>
+
+  <span class="flex-1"></span>
+
+  @if (selectedCount() > 0) {
+    <span class="font-mono text-[11px] text-ink-3">{{ selectedCount() }} seleccionado{{ selectedCount() !== 1 ? 's' : '' }}</span>
+    <button class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-2
+                   hover:text-ink-1 transition-colors">
+      Acciones · {{ selectedCount() }}
+    </button>
+  }
+
+  <a routerLink="/admin/products/new"
+     class="h-7 px-3 rounded bg-accent text-white text-xs font-medium
+            hover:bg-accent-hover transition-colors flex items-center">
+    + Nuevo producto
+  </a>
+
+</div>

@@ -1,0 +1,14 @@
+<div class="flex items-center gap-3 px-6 py-3.5 border-b border-line bg-surface-3 shrink-0 flex-wrap">
+  <a [routerLink]="backRoute()"
+     class="font-mono text-xs text-ink-3 hover:text-ink-1 transition-colors">{{ backLabel() }}</a>
+  <span class="text-ink-3 text-xs">/</span>
+  <span class="text-sm font-semibold text-ink-1 truncate max-w-xs">{{ title() }}</span>
+
+  @if (badgeClass() && badgeLabel()) {
+    <span [class]="badgeClass()!">{{ badgeLabel() }}</span>
+  }
+
+  <div class="flex-1"></div>
+
+  <ng-content />
+</div>

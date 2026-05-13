@@ -1,7 +1,8 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild, computed, effect, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../../../core/services/orders.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
+import { AdminPageActionsService } from '../../../../core/services/admin-page-actions.service';
 import {
   AdminOrder, AdminOrderItem, AdminOrderPayment, OrderStatus,
 } from '../../../../core/models/order.model';
@@ -30,8 +31,8 @@ const STATUS_BADGE: Record<string, string> = {
 };
 
 function ars(n: number): string {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency', currency: 'ARS',
+  return new Intl.NumberFormat('es-MX', {
+    style: 'currency', currency: 'MXN',
     minimumFractionDigits: 0, maximumFractionDigits: 0,
   }).format(n);
 }
@@ -39,28 +40,31 @@ function ars(n: number): string {
 function fmtTs(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
-  return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }) +
-    ' · ' + d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' }) +
+    ' · ' + d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
 }
 
 @Component({
   selector: 'app-order-detail',
   standalone: true,
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './order-detail.component.html',
 })
-export class OrderDetailComponent implements OnInit {
-  private readonly route  = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly svc    = inject(OrdersService);
-  private readonly bc     = inject(BreadcrumbService);
+export class OrderDetailComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('pageActions') private pageActionsTemplate!: TemplateRef<unknown>;
 
-  protected readonly order         = signal<AdminOrder | null>(null);
-  protected readonly payment       = signal<AdminOrderPayment | null>(null);
-  protected readonly isLoading     = signal(true);
-  protected readonly hasError      = signal(false);
-  protected readonly notesValue    = signal('');
-  protected readonly savingNotes   = signal(false);
+  private readonly route   = inject(ActivatedRoute);
+  private readonly router  = inject(Router);
+  private readonly svc     = inject(OrdersService);
+  private readonly bc      = inject(BreadcrumbService);
+  private readonly pageSvc = inject(AdminPageActionsService);
+
+  protected readonly order          = signal<AdminOrder | null>(null);
+  protected readonly payment        = signal<AdminOrderPayment | null>(null);
+  protected readonly isLoading      = signal(true);
+  protected readonly hasError       = signal(false);
+  protected readonly notesValue     = signal('');
+  protected readonly savingNotes    = signal(false);
   protected readonly updatingStatus = signal(false);
 
   protected readonly timeline = computed<TimelineEvent[]>(() => {
@@ -104,6 +108,13 @@ export class OrderDetailComponent implements OnInit {
     return events;
   });
 
+  constructor() {
+    effect(() => {
+      const o = this.order();
+      if (o) this.pageSvc.setBadge(this.badgeClass(o.status), this.statusLabel(o.status));
+    });
+  }
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.params['id']);
     this.bc.set([
@@ -111,6 +122,15 @@ export class OrderDetailComponent implements OnInit {
       { label: `#A-${id}` },
     ]);
     this.loadOrder(id);
+  }
+
+  ngAfterViewInit(): void {
+    this.pageSvc.setBack('/admin/orders', 'Órdenes');
+    this.pageSvc.setActions(this.pageActionsTemplate);
+  }
+
+  ngOnDestroy(): void {
+    this.pageSvc.clear();
   }
 
   private loadOrder(id: number): void {
@@ -129,27 +149,16 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  protected markAsShipped(): void {
-    this.changeStatus('SHIPPED');
-  }
-
-  protected cancelOrder(): void {
-    this.changeStatus('CANCELLED');
-  }
-
-  protected refundOrder(): void {
-    this.changeStatus('REFUNDED');
-  }
+  protected markAsShipped(): void { this.changeStatus('SHIPPED'); }
+  protected cancelOrder(): void   { this.changeStatus('CANCELLED'); }
+  protected refundOrder(): void   { this.changeStatus('REFUNDED'); }
 
   private changeStatus(status: OrderStatus): void {
     const o = this.order();
     if (!o) return;
     this.updatingStatus.set(true);
     this.svc.updateStatus(o.id, status).subscribe({
-      next: updated => {
-        this.order.set(updated);
-        this.updatingStatus.set(false);
-      },
+      next: updated => { this.order.set(updated); this.updatingStatus.set(false); },
       error: () => this.updatingStatus.set(false),
     });
   }
@@ -159,10 +168,7 @@ export class OrderDetailComponent implements OnInit {
     if (!o) return;
     this.savingNotes.set(true);
     this.svc.updateNotes(o.id, this.notesValue()).subscribe({
-      next: updated => {
-        this.order.set(updated);
-        this.savingNotes.set(false);
-      },
+      next: updated => { this.order.set(updated); this.savingNotes.set(false); },
       error: () => this.savingNotes.set(false),
     });
   }
@@ -177,10 +183,7 @@ export class OrderDetailComponent implements OnInit {
 
   protected mpStatusLabel(s: string): string {
     const map: Record<string, string> = {
-      approved: 'aprobado',
-      pending:  'pendiente',
-      rejected: 'rechazado',
-      refunded: 'reembolsado',
+      approved: 'aprobado', pending: 'pendiente', rejected: 'rechazado', refunded: 'reembolsado',
     };
     return map[s] ?? s;
   }
@@ -195,14 +198,9 @@ export class OrderDetailComponent implements OnInit {
     return 'px-2 py-0.5 rounded-full text-[10px] font-semibold ' + (map[s] ?? 'bg-surface-4 text-ink-2');
   }
 
-  protected ars     = ars;
-  protected fmtTs   = fmtTs;
+  protected ars   = ars;
+  protected fmtTs = fmtTs;
 
-  protected itemSubtotal(item: AdminOrderItem): string {
-    return ars(item.unitPrice * item.quantity);
-  }
-
-  protected goBack(): void {
-    this.router.navigate(['/admin/orders']);
-  }
+  protected itemSubtotal(item: AdminOrderItem): string { return ars(item.unitPrice * item.quantity); }
+  protected goBack(): void { this.router.navigate(['/admin/orders']); }
 }
