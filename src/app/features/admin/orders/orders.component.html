@@ -1,0 +1,31 @@
+<div class="flex flex-col h-full">
+
+  <app-orders-tabs
+    [tabs]="tabs"
+    [activeStatus]="activeStatus()"
+    [counts]="counts()"
+    (tabSelect)="setTab($event)"
+  />
+
+  <app-orders-filters
+    [datePreset]="datePreset()"
+    (searchChange)="onSearch($event)"
+    (datePresetChange)="onDatePresetChange($event)"
+  />
+
+  <div class="flex-1 overflow-auto">
+    <app-orders-table
+      [orders]="orders()"
+      [isLoading]="isLoading()"
+    />
+  </div>
+
+  <app-orders-pagination
+    [page]="page()"
+    [totalPages]="totalPages()"
+    [totalElems]="totalElems()"
+    [pageNumbers]="pageNumbers()"
+    (pageChange)="setPage($event)"
+  />
+
+</div>

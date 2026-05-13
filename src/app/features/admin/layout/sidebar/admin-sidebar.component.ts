@@ -1,4 +1,4 @@
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AUTH_SERVICE_TOKEN } from '../../../../core/tokens/auth.tokens';
 import { LogoComponent } from '../../../../shared/components/logo/logo.component';
@@ -106,8 +106,6 @@ const NAV_GROUPS: NavGroup[] = [
 export class AdminSidebarComponent {
   protected readonly authService = inject(AUTH_SERVICE_TOKEN);
   protected readonly navGroups = NAV_GROUPS;
-
-  @Input() pendingCount = 0;
 
   private readonly _collapsed = signal<boolean>(true);
   protected readonly collapsed = this._collapsed.asReadonly();

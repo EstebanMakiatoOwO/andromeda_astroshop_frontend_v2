@@ -1,0 +1,51 @@
+import { Component, input, output } from '@angular/core';
+
+@Component({
+  selector: 'app-orders-pagination',
+  standalone: true,
+  template: `
+    <div class="flex items-center justify-between px-6 py-3 border-t border-line shrink-0">
+      <small class="font-mono text-[11px] text-ink-3">
+        {{ totalElems() }} orden{{ totalElems() !== 1 ? 'es' : '' }} en total
+      </small>
+      @if (totalPages() > 1) {
+        <div class="flex items-center gap-1">
+          <button
+            (click)="pageChange.emit(page() - 1)"
+            [disabled]="page() === 0"
+            class="h-6 px-2 rounded border border-line bg-surface-4 text-[11px] text-ink-2
+                   hover:text-ink-1 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >‹</button>
+
+          @for (p of pageNumbers(); track p) {
+            <button
+              (click)="pageChange.emit(p)"
+              class="h-6 min-w-6 px-1.5 rounded border text-[11px] transition-colors"
+              [class.border-accent]="page() === p"
+              [class.bg-accent]="page() === p"
+              [class.text-white]="page() === p"
+              [class.border-line]="page() !== p"
+              [class.bg-surface-4]="page() !== p"
+              [class.text-ink-2]="page() !== p"
+            >{{ p + 1 }}</button>
+          }
+
+          <button
+            (click)="pageChange.emit(page() + 1)"
+            [disabled]="page() >= totalPages() - 1"
+            class="h-6 px-2 rounded border border-line bg-surface-4 text-[11px] text-ink-2
+                   hover:text-ink-1 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >›</button>
+        </div>
+      }
+    </div>
+  `,
+})
+export class OrdersPaginationComponent {
+  page        = input.required<number>();
+  totalPages  = input.required<number>();
+  totalElems  = input.required<number>();
+  pageNumbers = input.required<number[]>();
+
+  pageChange = output<number>();
+}
