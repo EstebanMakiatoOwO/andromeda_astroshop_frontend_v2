@@ -19,7 +19,7 @@ export class AuthService implements IAuthService {
   private readonly _isLoading   = signal<boolean>(false);
 
   readonly currentUser     = this._currentUser.asReadonly();
-  readonly isAuthenticated = computed(() => this._currentUser() !== null);
+  readonly isAuthenticated = computed(() => this._currentUser() !== null && !this.isTokenExpired());
   readonly isLoading       = this._isLoading.asReadonly();
 
   login(credentials: LoginCredentials, rememberMe: boolean): Observable<void> {
@@ -46,10 +46,7 @@ export class AuthService implements IAuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(USER_KEY);
+    this.clearStorage();
     this._currentUser.set(null);
     this.router.navigate(['/admin/login']);
   }
@@ -58,11 +55,38 @@ export class AuthService implements IAuthService {
     return localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY);
   }
 
+  private isTokenExpired(): boolean {
+    const token = this.getAccessToken();
+    if (!token) return true;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  }
+
+  private clearStorage(): void {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
+  }
+
   private loadUserFromStorage(): AuthUser | null {
     try {
       const raw =
         localStorage.getItem(USER_KEY) ?? sessionStorage.getItem(USER_KEY);
-      return raw ? (JSON.parse(raw) as AuthUser) : null;
+      if (!raw) return null;
+      const token = localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY);
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp * 1000 < Date.now()) {
+          this.clearStorage();
+          return null;
+        }
+      }
+      return JSON.parse(raw) as AuthUser;
     } catch {
       return null;
     }
