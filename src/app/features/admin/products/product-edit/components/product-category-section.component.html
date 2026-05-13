@@ -1,0 +1,49 @@
+<div class="rounded-xl border border-line bg-surface-3 p-4">
+  <h4 class="text-sm font-semibold text-ink-1 mb-3">Categoría y marca</h4>
+  <div class="flex flex-col gap-3">
+
+    <!-- Categories checkboxes -->
+    <div>
+      <small class="text-xs text-ink-3 block mb-2">Categorías</small>
+      @if (categories().length === 0) {
+        <p class="text-xs text-ink-3 font-mono">Cargando…</p>
+      } @else {
+        <div class="flex flex-wrap gap-2">
+          @for (cat of categories(); track cat.id) {
+            <label
+              class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer transition-colors"
+              [class.border-accent]="isSelected(cat.id)"
+              [class.bg-accent-soft]="isSelected(cat.id)"
+              [class.text-accent]="isSelected(cat.id)"
+              [class.border-line]="!isSelected(cat.id)"
+              [class.text-ink-2]="!isSelected(cat.id)"
+            >
+              <input
+                type="checkbox"
+                [checked]="isSelected(cat.id)"
+                (change)="toggleCategory(cat.id)"
+                class="cursor-pointer accent-accent"
+              />
+              {{ cat.name }}
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Brand ID -->
+    <label class="flex flex-col gap-1">
+      <small class="text-xs text-ink-3">ID de marca</small>
+      <input
+        type="number"
+        [value]="brandId() ?? ''"
+        (input)="emitBrandId($any($event.target).value)"
+        class="h-8 px-3 rounded border border-line bg-surface-4 text-xs text-ink-1
+               outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+        placeholder="Sin marca"
+        min="1"
+      />
+    </label>
+
+  </div>
+</div>

@@ -29,6 +29,16 @@ export const ADMIN_ROUTES: Routes = [
           import('./orders/order-detail/order-detail.component').then(m => m.OrderDetailComponent),
       },
       {
+        path: 'products',
+        loadComponent: () =>
+          import('./products/products.component').then(m => m.ProductsComponent),
+      },
+      {
+        path: 'products/:id',
+        loadComponent: () =>
+          import('./products/product-edit/product-edit.component').then(m => m.ProductEditComponent),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

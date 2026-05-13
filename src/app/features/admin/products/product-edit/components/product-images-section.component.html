@@ -1,0 +1,47 @@
+<div class="rounded-xl border border-line bg-surface-3 p-4">
+  <h4 class="text-sm font-semibold text-ink-1 mb-3">
+    Imágenes
+    <small class="text-ink-3 font-normal ml-1">· R2 CDN</small>
+  </h4>
+
+  <!-- Input file oculto -->
+  <input #fileInput type="file" accept="image/*" class="hidden"
+         (change)="onFileSelected($event)" />
+
+  <div class="grid grid-cols-4 gap-3">
+
+    @for (url of allImages(); track url; let i = $index) {
+      <div class="group relative aspect-square">
+        <img [src]="url" alt="Imagen del producto"
+             class="w-full h-full object-cover rounded-lg border border-line" />
+        @if (i === 0) {
+          <span class="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-semibold
+                       bg-surface-3 border border-line text-ink-2">portada</span>
+        }
+        <button
+          (click)="removeImage(i)"
+          class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-error text-white
+                 text-[10px] flex items-center justify-center
+                 opacity-0 group-hover:opacity-100 transition-opacity">
+          ×
+        </button>
+      </div>
+    }
+
+    @if (allImages().length === 0) {
+      <div class="col-span-3 aspect-square rounded-lg border border-dashed border-line
+                  flex items-center justify-center text-ink-3 text-xs">
+        Sin imágenes
+      </div>
+    }
+
+    <button type="button" (click)="openPicker()"
+            class="aspect-square rounded-lg border border-dashed border-line-strong
+                   flex flex-col items-center justify-center gap-1
+                   hover:bg-surface-4 transition-colors text-ink-3 cursor-pointer">
+      <span class="text-xl leading-none">+</span>
+      <small class="font-mono text-[10px]">subir</small>
+    </button>
+
+  </div>
+</div>

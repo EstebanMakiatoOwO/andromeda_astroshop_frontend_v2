@@ -1,0 +1,79 @@
+@if (isLoading()) {
+  <div class="flex items-center justify-center h-40 text-ink-3 text-sm font-mono">
+    Cargando productos…
+  </div>
+} @else if (products().length === 0) {
+  <div class="flex flex-col items-center justify-center h-40 gap-2">
+    <p class="text-ink-3 text-sm">Sin resultados</p>
+    <p class="text-ink-3 text-xs">Probá con otro filtro o término de búsqueda</p>
+  </div>
+} @else {
+  <table class="w-full text-xs">
+    <thead class="sticky top-0 z-10 bg-surface-3">
+      <tr class="border-b border-line">
+        <th class="px-4 py-2.5 w-8">
+          <input type="checkbox" [checked]="isAllSelected()"
+                 (change)="toggleAll($any($event.target).checked)" class="cursor-pointer" />
+        </th>
+        <th class="px-2 py-2.5 w-14"></th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">SKU</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Nombre</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Categoría</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Marca</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Precio</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Stock</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Estado</th>
+        <th class="px-4 py-2.5 text-left font-medium text-ink-3">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (product of products(); track product.id) {
+        <tr (click)="toggleOne(product.id)"
+            class="border-b border-line last:border-0 hover:bg-surface-4 transition-colors cursor-pointer"
+            [class.bg-accent-soft]="isSelected(product.id)">
+
+          <!-- Checkbox: detiene propagación para no doble-toggle -->
+          <td class="px-4 py-3" (click)="$event.stopPropagation()">
+            <input type="checkbox" [checked]="isSelected(product.id)"
+                   (change)="toggleOne(product.id)" class="cursor-pointer" />
+          </td>
+
+          <td class="px-2 py-3">
+            @if (product.images.length > 0) {
+              <img [src]="product.images[0]" [alt]="product.name"
+                   class="w-9 h-9 rounded-lg object-cover border border-line" />
+            } @else {
+              <div class="w-9 h-9 rounded-lg bg-surface-4 border border-line flex items-center
+                          justify-center text-[10px] font-bold text-ink-3">
+                {{ product.name.charAt(0) }}
+              </div>
+            }
+          </td>
+
+          <td class="px-4 py-3 font-mono text-[11px] text-ink-3">{{ product.sku }}</td>
+          <td class="px-4 py-3 font-semibold text-ink-1">{{ product.name }}</td>
+          <td class="px-4 py-3 text-ink-2">
+            {{ product.categories.length > 0 ? product.categories[0].name : '—' }}
+          </td>
+          <td class="px-4 py-3 text-ink-2">{{ product.brand?.name ?? '—' }}</td>
+          <td class="px-4 py-3 font-semibold text-ink-1">{{ ars(product.price) }}</td>
+          <td class="px-4 py-3">
+            <span [class]="stockBadgeClass(product.stock, product.stockAlertThreshold)">
+              {{ stockLabel(product.stock, product.isCatalog) }}
+            </span>
+          </td>
+          <td class="px-4 py-3">
+            <span [class]="badgeClass(product.status)">{{ statusLabel(product.status) }}</span>
+          </td>
+
+          <!-- Ver →: detiene propagación para no seleccionar al navegar -->
+          <td class="px-4 py-3" (click)="$event.stopPropagation()">
+            <a [routerLink]="['/admin/products', product.id]"
+               class="font-mono text-[11px] text-accent hover:underline">Ver →</a>
+          </td>
+
+        </tr>
+      }
+    </tbody>
+  </table>
+}

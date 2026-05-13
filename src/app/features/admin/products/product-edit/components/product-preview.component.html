@@ -1,0 +1,46 @@
+<div class="rounded-xl border border-line bg-surface-3 overflow-hidden">
+
+  <!-- Hero image -->
+  @if (coverUrl) {
+    <img [src]="coverUrl" [alt]="name()"
+         class="w-full aspect-[4/3] object-cover" />
+  } @else {
+    <div class="w-full aspect-[4/3] bg-surface-4 border-b border-line flex items-center
+                justify-center text-ink-3 text-xs font-mono">
+      sin imagen
+    </div>
+  }
+
+  <!-- Thumbnails -->
+  @if (images().length > 1) {
+    <div class="flex gap-2 p-3 border-b border-line">
+      @for (url of images().slice(0, 4); track url) {
+        <img [src]="url" alt="" class="w-12 h-12 rounded-lg object-cover border border-line" />
+      }
+    </div>
+  }
+
+  <!-- Info -->
+  <div class="p-4 flex flex-col gap-2">
+    <h2 class="text-base font-semibold text-ink-1 leading-snug">
+      {{ name() || 'Nombre del producto' }}
+    </h2>
+
+    @if (shortDescription()) {
+      <p class="text-xs text-ink-2 leading-relaxed">{{ shortDescription() }}</p>
+    }
+
+    <div class="flex items-center justify-between pt-1">
+      <strong class="text-xl text-ink-1">{{ ars(price()) }}</strong>
+      <span [class]="stockBadgeClass(stock(), 0)">
+        {{ stockLabel(stock(), isCatalog()) }}
+      </span>
+    </div>
+
+    <button class="w-full mt-1 h-9 rounded bg-accent text-white text-xs font-semibold
+                   hover:bg-accent-hover transition-colors">
+      Agregar al carrito
+    </button>
+  </div>
+
+</div>
