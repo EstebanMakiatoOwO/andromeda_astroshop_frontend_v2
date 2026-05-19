@@ -1,3 +1,12 @@
+<app-confirm-dialog
+  [open]="showConfirmDelete()"
+  title="¿Eliminar productos?"
+  [message]="'Se eliminarán ' + selectedIds().size + ' producto' + (selectedIds().size !== 1 ? 's' : '') + ' de forma permanente.'"
+  confirmLabel="Sí, eliminar"
+  (confirmed)="confirmDelete()"
+  (cancelled)="showConfirmDelete.set(false)"
+/>
+
 <div class="flex flex-col h-full">
 
   <app-products-filters
@@ -9,6 +18,7 @@
     (statusChange)="onStatusChange($event)"
     (availabilityChange)="onAvailabilityChange($event)"
     (stockChange)="onStockChange($event)"
+    (deleteSelected)="onDeleteSelected()"
   />
 
   <div class="flex-1 overflow-auto">

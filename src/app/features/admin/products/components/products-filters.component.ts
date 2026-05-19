@@ -17,4 +17,5 @@ export class ProductsFiltersComponent {
   statusChange      = output<string>();
   availabilityChange = output<string>();
   stockChange       = output<string>();
+  deleteSelected    = output<void>();
 }

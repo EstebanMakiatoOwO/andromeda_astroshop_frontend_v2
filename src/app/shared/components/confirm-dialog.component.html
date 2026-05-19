@@ -1,0 +1,54 @@
+@if (open()) {
+  <!-- Backdrop -->
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4"
+    (click)="cancelled.emit()"
+  >
+    <!-- Panel -->
+    <div
+      class="relative w-full max-w-sm rounded-2xl border border-line bg-surface-3
+             shadow-2xl p-6 flex flex-col gap-4"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Icono de advertencia -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-full shrink-0"
+             [class.bg-error-soft]="danger()"
+             [class.bg-warn-soft]="!danger()">
+          <svg class="w-5 h-5" [class.text-error]="danger()" [class.text-warn]="!danger()"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <h3 class="text-sm font-semibold text-ink-1">{{ title() }}</h3>
+      </div>
+
+      <p class="text-xs text-ink-2 leading-relaxed">{{ message() }}</p>
+
+      <div class="flex gap-2 justify-end pt-1">
+        <button
+          (click)="cancelled.emit()"
+          class="h-8 px-4 rounded border border-line bg-surface-4 text-xs text-ink-2
+                 hover:text-ink-1 transition-colors">
+          {{ cancelLabel() }}
+        </button>
+        <button
+          (click)="confirmed.emit()"
+          class="h-8 px-4 rounded text-xs font-medium transition-colors"
+          [class.bg-error]="danger()"
+          [class.text-white]="danger()"
+          [class.hover:bg-error-hover]="danger()"
+          [class.bg-warn]="!danger()"
+          [class.hover:bg-warn-hover]="!danger()">
+          {{ confirmLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay oscuro -->
+  <div class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" (click)="cancelled.emit()"></div>
+}

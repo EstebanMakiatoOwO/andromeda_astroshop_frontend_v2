@@ -64,6 +64,10 @@ export class ProductsService {
     return this.http.put<ApiResponse<AdminProduct>>(`${this.base}/${id}`, fd).pipe(map(r => r.data));
   }
 
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
+  }
+
   private buildFormData(request: ProductRequest, image?: File): FormData {
     const fd = new FormData();
     fd.append('request', new Blob([JSON.stringify(request)], { type: 'application/json' }));

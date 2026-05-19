@@ -1,5 +1,23 @@
+<app-confirm-dialog
+  [open]="showConfirmDelete()"
+  title="¿Eliminar producto?"
+  [message]="'Se eliminará ' + (formName() || 'este producto') + ' de forma permanente.'"
+  confirmLabel="Sí, eliminar"
+  (confirmed)="confirmDelete()"
+  (cancelled)="showConfirmDelete.set(false)"
+/>
+
 <!-- Botones que se proyectan al topbar global -->
 <ng-template #pageActions>
+  @if (!isNew()) {
+    <button
+      (click)="deleteProduct()"
+      [disabled]="isSaving()"
+      class="h-7 px-3 rounded border border-error bg-error-soft text-xs text-error
+             hover:bg-error hover:text-white disabled:opacity-50 transition-colors">
+      Eliminar
+    </button>
+  }
   <a routerLink="/admin/products"
      class="h-7 px-3 rounded border border-line bg-surface-4 text-xs text-ink-2
             hover:text-ink-1 transition-colors flex items-center">
