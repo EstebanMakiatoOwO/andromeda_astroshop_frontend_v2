@@ -8,11 +8,12 @@ import { AdminProduct } from '../../../core/models/product.model';
 import { ProductsFiltersComponent } from './components/products-filters.component';
 import { ProductsTableComponent } from './components/products-table.component';
 import { ProductsPaginationComponent } from './components/products-pagination.component';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [ProductsFiltersComponent, ProductsTableComponent, ProductsPaginationComponent],
+  imports: [ProductsFiltersComponent, ProductsTableComponent, ProductsPaginationComponent, ConfirmDialogComponent],
   templateUrl: './products.component.html',
 })
 export class ProductsComponent {
@@ -32,6 +33,7 @@ export class ProductsComponent {
   protected readonly totalElems         = signal(0);
   protected readonly isLoading          = signal(true);
   protected readonly selectedIds        = signal<Set<number>>(new Set());
+  protected readonly showConfirmDelete  = signal(false);
 
   protected readonly pageNumbers = computed(() => {
     const total   = this.totalPages();
@@ -88,6 +90,26 @@ export class ProductsComponent {
 
   protected onSelectionChange(ids: Set<number>): void {
     this.selectedIds.set(new Set(ids));
+  }
+
+  protected onDeleteSelected(): void {
+    if (!this.selectedIds().size) return;
+    this.showConfirmDelete.set(true);
+  }
+
+  protected confirmDelete(): void {
+    this.showConfirmDelete.set(false);
+    const ids = [...this.selectedIds()];
+    let pending = ids.length;
+    const done = () => {
+      if (--pending === 0) {
+        this.selectedIds.set(new Set());
+        this.loadProducts(this.page(), this.searchTerm(), this.statusFilter(), this.availabilityFilter(), this.stockFilter());
+      }
+    };
+    for (const id of ids) {
+      this.svc.deleteProduct(id).subscribe({ next: done, error: done });
+    }
   }
 
   protected setPage(p: number): void {

@@ -10,6 +10,7 @@ import { ProductImagesSectionComponent } from './components/product-images-secti
 import { ProductStockSectionComponent } from './components/product-stock-section.component';
 import { ProductCategorySectionComponent } from './components/product-category-section.component';
 import { ProductPreviewComponent } from './components/product-preview.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
 
 @Component({
   selector: 'app-product-edit',
@@ -21,6 +22,7 @@ import { ProductPreviewComponent } from './components/product-preview.component'
     ProductStockSectionComponent,
     ProductCategorySectionComponent,
     ProductPreviewComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './product-edit.component.html',
 })
@@ -35,8 +37,9 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected readonly isLoading  = signal(true);
   protected readonly hasError   = signal(false);
-  protected readonly isSaving   = signal(false);
-  protected readonly isNew      = signal(false);
+  protected readonly isSaving          = signal(false);
+  protected readonly isNew             = signal(false);
+  protected readonly showConfirmDelete = signal(false);
 
   // form state
   protected readonly formName        = signal('');
@@ -118,6 +121,19 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.hasError.set(true);
         this.isLoading.set(false);
       },
+    });
+  }
+
+  protected deleteProduct(): void {
+    this.showConfirmDelete.set(true);
+  }
+
+  protected confirmDelete(): void {
+    this.showConfirmDelete.set(false);
+    this.isSaving.set(true);
+    this.svc.deleteProduct(Number(this.route.snapshot.params['id'])).subscribe({
+      next: () => this.router.navigate(['/admin/products']),
+      error: () => this.isSaving.set(false),
     });
   }
 

@@ -1,0 +1,73 @@
+<app-confirm-dialog
+  [open]="showConfirmDelete()"
+  [title]="'¿Eliminar categoría?'"
+  [message]="'Se eliminará ' + deleteTargetName() + ' de forma permanente.'"
+  confirmLabel="Sí, eliminar"
+  (confirmed)="confirmDeleteFromTree()"
+  (cancelled)="showConfirmDelete.set(false)"
+/>
+
+<!-- Topbar actions -->
+<ng-template #pageActions>
+  <small class="text-ink-3 text-xs font-mono mr-1">
+    {{ rootCount() }} raíces · {{ subCount() }} subcategorías
+  </small>
+  <button
+    (click)="onNew()"
+    class="h-7 px-3 rounded bg-accent text-white text-xs font-medium
+           hover:bg-accent-hover transition-colors">
+    + Nueva categoría
+  </button>
+</ng-template>
+
+<!-- Main 2-column grid -->
+<div class="grid grid-cols-[1.3fr_1fr] h-full overflow-hidden">
+
+  <!-- Left: tree -->
+  <div class="overflow-auto p-5 border-r border-line flex flex-col gap-4">
+
+    @if (isTreeLoading()) {
+      <div class="flex items-center justify-center flex-1 text-xs text-ink-3 font-mono py-16">
+        Cargando…
+      </div>
+    } @else {
+      <app-category-tree
+        [categories]="treeCategories()"
+        [selectedId]="selectedId()"
+        (categorySelect)="onSelect($event)"
+        (reparent)="onReparent($event)"
+        (deleteRequest)="onDeleteFromTree($event)"
+      />
+    }
+
+  </div>
+
+  <!-- Right: edit panel or empty state -->
+  <div class="bg-surface-2 flex flex-col min-h-0">
+    @if (panelMode() === 'none') {
+      <div class="flex flex-col items-center justify-center h-full gap-4 text-ink-3 p-8">
+        <svg class="w-12 h-12 opacity-25" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p class="text-sm text-center">Selecciona una categoría del árbol para editarla</p>
+        <button
+          (click)="onNew()"
+          class="h-8 px-4 rounded border border-line bg-surface-3 text-xs text-ink-2
+                 hover:text-accent hover:border-accent transition-colors">
+          + Nueva categoría
+        </button>
+      </div>
+    } @else {
+      <app-category-edit-panel
+        class="flex-1 flex flex-col min-h-0"
+        [categoryId]="panelCategoryId()"
+        [allCategories]="flatCategories()"
+        (saved)="onSaved($event)"
+        (deleted)="onDeleted()"
+        (cancelled)="closePanel()"
+      />
+    }
+  </div>
+
+</div>

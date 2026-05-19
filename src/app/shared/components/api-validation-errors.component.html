@@ -1,0 +1,39 @@
+@if (message()) {
+  <div class="rounded-lg border border-error/50 bg-error-soft p-4 flex gap-3">
+    <!-- Icon -->
+    <svg class="w-4 h-4 text-error mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-semibold text-error">{{ message() }}</p>
+
+      @if (hasFields()) {
+        <ul class="mt-2 flex flex-col gap-1">
+          @for (entry of entries(); track entry[0]) {
+            <li class="text-xs text-error/80 flex gap-1.5">
+              <span class="font-mono text-[10px] bg-error/10 px-1 rounded shrink-0 leading-[1.6]">
+                {{ entry[0] }}
+              </span>
+              {{ entry[1] }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <!-- Dismiss -->
+    <button
+      (click)="dismissed.emit()"
+      class="text-error/60 hover:text-error transition-colors shrink-0 mt-0.5">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+}
