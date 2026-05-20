@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnDestroy, ViewChild, computed, input, output, signal } from '@angular/core';
+import { AssetUrlPipe } from '../../../../../shared/pipes/asset-url.pipe';
 
 @Component({
   selector: 'app-product-images-section',
   standalone: true,
+  imports: [AssetUrlPipe],
   templateUrl: './product-images-section.component.html',
 })
 export class ProductImagesSectionComponent implements OnDestroy {

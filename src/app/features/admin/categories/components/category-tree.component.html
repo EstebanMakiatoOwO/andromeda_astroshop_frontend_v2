@@ -102,9 +102,21 @@
             </button>
 
             @if (openMenuId() === node.cat.id) {
-              <div class="absolute right-0 top-6 z-20 w-44 rounded-lg border border-line
+              <div class="absolute right-0 top-6 z-20 w-48 rounded-lg border border-line
                           bg-surface-3 shadow-lg py-1"
                    (click)="$event.stopPropagation()">
+                <button
+                  (click)="onToggleShowInMenu(node.cat.id, $event)"
+                  class="w-full px-3 py-2 text-xs text-ink-2 hover:bg-surface-4 transition-colors text-left flex items-center gap-2">
+                  <span class="w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0"
+                        [class.bg-accent]="node.cat.showInMenu"
+                        [class.border-accent]="node.cat.showInMenu"
+                        [class.border-line]="!node.cat.showInMenu">
+                    @if (node.cat.showInMenu) { <span class="w-1.5 h-1.5 rounded-full bg-white"></span> }
+                  </span>
+                  {{ node.cat.showInMenu ? 'Ocultar del menú' : 'Mostrar en menú' }}
+                </button>
+                <div class="my-1 border-t border-line"></div>
                 <button
                   (click)="onDeleteClick(node.cat.id, $event)"
                   class="w-full px-3 py-2 text-xs text-error hover:bg-error-soft transition-colors text-left">

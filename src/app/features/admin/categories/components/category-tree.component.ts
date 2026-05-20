@@ -15,9 +15,10 @@ export class CategoryTreeComponent {
   categories = input.required<AdminCategory[]>();
   selectedId = input<number | null>(null);
 
-  categorySelect = output<number>();
-  reparent       = output<{ id: number; newParentId: number | null }>();
-  deleteRequest  = output<number>();
+  categorySelect       = output<number>();
+  reparent             = output<{ id: number; newParentId: number | null }>();
+  deleteRequest        = output<number>();
+  toggleShowInMenu     = output<number>();
 
   protected readonly search          = signal('');
   protected readonly expandedIds     = signal<Set<number>>(new Set());
@@ -164,6 +165,12 @@ export class CategoryTreeComponent {
     event.stopPropagation();
     this.openMenuId.set(null);
     this.deleteRequest.emit(id);
+  }
+
+  protected onToggleShowInMenu(id: number, event: Event): void {
+    event.stopPropagation();
+    this.openMenuId.set(null);
+    this.toggleShowInMenu.emit(id);
   }
 
   @HostListener('document:click')

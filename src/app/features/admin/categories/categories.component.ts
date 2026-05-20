@@ -106,6 +106,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       description:     cat.description ?? '',
       slug:            cat.slug,
       isActive:        cat.isActive,
+      showInMenu:      cat.showInMenu,
       sortOrder:       cat.sortOrder,
       imageUrl:        cat.imageUrl ?? '',
       metaTitle:       cat.metaTitle ?? '',
@@ -115,6 +116,28 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
     this.svc.updateCategory(event.id, request).subscribe({
       next: () => this.loadTree(),
       error: () => this.loadTree(), // reload even on error to keep state consistent
+    });
+  }
+
+  // ── Toggle showInMenu ──────────────────────────────────────────────
+
+  protected onToggleShowInMenu(id: number): void {
+    const cat = this.flatCategories().find(c => c.id === id);
+    if (!cat) return;
+    const request: CategoryRequest = {
+      name:            cat.name,
+      description:     cat.description ?? '',
+      slug:            cat.slug,
+      isActive:        cat.isActive,
+      showInMenu:      !cat.showInMenu,
+      sortOrder:       cat.sortOrder,
+      imageUrl:        cat.imageUrl ?? '',
+      metaTitle:       cat.metaTitle ?? '',
+      metaDescription: cat.metaDescription ?? '',
+      parentId:        cat.parentId,
+    };
+    this.svc.updateCategory(id, request).subscribe({
+      next: () => this.loadTree(),
     });
   }
 

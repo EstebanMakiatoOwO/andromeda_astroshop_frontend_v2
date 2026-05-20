@@ -2,11 +2,12 @@ import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AdminProduct } from '../../../../core/models/product.model';
 import { ars, badgeClass, statusLabel, stockBadgeClass, stockLabel } from '../products.helpers';
+import { AssetUrlPipe } from '../../../../shared/pipes/asset-url.pipe';
 
 @Component({
   selector: 'app-products-table',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, AssetUrlPipe],
   templateUrl: './products-table.component.html',
 })
 export class ProductsTableComponent {
