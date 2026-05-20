@@ -90,12 +90,21 @@
       </div>
 
       <!-- Loyalty — solo desktop -->
-      <span class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-line
-                   bg-surface-3 text-xs text-ink-2 select-none">
-        <span class="w-2 h-2 rounded-full shrink-0"
-              style="background-color: var(--color-accent);"></span>
-        {{ formatPts(loyaltyPts()) }} pts
-      </span>
+      @if (auth.isAuthenticated()) {
+        <span class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-line
+                     bg-surface-3 text-xs text-ink-2 select-none">
+          <span class="w-2 h-2 rounded-full shrink-0"
+                style="background-color: var(--color-accent);"></span>
+          {{ formatPts(loyaltyAccount()?.pointsBalance ?? 0) }} pts
+        </span>
+      } @else {
+        <span class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-line
+                     bg-surface-3 text-xs text-ink-2 select-none">
+          <span class="w-2 h-2 rounded-full shrink-0"
+                style="background-color: var(--color-accent);"></span>
+          {{ formatPts(loyaltyPts()) }} pts
+        </span>
+      }
 
       <!-- Auth — solo desktop -->
       @if (auth.isAuthenticated()) {
@@ -221,7 +230,12 @@
           @if (auth.isAuthenticated()) {
             <span class="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg border border-line
                          bg-surface-3 text-sm text-ink-2 truncate">
+              <span class="w-2 h-2 rounded-full shrink-0"
+                    style="background-color: var(--color-accent);"></span>
               {{ auth.currentUser()?.name }}
+              <span class="font-mono text-xs ml-auto shrink-0">
+                {{ formatPts(loyaltyAccount()?.pointsBalance ?? 0) }} pts
+              </span>
             </span>
             <button (click)="auth.logout()"
                     class="shrink-0 py-2 px-3 rounded-lg border border-line text-sm text-ink-2
@@ -238,7 +252,7 @@
                          bg-surface-3 text-sm text-ink-2">
               <span class="w-2 h-2 rounded-full shrink-0"
                     style="background-color: var(--color-accent);"></span>
-              {{ formatPts(loyaltyPts()) }} pts
+              {{ formatPts(loyaltyAccount()?.pointsBalance ?? loyaltyPts()) }} pts
             </span>
           }
         </div>

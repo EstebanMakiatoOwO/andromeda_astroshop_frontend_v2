@@ -1,11 +1,13 @@
 import { Component, DestroyRef, HostListener, computed, inject, input, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { Subject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, filter, of, switchMap } from 'rxjs';
 import { PublicCategory } from '../../../core/models/public-category.model';
 import { PublicProduct } from '../../../core/models/public-product.model';
+import { LoyaltyAccount } from '../../../core/models/loyalty.model';
 import { PublicAuthService } from '../../../core/services/public-auth.service';
 import { PublicProductsService } from '../../../core/services/public-products.service';
+import { LoyaltyService } from '../../../core/services/loyalty.service';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 
@@ -17,6 +19,7 @@ import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 })
 export class PublicNavbarComponent {
   private readonly productsService = inject(PublicProductsService);
+  private readonly loyaltyService  = inject(LoyaltyService);
   private readonly destroyRef      = inject(DestroyRef);
   protected readonly auth          = inject(PublicAuthService);
 
@@ -26,6 +29,13 @@ export class PublicNavbarComponent {
   protected readonly mobileMenuOpen = signal(false);
   protected readonly cartCount      = signal(2);
   protected readonly loyaltyPts     = signal(1240);
+
+  protected readonly loyaltyAccount = toSignal<LoyaltyAccount | null>(
+    toObservable(this.auth.isAuthenticated).pipe(
+      switchMap(isAuth => isAuth ? this.loyaltyService.getMyAccount() : of(null)),
+    ),
+    { initialValue: null },
+  );
 
   protected readonly navCategories = computed(() =>
     this.categories().filter(c => c.showInMenu !== false && c.slug !== 'nivel')

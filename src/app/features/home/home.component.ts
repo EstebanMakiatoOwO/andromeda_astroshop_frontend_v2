@@ -4,6 +4,7 @@ import { PublicProduct } from '../../core/models/public-product.model';
 import { Brand } from '../../core/models/brand.model';
 import { PublicProductsService } from '../../core/services/public-products.service';
 import { BrandsService } from '../../core/services/brands.service';
+import { PublicAuthService } from '../../core/services/public-auth.service';
 import { HeroSectionComponent } from './components/hero-section.component';
 import { LoyaltyBannerComponent } from './components/loyalty-banner.component';
 import { FeaturedProductsComponent } from './components/featured-products.component';
@@ -25,6 +26,7 @@ import { BrandsSectionComponent } from './components/brands-section.component';
 export class HomeComponent implements OnInit {
   private readonly productsService = inject(PublicProductsService);
   private readonly brandsService   = inject(BrandsService);
+  protected readonly auth          = inject(PublicAuthService);
 
   protected readonly featuredProducts  = signal<PublicProduct[]>([]);
   protected readonly brands            = signal<Brand[]>([]);
