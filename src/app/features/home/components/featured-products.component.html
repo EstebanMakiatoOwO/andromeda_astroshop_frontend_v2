@@ -12,19 +12,17 @@
     </a>
   </div>
 
-  <!-- Grid -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+  <!-- Grid — sparse (3 cols, 24px gap) matching wireframe grid--sparse -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
 
     @if (isLoading()) {
       @for (s of skeletons; track $index) {
-        <div class="rounded-xl border border-line bg-surface-3 overflow-hidden animate-pulse">
-          <div class="aspect-square bg-surface-4"></div>
-          <div class="p-3 flex flex-col gap-2">
-            <div class="h-2.5 w-16 rounded bg-surface-4"></div>
-            <div class="h-3 w-full rounded bg-surface-4"></div>
-            <div class="h-3 w-3/4 rounded bg-surface-4"></div>
-            <div class="h-4 w-20 rounded bg-surface-4 mt-1"></div>
-          </div>
+        <div class="flex flex-col gap-2 animate-pulse">
+          <div class="aspect-square rounded-md border border-line bg-surface-3"></div>
+          <div class="h-2.5 w-16 rounded bg-surface-3"></div>
+          <div class="h-3 w-full rounded bg-surface-3"></div>
+          <div class="h-3 w-3/4 rounded bg-surface-3"></div>
+          <div class="h-4 w-20 rounded bg-surface-3"></div>
         </div>
       }
     } @else {

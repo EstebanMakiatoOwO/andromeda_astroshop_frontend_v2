@@ -1,71 +1,66 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Surfaces */
-  --color-surface-1: oklch(9% 0.015 280);
-  --color-surface-2: oklch(12% 0.018 280);
-  --color-surface-3: oklch(16% 0.022 280);
-  --color-surface-4: oklch(20% 0.025 280);
+  /* ── Surfaces — dark (default, navy-shifted per wireframe) ── */
+  --color-surface-1: oklch(7% 0.02 265);
+  --color-surface-2: oklch(10% 0.025 265);
+  --color-surface-3: oklch(14% 0.03 265);
+  --color-surface-4: oklch(17% 0.028 265);
 
   /* Borders */
-  --color-line: oklch(22% 0.02 280);
-  --color-line-strong: oklch(30% 0.03 280);
+  --color-line:       oklch(20% 0.025 265);
+  --color-line-strong: oklch(27% 0.028 265);
 
   /* Text hierarchy */
-  --color-ink-1: oklch(96% 0.01 280);
-  --color-ink-2: oklch(75% 0.015 280);
-  --color-ink-3: oklch(50% 0.015 280);
+  --color-ink-1: oklch(94% 0.003 265);
+  --color-ink-2: oklch(73% 0.004 265);
+  --color-ink-3: oklch(50% 0.008 265);
 
-  /* Accent — cosmic purple */
-  --color-accent: oklch(62% 0.22 295);
-  --color-accent-soft: oklch(62% 0.22 295 / 15%);
-  --color-accent-hover: oklch(68% 0.22 295);
+  /* Accent — less saturated, slightly lighter than before; white text still readable */
+  --color-accent:       oklch(68% 0.18 290);
+  --color-accent-soft:  oklch(30% 0.08 290);
+  --color-accent-hover: oklch(72% 0.18 290);
 
-  /* Warn — amber */
-  --color-warn: oklch(78% 0.17 80);
-  --color-warn-soft: oklch(78% 0.17 80 / 15%);
-
-  /* Error — red */
-  --color-error: oklch(62% 0.22 25);
-  --color-error-soft: oklch(62% 0.22 25 / 15%);
-
-  /* Success — green */
-  --color-success: oklch(55% 0.15 150);
+  /* Semantic */
+  --color-warn:         oklch(78% 0.17 80);
+  --color-warn-soft:    oklch(78% 0.17 80 / 15%);
+  --color-error:        oklch(62% 0.22 25);
+  --color-error-soft:   oklch(62% 0.22 25 / 15%);
+  --color-success:      oklch(55% 0.15 150);
   --color-success-soft: oklch(55% 0.15 150 / 15%);
 
   /* Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Sidebar widths */
-  --spacing-sidebar-expanded: 15rem;
+  --spacing-sidebar-expanded:  15rem;
   --spacing-sidebar-collapsed: 3.5rem;
 }
 
-/* ── Light mode overrides ── */
+/* ── Light mode overrides (warm off-white per wireframe) ── */
 :root.light {
-  --color-surface-1: oklch(97% 0.005 280);
-  --color-surface-2: oklch(94% 0.008 280);
-  --color-surface-3: oklch(100% 0 0);
-  --color-surface-4: oklch(90% 0.01 280);
+  --color-surface-1: oklch(97% 0.005 95);
+  --color-surface-2: oklch(100% 0 0);
+  --color-surface-3: oklch(94.5% 0.006 95);
+  --color-surface-4: oklch(90% 0.008 95);
 
-  --color-line: oklch(86% 0.012 280);
-  --color-line-strong: oklch(78% 0.015 280);
+  --color-line:        oklch(86% 0.005 95);
+  --color-line-strong: oklch(75% 0.005 95);
 
-  --color-ink-1: oklch(12% 0.015 280);
-  --color-ink-2: oklch(32% 0.015 280);
-  --color-ink-3: oklch(55% 0.015 280);
+  --color-ink-1: oklch(12% 0.002 0);
+  --color-ink-2: oklch(38% 0.002 0);
+  --color-ink-3: oklch(58% 0.005 95);
 
-  --color-accent: oklch(55% 0.22 295);
-  --color-accent-soft: oklch(55% 0.22 295 / 12%);
-  --color-accent-hover: oklch(60% 0.22 295);
+  --color-accent:       oklch(55% 0.16 290);
+  --color-accent-soft:  oklch(95% 0.04 290);
+  --color-accent-hover: oklch(60% 0.16 290);
 
-  --color-warn: oklch(62% 0.17 70);
-  --color-warn-soft: oklch(62% 0.17 70 / 12%);
-
-  --color-error: oklch(52% 0.22 25);
-  --color-error-soft: oklch(52% 0.22 25 / 12%);
-
-  --color-success: oklch(48% 0.15 150);
+  --color-warn:         oklch(62% 0.17 70);
+  --color-warn-soft:    oklch(62% 0.17 70 / 12%);
+  --color-error:        oklch(52% 0.22 25);
+  --color-error-soft:   oklch(52% 0.22 25 / 12%);
+  --color-success:      oklch(48% 0.15 150);
   --color-success-soft: oklch(48% 0.15 150 / 12%);
 }
 
@@ -76,16 +71,46 @@
     box-sizing: border-box;
   }
 
-  html,
+  html {
+    height: 100%;
+    font-size: 16px;
+  }
+
   body {
     height: 100%;
     margin: 0;
     background-color: var(--color-surface-1);
     color: var(--color-ink-2);
     font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px — comfortable base for app text */
+    letter-spacing: -0.005em;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  h1 { font-size: 2rem;    line-height: 1.1;  font-weight: 600; letter-spacing: -0.02em;  margin: 0; }
+  h2 { font-size: 1.375rem; line-height: 1.2; font-weight: 600; letter-spacing: -0.015em; margin: 0; }
+  h3 { font-size: 1rem;    line-height: 1.25; font-weight: 600; margin: 0; }
+  h4 { font-size: 0.75rem; line-height: 1.3;  font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+  p  { margin: 0; }
+}
+
+/* ── Wireframe CSS variable aliases (short names → app tokens) ── */
+:root {
+  --bg:          var(--color-surface-1);
+  --surface:     var(--color-surface-2);
+  --surface-2:   var(--color-surface-3);
+  --surface-3:   var(--color-surface-4);
+  --line:        var(--color-line);
+  --line-strong: var(--color-line-strong);
+  --ink:         var(--color-ink-1);
+  --ink-2:       var(--color-ink-2);
+  --ink-3:       var(--color-ink-3);
+  --accent:      var(--color-accent);
+  --accent-soft: var(--color-accent-soft);
+  --radius:      6px;
+  --radius-lg:   10px;
 }
 
 .orbit {
