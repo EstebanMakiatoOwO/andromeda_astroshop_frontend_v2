@@ -3,9 +3,9 @@
   <!-- Hero image -->
   @if (coverUrl) {
     <img [src]="coverUrl | assetUrl" [alt]="name()"
-         class="w-full aspect-[4/3] object-cover" />
+         class="w-full aspect-4/3 object-cover" />
   } @else {
-    <div class="w-full aspect-[4/3] bg-surface-4 border-b border-line flex items-center
+    <div class="w-full aspect-4/3 bg-surface-4 border-b border-line flex items-center
                 justify-center text-ink-3 text-xs font-mono">
       sin imagen
     </div>
