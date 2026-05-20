@@ -97,11 +97,24 @@
         {{ formatPts(loyaltyPts()) }} pts
       </span>
 
-      <!-- Login — solo desktop -->
-      <button class="hidden md:block h-7.5 px-3 rounded border border-line text-xs text-ink-2
-                     hover:text-ink-1 hover:border-accent transition-colors">
-        Ingresar
-      </button>
+      <!-- Auth — solo desktop -->
+      @if (auth.isAuthenticated()) {
+        <span class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-line
+                     bg-surface-3 text-xs text-ink-2 select-none max-w-36 truncate">
+          {{ auth.currentUser()?.name }}
+        </span>
+        <button (click)="auth.logout()"
+                class="hidden md:block h-7.5 px-3 rounded border border-line text-xs text-ink-2
+                       hover:text-ink-1 hover:border-error transition-colors">
+          Salir
+        </button>
+      } @else {
+        <a routerLink="/login"
+           class="hidden md:inline-flex items-center h-7.5 px-3 rounded border border-line text-xs text-ink-2
+                  hover:text-ink-1 hover:border-accent transition-colors">
+          Ingresar
+        </a>
+      }
 
       <!-- Cart — siempre visible -->
       <button class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
@@ -205,16 +218,29 @@
 
         <!-- Acciones -->
         <div class="flex gap-2">
-          <button class="flex-1 py-2 rounded-lg border border-line text-sm text-ink-2
-                         hover:text-ink-1 hover:border-accent transition-colors">
-            Ingresar
-          </button>
-          <span class="flex items-center gap-2 px-3 py-2 rounded-lg border border-line
-                       bg-surface-3 text-sm text-ink-2">
-            <span class="w-2 h-2 rounded-full shrink-0"
-                  style="background-color: var(--color-accent);"></span>
-            {{ formatPts(loyaltyPts()) }} pts
-          </span>
+          @if (auth.isAuthenticated()) {
+            <span class="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg border border-line
+                         bg-surface-3 text-sm text-ink-2 truncate">
+              {{ auth.currentUser()?.name }}
+            </span>
+            <button (click)="auth.logout()"
+                    class="shrink-0 py-2 px-3 rounded-lg border border-line text-sm text-ink-2
+                           hover:text-error hover:border-error transition-colors">
+              Salir
+            </button>
+          } @else {
+            <a routerLink="/login"
+               class="flex-1 py-2 text-center rounded-lg border border-line text-sm text-ink-2
+                      hover:text-ink-1 hover:border-accent transition-colors">
+              Ingresar
+            </a>
+            <span class="flex items-center gap-2 px-3 py-2 rounded-lg border border-line
+                         bg-surface-3 text-sm text-ink-2">
+              <span class="w-2 h-2 rounded-full shrink-0"
+                    style="background-color: var(--color-accent);"></span>
+              {{ formatPts(loyaltyPts()) }} pts
+            </span>
+          }
         </div>
 
       </div>

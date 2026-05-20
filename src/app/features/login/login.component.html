@@ -1,0 +1,236 @@
+<div class="relative min-h-screen overflow-hidden bg-surface-1">
+
+  <!-- Background -->
+  <app-star-field [count]="150" [seed]="5" class="absolute inset-0 z-0" />
+  <span class="orbit" style="width:800px;height:800px;top:-200px;right:-300px;opacity:0.4;"></span>
+  <span class="orbit" style="width:1000px;height:1000px;top:-400px;right:-500px;opacity:0.2;"></span>
+
+  <!-- Topbar -->
+  <div class="relative z-10 h-14 px-6 flex items-center gap-4">
+    <a href="/"><app-logo [size]="22" /></a>
+    <div class="flex-1"></div>
+    <span class="hidden sm:block font-mono text-xs text-ink-3">¿problemas para ingresar?</span>
+    <button class="h-7 px-3 rounded border border-line text-xs text-ink-2
+                   hover:text-ink-1 hover:border-accent transition-colors">Ayuda</button>
+  </div>
+
+  <!-- Contenido -->
+  <div class="relative z-10 flex items-center justify-center min-h-[calc(100vh-56px)] p-4 sm:p-6">
+    <div class="flex flex-col gap-3 w-full max-w-190">
+
+      <!-- Banner guest -->
+      <div class="rounded-xl border border-line bg-surface-2 px-4 py-3 sm:px-5">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <div class="w-9 h-9 rounded-full bg-surface-3 flex items-center justify-center shrink-0 text-base">🛒</div>
+            <div class="flex flex-col gap-0.5 min-w-0">
+              <span class="text-sm font-semibold text-ink-1">¿Solo querés comprar?</span>
+              <small class="text-xs text-ink-3">No necesitás cuenta. Pagás con Mercado Pago igual.</small>
+            </div>
+          </div>
+          <button (click)="onGuest()"
+                  class="shrink-0 h-8 px-4 rounded border border-line text-xs text-ink-2
+                         hover:text-ink-1 hover:border-accent transition-colors whitespace-nowrap">
+            Continuar como invitado →
+          </button>
+        </div>
+      </div>
+
+      <!-- Card principal -->
+      <div class="rounded-xl border border-line bg-surface-2 p-6 sm:p-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+
+          <!-- Formulario -->
+          <div class="flex flex-col gap-4">
+
+            <!-- Tabs -->
+            <div class="flex gap-0 border-b border-line">
+              @for (tab of tabs; track tab.id) {
+                <button (click)="activeTab.set(tab.id)"
+                        class="pb-2.5 mr-5 text-sm transition-colors border-b-2 -mb-px"
+                        [class.border-accent]="activeTab() === tab.id"
+                        [class.text-ink-1]="activeTab() === tab.id"
+                        [class.font-semibold]="activeTab() === tab.id"
+                        [class.border-transparent]="activeTab() !== tab.id"
+                        [class.text-ink-3]="activeTab() !== tab.id">
+                  {{ tab.label }}
+                </button>
+              }
+            </div>
+
+            <!-- Error -->
+            @if (error()) {
+              <div class="px-3 py-2.5 rounded-lg border border-error/30 bg-error-soft text-xs text-error">
+                {{ error() }}
+              </div>
+            }
+
+            <!-- Register -->
+            @if (activeTab() === 'register') {
+              <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="flex flex-col gap-3">
+
+                <label class="flex flex-col gap-1">
+                  <small class="text-xs text-ink-3">Nombre completo</small>
+                  <input formControlName="name" type="text" placeholder="María González"
+                         class="h-9 px-3 rounded-lg border text-sm text-ink-1 bg-surface-3
+                                placeholder-ink-3 outline-none transition-colors focus:border-accent"
+                         [class.border-error]="fieldError('register','name','required')"
+                         [class.border-line]="!fieldError('register','name','required')" />
+                  @if (fieldError('register','name','required')) {
+                    <span class="text-[10px] text-error">El nombre es requerido</span>
+                  }
+                </label>
+
+                <label class="flex flex-col gap-1">
+                  <small class="text-xs text-ink-3">Email</small>
+                  <input formControlName="email" type="email" placeholder="correo@ejemplo.com"
+                         class="h-9 px-3 rounded-lg border text-sm text-ink-1 bg-surface-3
+                                placeholder-ink-3 outline-none transition-colors focus:border-accent"
+                         [class.border-error]="fieldError('register','email','required') || fieldError('register','email','email')"
+                         [class.border-line]="!fieldError('register','email','required') && !fieldError('register','email','email')" />
+                  @if (fieldError('register','email','required')) {
+                    <span class="text-[10px] text-error">El email es requerido</span>
+                  } @else if (fieldError('register','email','email')) {
+                    <span class="text-[10px] text-error">Ingresá un email válido</span>
+                  }
+                </label>
+
+                <app-password-input
+                  [control]="registerForm.controls.password"
+                  label="Contraseña"
+                  placeholder="mínimo 8 caracteres"
+                  [errorMsg]="fieldError('register','password','minlength') ? 'Mínimo 8 caracteres' : null"
+                />
+
+                <app-password-input
+                  [control]="registerForm.controls.confirmPassword"
+                  label="Confirmar contraseña"
+                  placeholder="repetir contraseña"
+                  [errorMsg]="passwordMismatch() ? 'Las contraseñas no coinciden' : null"
+                />
+
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                  <input formControlName="terms" type="checkbox" class="mt-0.5 accent-accent" />
+                  <span class="text-xs text-ink-2 leading-relaxed">
+                    Acepto los <a href="#" class="text-accent hover:underline">términos</a>
+                    y la <a href="#" class="text-accent hover:underline">política de privacidad</a>
+                  </span>
+                </label>
+
+                <button type="submit" [disabled]="isLoading()"
+                        class="h-10 px-4 rounded-lg text-sm font-medium text-white
+                               disabled:opacity-60 disabled:cursor-not-allowed
+                               flex items-center justify-center gap-2"
+                        style="background-color:var(--color-accent);"
+                        onmouseenter="if(!this.disabled)this.style.backgroundColor='var(--color-accent-hover)'"
+                        onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+                  @if (isLoading()) {
+                    <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                  }
+                  Crear cuenta y empezar a sumar
+                </button>
+
+              </form>
+            }
+
+            <!-- Login -->
+            @if (activeTab() === 'login') {
+              <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex flex-col gap-3">
+
+                <label class="flex flex-col gap-1">
+                  <small class="text-xs text-ink-3">Email</small>
+                  <input formControlName="email" type="email" placeholder="correo@ejemplo.com"
+                         class="h-9 px-3 rounded-lg border text-sm text-ink-1 bg-surface-3
+                                placeholder-ink-3 outline-none transition-colors focus:border-accent"
+                         [class.border-error]="fieldError('login','email','required') || fieldError('login','email','email')"
+                         [class.border-line]="!fieldError('login','email','required') && !fieldError('login','email','email')" />
+                  @if (fieldError('login','email','required')) {
+                    <span class="text-[10px] text-error">El email es requerido</span>
+                  } @else if (fieldError('login','email','email')) {
+                    <span class="text-[10px] text-error">Ingresá un email válido</span>
+                  }
+                </label>
+
+                <app-password-input
+                  [control]="loginForm.controls.password"
+                  [errorMsg]="fieldError('login','password','minlength') ? 'Mínimo 8 caracteres' : null"
+                />
+
+                <a href="#" class="self-end text-xs text-accent hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </a>
+
+                <button type="submit" [disabled]="isLoading()"
+                        class="h-10 px-4 rounded-lg text-sm font-medium text-white
+                               disabled:opacity-60 disabled:cursor-not-allowed
+                               flex items-center justify-center gap-2"
+                        style="background-color:var(--color-accent);"
+                        onmouseenter="if(!this.disabled)this.style.backgroundColor='var(--color-accent-hover)'"
+                        onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+                  @if (isLoading()) {
+                    <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                  }
+                  Ingresar
+                </button>
+
+              </form>
+            }
+
+          </div>
+
+          <!-- Panel loyalty -->
+          <app-loyalty-teaser />
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 pt-4 border-t border-line text-center">
+          <small class="text-xs text-ink-3">
+            Pagás con <strong class="text-ink-2">Mercado Pago</strong> igual, tengas cuenta o no.
+            Crear cuenta solo te suma puntos.
+          </small>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: email duplicado -->
+  @if (showDuplicateModal()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         (click)="showDuplicateModal.set(false)">
+      <div class="absolute inset-0 bg-surface-1/80 backdrop-blur-sm"></div>
+      <div class="relative z-10 w-full max-w-sm rounded-xl border border-line bg-surface-2 p-6
+                  flex flex-col gap-4 shadow-2xl"
+           (click)="$event.stopPropagation()">
+
+        <div class="w-10 h-10 rounded-full bg-warn-soft flex items-center justify-center text-lg mx-auto">
+          ✉️
+        </div>
+
+        <div class="text-center flex flex-col gap-1">
+          <h3 class="text-sm font-semibold text-ink-1">Este correo ya está registrado</h3>
+          <p class="text-xs text-ink-3 break-all">{{ duplicateEmail() }}</p>
+          <p class="text-xs text-ink-2 mt-1">¿Querés ingresar con esa cuenta?</p>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <button (click)="goToLogin()"
+                  class="h-9 rounded-lg text-sm font-medium text-white flex items-center justify-center"
+                  style="background-color:var(--color-accent);"
+                  onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+                  onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+            Sí, ingresar con este correo
+          </button>
+          <button (click)="showDuplicateModal.set(false)"
+                  class="h-9 rounded-lg border border-line text-xs text-ink-2
+                         hover:text-ink-1 hover:border-accent transition-colors">
+            Usar otro correo
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

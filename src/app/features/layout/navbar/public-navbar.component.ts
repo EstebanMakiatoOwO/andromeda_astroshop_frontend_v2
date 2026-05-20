@@ -1,8 +1,10 @@
 import { Component, DestroyRef, HostListener, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { PublicCategory } from '../../../core/models/public-category.model';
 import { PublicProduct } from '../../../core/models/public-product.model';
+import { PublicAuthService } from '../../../core/services/public-auth.service';
 import { PublicProductsService } from '../../../core/services/public-products.service';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
@@ -10,12 +12,13 @@ import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
-  imports: [LogoComponent, AssetUrlPipe],
+  imports: [LogoComponent, AssetUrlPipe, RouterLink],
   templateUrl: './public-navbar.component.html',
 })
 export class PublicNavbarComponent {
   private readonly productsService = inject(PublicProductsService);
   private readonly destroyRef      = inject(DestroyRef);
+  protected readonly auth          = inject(PublicAuthService);
 
   categories = input<PublicCategory[]>([]);
 
