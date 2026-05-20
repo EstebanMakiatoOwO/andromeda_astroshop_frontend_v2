@@ -12,7 +12,7 @@
 
     @for (url of allImages(); track url; let i = $index) {
       <div class="group relative aspect-square">
-        <img [src]="url" alt="Imagen del producto"
+        <img [src]="url | assetUrl" alt="Imagen del producto"
              class="w-full h-full object-cover rounded-lg border border-line" />
         @if (i === 0) {
           <span class="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-semibold

@@ -86,6 +86,7 @@ export class CategoryEditPanelComponent {
         this.formDescription.set(cat.description ?? '');
         this.formSlug.set(cat.slug);
         this.formIsActive.set(cat.isActive);
+        this.formShowInMenu.set(cat.showInMenu);
         this.formSortOrder.set(cat.sortOrder);
         this.formImageUrl.set(cat.imageUrl ?? '');
         this.formMetaTitle.set(cat.metaTitle ?? '');
@@ -111,6 +112,7 @@ export class CategoryEditPanelComponent {
       description:     this.formDescription(),
       slug:            this.formSlug() || this.toSlug(this.formName()),
       isActive:        this.formIsActive(),
+      showInMenu:      this.formShowInMenu(),
       sortOrder:       this.formSortOrder(),
       imageUrl:        this.formImageUrl(),
       metaTitle:       this.formMetaTitle(),

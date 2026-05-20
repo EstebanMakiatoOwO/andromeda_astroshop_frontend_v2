@@ -4,6 +4,7 @@ export interface AdminCategory {
   description: string | null;
   slug: string;
   isActive: boolean;
+  showInMenu: boolean;
   sortOrder: number;
   imageUrl: string | null;
   metaTitle: string | null;
@@ -21,6 +22,7 @@ export interface CategoryRequest {
   description: string;
   slug: string;
   isActive: boolean;
+  showInMenu: boolean;
   sortOrder: number;
   imageUrl: string;
   metaTitle: string;

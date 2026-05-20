@@ -87,3 +87,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+.orbit {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1px dashed color-mix(in oklch, var(--color-accent) 25%, transparent);
+}

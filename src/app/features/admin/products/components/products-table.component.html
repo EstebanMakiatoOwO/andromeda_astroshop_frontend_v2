@@ -40,7 +40,7 @@
 
           <td class="px-2 py-3">
             @if (product.images.length > 0) {
-              <img [src]="product.images[0]" [alt]="product.name"
+              <img [src]="product.images[0] | assetUrl" [alt]="product.name"
                    class="w-9 h-9 rounded-lg object-cover border border-line" />
             } @else {
               <div class="w-9 h-9 rounded-lg bg-surface-4 border border-line flex items-center

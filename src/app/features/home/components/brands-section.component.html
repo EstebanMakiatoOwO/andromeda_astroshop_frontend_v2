@@ -1,0 +1,34 @@
+<section class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-14">
+
+  <h4 class="text-sm font-semibold text-ink-1 mb-4">Marcas oficiales</h4>
+
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
+    @for (brand of brands(); track brand.id) {
+      <div class="rounded border border-line bg-surface-3 flex items-center justify-center
+                  hover:border-accent transition-colors cursor-pointer p-2"
+           style="height: 48px;">
+        @if (brand.logoUrl) {
+          <img [src]="brand.logoUrl | assetUrl" [alt]="brand.name"
+               class="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity" />
+        } @else {
+          <span class="font-mono text-[10px] md:text-[11px] text-ink-3 hover:text-accent
+                       transition-colors text-center leading-tight">
+            {{ brand.name }}
+          </span>
+        }
+      </div>
+    }
+
+    @if (brands().length === 0) {
+      @for (placeholder of ['Celestron','Meade','SkyWatcher','Bushnell','Orion','Vixen']; track placeholder) {
+        <div class="rounded border border-line flex items-center justify-center p-2"
+             style="height: 48px;">
+          <span class="font-mono text-[10px] md:text-[11px] text-ink-3 text-center leading-tight">
+            {{ placeholder }}
+          </span>
+        </div>
+      }
+    }
+  </div>
+
+</section>

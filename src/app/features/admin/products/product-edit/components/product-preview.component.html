@@ -2,7 +2,7 @@
 
   <!-- Hero image -->
   @if (coverUrl) {
-    <img [src]="coverUrl" [alt]="name()"
+    <img [src]="coverUrl | assetUrl" [alt]="name()"
          class="w-full aspect-[4/3] object-cover" />
   } @else {
     <div class="w-full aspect-[4/3] bg-surface-4 border-b border-line flex items-center
@@ -15,7 +15,7 @@
   @if (images().length > 1) {
     <div class="flex gap-2 p-3 border-b border-line">
       @for (url of images().slice(0, 4); track url) {
-        <img [src]="url" alt="" class="w-12 h-12 rounded-lg object-cover border border-line" />
+        <img [src]="url | assetUrl" alt="" class="w-12 h-12 rounded-lg object-cover border border-line" />
       }
     </div>
   }

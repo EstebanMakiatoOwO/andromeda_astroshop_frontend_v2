@@ -1,9 +1,11 @@
 import { Component, input } from '@angular/core';
 import { ars, stockBadgeClass, stockLabel } from '../../products.helpers';
+import { AssetUrlPipe } from '../../../../../shared/pipes/asset-url.pipe';
 
 @Component({
   selector: 'app-product-preview',
   standalone: true,
+  imports: [AssetUrlPipe],
   templateUrl: './product-preview.component.html',
 })
 export class ProductPreviewComponent {

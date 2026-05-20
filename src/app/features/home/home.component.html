@@ -1,0 +1,12 @@
+<app-hero-section />
+
+<app-loyalty-banner />
+
+<app-featured-products
+  [products]="featuredProducts()"
+  [isLoading]="isLoadingProducts()"
+/>
+
+<app-editorial-section />
+
+<app-brands-section [brands]="brands()" />

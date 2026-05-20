@@ -1,0 +1,67 @@
+<article class="group rounded-xl border border-line bg-surface-3 overflow-hidden
+             flex flex-col transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10
+             h-72 md:h-80">
+
+  <!-- Image -->
+  <div class="relative h-40 md:h-48 shrink-0 bg-surface-4 overflow-hidden">
+    @if (product().images.length > 0) {
+      <img
+        [src]="product().images[0] | assetUrl"
+        [alt]="product().name"
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    } @else {
+      <div class="w-full h-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-ink-3 opacity-40" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+    }
+
+    <!-- Stock badge -->
+    @if (product().stock === 0) {
+      <span class="absolute top-2 left-2 text-[10px] font-mono px-2 py-0.5 rounded-full
+                   bg-error-soft text-error border border-error/20">
+        Sin stock
+      </span>
+    } @else if (product().stockAlertThreshold !== null && product().stock <= product().stockAlertThreshold!) {
+      <span class="absolute top-2 left-2 text-[10px] font-mono px-2 py-0.5 rounded-full
+                   bg-warn-soft text-warn border border-warn/20">
+        Últimas unidades
+      </span>
+    }
+  </div>
+
+  <!-- Body -->
+  <div class="flex flex-col flex-1 p-3 gap-1.5">
+    <!-- Category -->
+    @if (product().categories.length > 0) {
+      <span class="text-[10px] font-mono text-accent uppercase tracking-wider truncate">
+        {{ product().categories[0].name }}
+      </span>
+    }
+
+    <!-- Name -->
+    <h3 class="text-sm font-medium text-ink-1 leading-snug line-clamp-2 flex-1">
+      {{ product().name }}
+    </h3>
+
+    <!-- Short description -->
+    @if (product().shortDescription) {
+      <p class="text-xs text-ink-3 line-clamp-1">{{ product().shortDescription }}</p>
+    }
+
+    <!-- Price -->
+    <div class="flex items-baseline gap-2 mt-auto pt-1">
+      <span class="text-base font-bold text-ink-1">
+        {{ formatPrice(product().price) }}
+      </span>
+      @if (product().brand) {
+        <span class="text-[10px] text-ink-3 font-mono ml-auto">{{ product().brand!.name }}</span>
+      }
+    </div>
+  </div>
+</article>
