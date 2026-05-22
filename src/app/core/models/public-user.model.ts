@@ -18,7 +18,7 @@ export interface PublicRegisterRequest {
 
 export interface PublicLoginResponse {
   name: string;
-  jwt: string;
+  token: string;
 }
 
 export interface PublicRegisterResponse {

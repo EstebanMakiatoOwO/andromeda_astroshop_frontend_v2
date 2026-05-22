@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { PublicAuthService } from '../../core/services/public-auth.service';
 import { StarFieldComponent } from '../../shared/components/star-field.component';
@@ -16,7 +16,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, StarFieldComponent, LogoComponent, PasswordInputComponent, LoyaltyTeaserComponent],
+  imports: [ReactiveFormsModule, RouterLink, StarFieldComponent, LogoComponent, PasswordInputComponent, LoyaltyTeaserComponent],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -56,7 +56,14 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
     this.auth.login(email!, password!).subscribe({
       next:  () => this.router.navigateByUrl(this.returnUrl),
-      error: () => this.error.set('Email o contraseña incorrectos.'),
+      error: (err) => {
+        const msg: string = err?.error?.message ?? '';
+        if (err?.status === 403 && msg) {
+          this.error.set(msg);
+        } else {
+          this.error.set('Email o contraseña incorrectos.');
+        }
+      },
     });
   }
 
@@ -65,7 +72,7 @@ export class LoginComponent {
     this.error.set(null);
     const { name, email, password } = this.registerForm.value;
     this.auth.register(name!, email!, password!).subscribe({
-      next:  () => this.router.navigateByUrl(this.returnUrl),
+      next:  () => this.router.navigate(['/check-email']),
       error: (err) => {
         const msg: string = err?.error?.message ?? '';
         if (msg.includes('Email already registered')) {
@@ -73,7 +80,7 @@ export class LoginComponent {
           this.duplicateEmail.set(match?.[1]?.trim() ?? this.registerForm.value.email ?? '');
           this.showDuplicateModal.set(true);
         } else {
-          this.error.set('No se pudo crear la cuenta. Revisá los datos e intentá de nuevo.');
+          this.error.set('No se pudo crear la cuenta. Revisa los datos e intenta de nuevo.');
         }
       },
     });

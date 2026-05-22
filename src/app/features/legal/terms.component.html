@@ -1,0 +1,144 @@
+<div class="relative min-h-screen bg-surface-1">
+
+  <app-star-field [count]="80" [seed]="12" class="absolute inset-0 z-0" />
+
+  <!-- Topbar -->
+  <div class="relative z-10 h-14 px-6 flex items-center gap-4 border-b border-line bg-surface-2/60 backdrop-blur-md">
+    <a href="/"><app-logo [size]="22" /></a>
+    <div class="flex-1"></div>
+    <a routerLink="/login" class="inline-flex items-center h-7 px-3 rounded border border-line text-xs text-ink-2
+                                  hover:text-ink-1 hover:border-accent transition-colors">
+      ← Volver
+    </a>
+  </div>
+
+  <!-- Contenido -->
+  <div class="relative z-10 max-w-3xl mx-auto px-6 py-12">
+
+    <div class="rounded-xl border border-line bg-surface-2 p-8 flex flex-col gap-8">
+
+      <!-- Header -->
+      <div class="flex flex-col gap-2 pb-6 border-b border-line">
+        <span class="font-mono text-xs text-accent">// legal</span>
+        <h1 class="text-xl font-semibold text-ink-1">Términos y Condiciones</h1>
+        <p class="text-xs text-ink-3">Última actualización: {{ lastUpdated }}</p>
+      </div>
+
+      <!-- Secciones -->
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">1. Objeto y aceptación</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Los presentes Términos y Condiciones regulan el acceso y uso del sitio web
+          <strong class="text-ink-1">Andromeda Astroshop</strong>, plataforma de comercio
+          electrónico dedicada a la venta de telescopios, binoculares, accesorios de astronomía
+          y material educativo. Al acceder o usar el sitio, aceptas en su totalidad estos términos.
+          Si no estás de acuerdo, te pedimos que te abstengas de utilizar nuestros servicios.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">2. Registro y cuenta de usuario</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Puedes realizar compras como invitado sin necesidad de crear una cuenta. Si decides registrarte,
+          debes proporcionar información verídica y mantenerla actualizada. Eres responsable de mantener
+          la confidencialidad de tus credenciales y de todas las actividades realizadas desde tu cuenta.
+          Andromeda Astroshop se reserva el derecho de suspender cuentas que incumplan estos términos.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">3. Programa de puntos Loyalty</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Los usuarios registrados acumulan puntos por cada compra realizada: <strong class="text-ink-1">1 punto
+          por cada $100 MXN gastados</strong>, más <strong class="text-ink-1">100 puntos de bienvenida</strong>
+          al registrarse. Los puntos pueden canjearse como descuento: <strong class="text-ink-1">$1 MXN de descuento
+          por cada 10 puntos</strong>. Los puntos no tienen valor monetario, no son transferibles, no se
+          acumulan con otras promociones y vencen a los 24 meses sin actividad en la cuenta.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">4. Productos, precios y disponibilidad</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Los precios publicados están expresados en pesos mexicanos (MXN) e incluyen el IVA aplicable,
+          salvo indicación en contrario. Nos reservamos el derecho de modificar precios sin previo aviso.
+          La disponibilidad del inventario se indica en cada producto; algunos artículos pueden estar
+          disponibles bajo la modalidad "a pedido" con tiempos de entrega extendidos. Las imágenes
+          son ilustrativas; el producto final puede presentar variaciones menores de diseño o color.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">5. Proceso de compra y pago</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Los pagos se procesan exclusivamente a través de <strong class="text-ink-1">Mercado Pago</strong>,
+          plataforma que acepta tarjetas de crédito, débito, transferencias y otros medios disponibles
+          en México. Andromeda Astroshop no almacena datos de tarjetas ni información financiera sensible.
+          Una vez confirmado el pago, recibirás un correo electrónico con el detalle de tu pedido.
+          El contrato de compraventa se perfecciona al recibir dicha confirmación.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">6. Envíos y entregas</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Los tiempos y costos de envío se informan durante el proceso de compra antes de confirmar el pago.
+          Los plazos son estimados y pueden variar por factores externos fuera de nuestro control
+          (demoras de paquetería, días festivos, condiciones climáticas). Para artículos "a pedido",
+          el plazo de entrega inicia a partir de la disponibilidad del producto. El riesgo de la mercancía
+          se transfiere al comprador en el momento de la entrega.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">7. Devoluciones y garantía</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Todos los productos cuentan con la garantía de fábrica correspondiente. Si recibes un producto
+          con defectos o dañado durante el transporte, tienes <strong class="text-ink-1">30 días hábiles</strong>
+          desde la recepción para notificarnos. De acuerdo con la Ley Federal de Protección al Consumidor
+          (PROFECO), tienes derecho a reclamar la reparación, reposición o devolución del importe
+          pagado cuando el producto presente defectos o no corresponda a lo ofrecido.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">8. Propiedad intelectual</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Todo el contenido del sitio (textos, imágenes, logotipos, diseño) es propiedad de Andromeda
+          Astroshop o de sus licenciantes y está protegido por las leyes mexicanas de derechos de autor
+          y propiedad industrial. Queda prohibida su reproducción total o parcial sin autorización
+          expresa y por escrito.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">9. Modificaciones</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Andromeda Astroshop se reserva el derecho de modificar estos Términos en cualquier momento.
+          Los cambios serán publicados en esta página con la fecha de actualización. El uso continuado
+          del sitio después de la publicación de los cambios implica su aceptación.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">10. Contacto</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Para cualquier duda sobre estos términos puedes escribirnos a
+          <strong class="text-ink-1">legal&#64;andromedaastroshop.com</strong>.
+        </p>
+      </section>
+
+      <!-- Footer -->
+      <div class="pt-4 border-t border-line flex gap-4">
+        <a routerLink="/privacidad" class="text-xs text-accent hover:underline">
+          Política de privacidad →
+        </a>
+        <a routerLink="/login" class="text-xs text-ink-3 hover:text-ink-2 transition-colors">
+          Volver al login
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -10,8 +10,9 @@
     <a href="/"><app-logo [size]="22" /></a>
     <div class="flex-1"></div>
     <span class="hidden sm:block font-mono text-xs text-ink-3">¿problemas para ingresar?</span>
-    <button class="h-7 px-3 rounded border border-line text-xs text-ink-2
-                   hover:text-ink-1 hover:border-accent transition-colors">Ayuda</button>
+    <a href="https://wa.me/525512672026" target="_blank" rel="noopener noreferrer"
+       class="inline-flex items-center h-7 px-3 rounded border border-line text-xs text-ink-2
+              hover:text-ink-1 hover:border-accent transition-colors">Ayuda</a>
   </div>
 
   <!-- Contenido -->
@@ -112,12 +113,12 @@
                 <label class="flex items-start gap-2.5 cursor-pointer">
                   <input formControlName="terms" type="checkbox" class="mt-0.5 accent-accent" />
                   <span class="text-xs text-ink-2 leading-relaxed">
-                    Acepto los <a href="#" class="text-accent hover:underline">términos</a>
-                    y la <a href="#" class="text-accent hover:underline">política de privacidad</a>
+                    Acepto los <a routerLink="/terminos" target="_blank" class="text-accent hover:underline">términos</a>
+                    y la <a routerLink="/privacidad" target="_blank" class="text-accent hover:underline">política de privacidad</a>
                   </span>
                 </label>
 
-                <button type="submit" [disabled]="isLoading()"
+                <button type="submit" [disabled]="isLoading() || registerForm.invalid"
                         class="h-10 px-4 rounded-lg text-sm font-medium text-white
                                disabled:opacity-60 disabled:cursor-not-allowed
                                flex items-center justify-center gap-2"

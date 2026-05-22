@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, map, switchMap, tap, catchError, throwError } from 'rxjs';
+import { Observable, map, tap, catchError, throwError } from 'rxjs';
 import { PublicUser, PublicLoginResponse, PublicRegisterResponse } from '../models/public-user.model';
 import { environment } from '../../../environments/environment';
 
@@ -27,16 +27,10 @@ export class PublicAuthService {
       .post<PublicLoginResponse>(`${API_BASE}/api/v1/auth/login`, { email, password })
       .pipe(
         tap(response => {
-          localStorage.setItem(TOKEN_KEY, response.jwt);
-          const stored = localStorage.getItem(USER_KEY);
-          if (!stored) {
-            const user: PublicUser = { id: 0, name: response.name, email, role: 'USER' };
-            localStorage.setItem(USER_KEY, JSON.stringify(user));
-            this._currentUser.set(user);
-          } else {
-            const user = JSON.parse(stored) as PublicUser;
-            this._currentUser.set(user);
-          }
+          localStorage.setItem(TOKEN_KEY, response.token);
+          const user: PublicUser = { id: 0, name: response.name, email, role: 'USER' };
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+          this._currentUser.set(user);
           this._isLoading.set(false);
         }),
         map(() => void 0),
@@ -47,28 +41,22 @@ export class PublicAuthService {
       );
   }
 
-  register(name: string, email: string, password: string): Observable<void> {
+  register(name: string, email: string, password: string): Observable<PublicRegisterResponse> {
     this._isLoading.set(true);
     return this.http
       .post<PublicRegisterResponse>(`${API_BASE}/api/v1/auth/register`, { name, email, password })
       .pipe(
-        tap(response => {
-          const user: PublicUser = { id: response.id, name: response.name, email: response.email, role: response.role };
-          localStorage.setItem(USER_KEY, JSON.stringify(user));
-        }),
-        switchMap(() => this.http.post<PublicLoginResponse>(`${API_BASE}/api/v1/auth/login`, { email, password })),
-        tap(response => {
-          localStorage.setItem(TOKEN_KEY, response.jwt);
-          const stored = localStorage.getItem(USER_KEY);
-          if (stored) this._currentUser.set(JSON.parse(stored) as PublicUser);
-          this._isLoading.set(false);
-        }),
-        map(() => void 0),
+        tap(() => this._isLoading.set(false)),
         catchError(err => {
           this._isLoading.set(false);
           return throwError(() => err);
         }),
       );
+  }
+
+  verifyEmail(token: string): Observable<void> {
+    return this.http
+      .get<void>(`${API_BASE}/api/v1/auth/verify`, { params: { token } });
   }
 
   logout(): void {

@@ -27,6 +27,7 @@ export class PublicNavbarComponent {
 
   protected readonly megaOpen       = signal(false);
   protected readonly mobileMenuOpen = signal(false);
+  protected readonly userMenuOpen   = signal(false);
   protected readonly cartCount      = signal(2);
   protected readonly loyaltyPts     = signal(1240);
 
@@ -96,6 +97,7 @@ export class PublicNavbarComponent {
   @HostListener('document:click')
   protected onDocumentClick(): void {
     this.showDropdown.set(false);
+    this.userMenuOpen.set(false);
   }
 
   protected formatPrice(value: number): string {
