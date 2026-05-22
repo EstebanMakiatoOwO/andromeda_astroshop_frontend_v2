@@ -1,0 +1,67 @@
+<div class="relative min-h-screen overflow-hidden bg-surface-1 flex flex-col">
+
+  <app-star-field [count]="120" [seed]="9" class="absolute inset-0 z-0" />
+  <span class="orbit" style="width:600px;height:600px;top:-150px;right:-200px;opacity:0.3;"></span>
+
+  <!-- Topbar -->
+  <div class="relative z-10 h-14 px-6 flex items-center">
+    <a href="/"><app-logo [size]="22" /></a>
+  </div>
+
+  <!-- Contenido centrado -->
+  <div class="relative z-10 flex-1 flex items-center justify-center p-6">
+    <div class="w-full max-w-md text-center flex flex-col items-center gap-6">
+
+      <!-- Ícono -->
+      <div class="w-16 h-16 rounded-full border border-line bg-surface-2 flex items-center justify-center text-3xl">
+        ✉️
+      </div>
+
+      <!-- Texto -->
+      <div class="flex flex-col gap-2">
+        <span class="font-mono text-xs text-accent">// paso 1 de 2</span>
+        <h1 class="text-xl font-semibold text-ink-1">Revisa tu correo</h1>
+        <p class="text-sm text-ink-3 leading-relaxed max-w-sm">
+          Te enviamos un link de confirmación. Haz clic en él para activar
+          tu cuenta y empezar a sumar puntos.
+        </p>
+      </div>
+
+      <!-- Card info -->
+      <div class="w-full rounded-xl border border-line bg-surface-2 px-5 py-4 flex flex-col gap-3 text-left">
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 w-5 h-5 rounded-full border border-line bg-surface-3 flex items-center
+                       justify-center text-[10px] text-ink-3 shrink-0">1</span>
+          <p class="text-xs text-ink-2 leading-relaxed">
+            Abre el correo de <strong class="text-ink-1">no-reply&#64;andromedaastroshop.com</strong>
+            en tu bandeja de entrada (o en spam si no lo ves).
+          </p>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 w-5 h-5 rounded-full border border-line bg-surface-3 flex items-center
+                       justify-center text-[10px] text-ink-3 shrink-0">2</span>
+          <p class="text-xs text-ink-2 leading-relaxed">
+            Haz clic en el botón <strong class="text-ink-1">"Confirmar mi correo"</strong>
+            para activar tu cuenta.
+          </p>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 w-5 h-5 rounded-full border border-line bg-surface-3 flex items-center
+                       justify-center text-[10px] text-ink-3 shrink-0">3</span>
+          <p class="text-xs text-ink-2 leading-relaxed">
+            Ya puedes iniciar sesión y comenzar a explorar el universo.
+          </p>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <p class="text-xs text-ink-3">
+        ¿No llegó el correo?
+        <a href="https://wa.me/525512672026" target="_blank" rel="noopener noreferrer"
+           class="text-accent hover:underline">Contáctanos por WhatsApp</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>

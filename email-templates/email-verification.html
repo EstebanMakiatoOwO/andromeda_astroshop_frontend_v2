@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="supported-color-schemes" content="dark" />
+  <!-- Metadatos para validadores y clientes de correo -->
+  <meta name="subject"      content="Confirma tu correo — Andromeda Astroshop" />
+  <meta name="from-name"    content="Andromeda Astroshop" />
+  <meta name="from-address" content="no-reply@andromedaastroshop.com" />
+  <title>Confirma tu correo — Andromeda Astroshop</title>
+  <!--[if mso]>
+  <noscript>
+    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    * { box-sizing: border-box; }
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; display: block; }
+    a { color: #7C5CE8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    @media only screen and (max-width: 600px) {
+      .email-wrapper { width: 100% !important; }
+      .email-pad     { padding: 24px 16px !important; }
+    }
+  </style>
+</head>
+
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  VARIABLES                                              ║
+  ║  {{CUSTOMER_NAME}}  → Nombre del usuario                ║
+  ║  {{TOKEN}}          → UUID del token de verificación    ║
+  ║    ej. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx             ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
+
+<body style="margin:0;padding:0;background-color:#0A0A14;
+             font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+  <!-- Preview text / preheader — aparece en el inbox antes de abrir el correo -->
+  <span style="display:none!important;visibility:hidden;opacity:0;color:transparent;
+               height:0;width:0;font-size:0;max-height:0;max-width:0;overflow:hidden;
+               mso-hide:all;">
+    Un clic y listo — confirma tu correo para activar tu cuenta en Andromeda Astroshop.
+    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </span>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+         style="background-color:#0A0A14;">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" class="email-wrapper" width="520" cellpadding="0" cellspacing="0"
+               border="0" style="max-width:520px;width:100%;">
+
+          <!-- ── HEADER ─────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#10101E;border-radius:16px 16px 0 0;
+                       border:1px solid #1E1E30;border-bottom:none;
+                       padding:36px 40px 28px;">
+              <p style="margin:0;font-family:'Courier New',Courier,monospace;
+                        font-size:11px;color:#7C5CE8;letter-spacing:0.12em;
+                        text-transform:uppercase;">
+                // andromeda
+              </p>
+              <h1 style="margin:6px 0 0;font-size:22px;font-weight:700;
+                         color:#EAEAF5;letter-spacing:-0.02em;">
+                Astroshop
+              </h1>
+              <div style="margin:20px auto 0;width:40px;height:2px;
+                          background:linear-gradient(90deg,#7C5CE8,#A78BFA);
+                          border-radius:2px;"></div>
+            </td>
+          </tr>
+
+          <!-- ── BODY ───────────────────────────────────── -->
+          <tr>
+            <td class="email-pad" align="center"
+                style="background-color:#10101E;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:40px;">
+
+              <!-- Ícono sobre -->
+              <div style="width:64px;height:64px;background-color:#1A1A2E;
+                          border:1px solid #2A2A45;border-radius:50%;
+                          margin:0 auto 24px;text-align:center;line-height:64px;
+                          font-size:28px;">
+                ✉️
+              </div>
+
+              <h2 style="margin:0 0 12px;font-size:20px;font-weight:700;color:#EAEAF5;">
+                Confirma tu correo
+              </h2>
+
+              <p style="margin:0 0 8px;font-size:14px;color:#8888AA;line-height:1.6;">
+                Hola <strong style="color:#BBBBD0;">{{CUSTOMER_NAME}}</strong>,
+              </p>
+              <p style="margin:0 0 32px;font-size:14px;color:#8888AA;line-height:1.6;">
+                Gracias por registrarte en <strong style="color:#BBBBD0;">Andromeda Astroshop</strong>.
+                Solo falta un paso: haz clic en el botón de abajo para verificar tu correo
+                y activar tu cuenta.
+              </p>
+
+              <!-- CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+                     style="margin:0 auto 32px;">
+                <tr>
+                  <td align="center"
+                      style="background-color:#7C5CE8;border-radius:10px;mso-padding-alt:0;">
+                    <a href="https://andromedaastroshop.com/verify-email?token={{TOKEN}}"
+                       style="display:inline-block;padding:14px 36px;font-size:15px;
+                              font-weight:600;color:#FFFFFF;text-decoration:none;
+                              border-radius:10px;mso-hide:all;">
+                      Confirmar mi correo →
+                    </a>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                                 href="https://andromedaastroshop.com/verify-email?token={{TOKEN}}"
+                                 style="height:48px;v-text-anchor:middle;width:200px;"
+                                 arcsize="21%" fillcolor="#7C5CE8" stroke="f">
+                      <w:anchorlock/>
+                      <center style="color:#FFFFFF;font-family:sans-serif;font-size:15px;font-weight:600;">
+                        Confirmar mi correo →
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Link alternativo -->
+              <p style="margin:0 0 8px;font-size:12px;color:#55556A;">
+                Si el botón no funciona, copia y pega este enlace en tu navegador:
+              </p>
+              <p style="margin:0;font-size:11px;color:#7C5CE8;word-break:break-all;">
+                <a href="https://andromedaastroshop.com/verify-email?token={{TOKEN}}" style="color:#7C5CE8;">https://andromedaastroshop.com/verify-email?token={{TOKEN}}</a>
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- ── AVISO DE SEGURIDAD ─────────────────────── -->
+          <tr>
+            <td style="background-color:#0D0D1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:20px 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="20" valign="top" style="padding-top:1px;">
+                    <div style="width:16px;height:16px;border-radius:50%;
+                                background-color:#1A1A2E;border:1px solid #2A2A45;
+                                text-align:center;line-height:16px;font-size:10px;color:#8888AA;">
+                      !
+                    </div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0;font-size:12px;color:#55556A;line-height:1.6;">
+                      Si no creaste una cuenta en Andromeda Astroshop, ignora este correo.
+                      El link expira en <strong style="color:#8888AA;">24 horas</strong>.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── FOOTER ─────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#080812;border:1px solid #1E1E30;
+                       border-top:none;border-radius:0 0 16px 16px;
+                       padding:24px 40px 28px;">
+              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;
+                        font-size:11px;color:#44445A;letter-spacing:0.1em;">
+                // andromeda astroshop · 2026
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+                     style="margin:0 auto 16px;">
+                <tr>
+                  <td style="padding:0 10px;">
+                    <a href="https://andromedaastroshop.com/terminos"
+                       style="font-size:11px;color:#55556A;text-decoration:none;">
+                      Términos
+                    </a>
+                  </td>
+                  <td style="padding:0 10px;border-left:1px solid #2A2A45;">
+                    <a href="https://andromedaastroshop.com/privacidad"
+                       style="font-size:11px;color:#55556A;text-decoration:none;">
+                      Privacidad
+                    </a>
+                  </td>
+                  <td style="padding:0 10px;border-left:1px solid #2A2A45;">
+                    <a href="mailto:legal@andromedaastroshop.com"
+                       style="font-size:11px;color:#55556A;text-decoration:none;">
+                      Contacto
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0;font-size:11px;color:#44445A;line-height:1.6;">
+                Recibiste este correo porque alguien se registró con esta dirección.<br />
+                Si no fuiste tú, simplemente ignóralo.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

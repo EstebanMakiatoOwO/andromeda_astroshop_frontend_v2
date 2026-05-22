@@ -1,6 +1,14 @@
 import { Component, computed, input } from '@angular/core';
 
-interface Star { cx: number; cy: number; r: number; opacity: number; }
+interface Star {
+  cx: number;
+  cy: number;
+  r: number;
+  opacity: number;
+  dur: number;
+  begin: number;
+  animVals: string;
+}
 
 @Component({
   selector: 'app-star-field',
@@ -19,7 +27,18 @@ interface Star { cx: number; cy: number; r: number; opacity: number; }
           [attr.r]="star.r"
           fill="white"
           [attr.opacity]="star.opacity"
-        />
+        >
+          <animate
+            attributeName="opacity"
+            [attr.values]="star.animVals"
+            [attr.dur]="star.dur + 's'"
+            [attr.begin]="star.begin + 's'"
+            repeatCount="indefinite"
+            calcMode="spline"
+            keyTimes="0;0.5;1"
+            keySplines="0.4 0 0.6 1;0.4 0 0.6 1"
+          />
+        </circle>
       }
     </svg>
   `,
@@ -30,12 +49,20 @@ export class StarFieldComponent {
 
   protected readonly stars = computed<Star[]>(() => {
     const rand = this.lcg(this.seed());
-    return Array.from({ length: this.count() }, () => ({
-      cx:      rand() * 100,
-      cy:      rand() * 100,
-      r:       0.08 + rand() * 0.22,
-      opacity: 0.15 + rand() * 0.65,
-    }));
+    return Array.from({ length: this.count() }, () => {
+      const opacity = 0.15 + rand() * 0.65;
+      const dur     = 2 + rand() * 5;
+      const begin   = rand() * 6;
+      return {
+        cx:       rand() * 100,
+        cy:       rand() * 100,
+        r:        0.08 + rand() * 0.22,
+        opacity,
+        dur,
+        begin,
+        animVals: `${opacity};${+(opacity * 0.08).toFixed(3)};${opacity}`,
+      };
+    });
   });
 
   private lcg(seed: number): () => number {

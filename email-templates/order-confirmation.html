@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="supported-color-schemes" content="dark" />
+  <title>Confirmación de pedido — Andromeda Astroshop</title>
+  <!--[if mso]>
+  <noscript>
+    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    * { box-sizing: border-box; }
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; display: block; }
+    a { color: #7C5CE8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media only screen and (max-width: 600px) {
+      .email-wrapper { width: 100% !important; }
+      .email-card    { padding: 24px 16px !important; }
+      .item-img      { display: none !important; }
+      .hide-mobile   { display: none !important; }
+    }
+  </style>
+</head>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  VARIABLES A REEMPLAZAR (backend / template engine)             ║
+  ║  {{ORDER_NUMBER}}   → Número de pedido  (ej. 12345)             ║
+  ║  {{ORDER_DATE}}     → Fecha             (ej. 20 de mayo de 2026) ║
+  ║  {{CUSTOMER_NAME}}  → Nombre del cliente                        ║
+  ║  {{ITEMS}}          → Bloque de productos (ver sección Items)   ║
+  ║  {{SUBTOTAL}}       → Subtotal formateado (ej. $1,299.00)       ║
+  ║  {{SHIPPING}}       → Costo de envío     (ej. $99.00 / Gratis)  ║
+  ║  {{DISCOUNT}}       → Descuento puntos   (ej. -$50.00 / —)      ║
+  ║  {{TOTAL}}          → Total final        (ej. $1,348.00)        ║
+  ║  {{SHIP_NAME}}      → Nombre destinatario                       ║
+  ║  {{SHIP_ADDRESS}}   → Calle y número                            ║
+  ║  {{SHIP_CITY}}      → Ciudad, Estado, CP                        ║
+  ║  {{POINTS_EARNED}}  → Puntos ganados esta compra (ej. 13)       ║
+  ║  {{POINTS_BALANCE}} → Saldo total de puntos (ej. 113)           ║
+  ║  {{ORDER_URL}}      → URL para ver el pedido                    ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+
+<body style="margin:0;padding:0;background-color:#0A0A14;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+  <!-- Preheader (invisible, aparece en preview del inbox) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+    Tu pedido #{{ORDER_NUMBER}} está confirmado — pronto lo tendrás en tus manos. 🔭
+    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </div>
+
+  <!-- Wrapper -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+         style="background-color:#0A0A14;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <!-- Card -->
+        <table role="presentation" class="email-wrapper" width="600" cellpadding="0" cellspacing="0" border="0"
+               style="max-width:600px;width:100%;">
+
+          <!-- ── HEADER ─────────────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#10101E;border-radius:16px 16px 0 0;
+                       border:1px solid #1E1E30;border-bottom:none;
+                       padding:32px 40px 24px;">
+
+              <!-- Logo text -->
+              <p style="margin:0;font-family:'Courier New',Courier,monospace;
+                        font-size:11px;color:#7C5CE8;letter-spacing:0.12em;
+                        text-transform:uppercase;">
+                // andromeda
+              </p>
+              <h1 style="margin:6px 0 0;font-size:22px;font-weight:700;
+                         color:#EAEAF5;letter-spacing:-0.02em;">
+                Astroshop
+              </h1>
+
+              <!-- Divider -->
+              <div style="margin:20px auto 0;width:40px;height:2px;
+                          background:linear-gradient(90deg,#7C5CE8,#A78BFA);
+                          border-radius:2px;"></div>
+            </td>
+          </tr>
+
+          <!-- ── HERO ───────────────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#10101E;border-left:1px solid #1E1E30;
+                       border-right:1px solid #1E1E30;padding:28px 40px 32px;">
+
+              <!-- Ícono check -->
+              <div style="width:56px;height:56px;background-color:#1A1A2E;
+                          border:1px solid #2A2A45;border-radius:50%;
+                          margin:0 auto 20px;line-height:56px;
+                          text-align:center;font-size:24px;">
+                ✓
+              </div>
+
+              <h2 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#EAEAF5;">
+                ¡Tu pedido está confirmado!
+              </h2>
+              <p style="margin:0;font-size:14px;color:#8888AA;line-height:1.5;">
+                Hola <strong style="color:#BBBBD0;">{{CUSTOMER_NAME}}</strong>, recibimos tu pedido
+                y ya lo estamos preparando.
+              </p>
+
+              <!-- Order badge -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+                     style="margin:24px auto 0;">
+                <tr>
+                  <td style="background-color:#1A1A2E;border:1px solid #2A2A45;
+                              border-radius:8px;padding:12px 24px;text-align:center;">
+                    <p style="margin:0 0 2px;font-size:11px;color:#8888AA;
+                               font-family:'Courier New',Courier,monospace;letter-spacing:0.08em;">
+                      PEDIDO
+                    </p>
+                    <p style="margin:0;font-size:18px;font-weight:700;color:#A78BFA;
+                               font-family:'Courier New',Courier,monospace;">
+                      #{{ORDER_NUMBER}}
+                    </p>
+                    <p style="margin:4px 0 0;font-size:12px;color:#8888AA;">
+                      {{ORDER_DATE}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- ── PRODUCTOS ───────────────────────────────────────── -->
+          <tr>
+            <td style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:0 40px;">
+
+              <p style="margin:0;padding:24px 0 16px;font-size:12px;font-weight:600;
+                        color:#8888AA;letter-spacing:0.06em;text-transform:uppercase;
+                        border-bottom:1px solid #1E1E30;">
+                Resumen del pedido
+              </p>
+
+              <!--
+                ══ BLOQUE ITEM — repetir por cada producto ══
+                Reemplazar o generar con template engine (Thymeleaf, Handlebars, etc.)
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                       style="padding:16px 0;border-bottom:1px solid #1A1A2E;">
+                  <tr>
+                    <td class="item-img" width="56" valign="top">
+                      <img src="{{PRODUCT_IMAGE_URL}}" width="52" height="52" alt=""
+                           style="border-radius:8px;background-color:#1A1A2E;object-fit:cover;" />
+                    </td>
+                    <td valign="top" style="padding-left:12px;">
+                      <p style="margin:0 0 2px;font-size:14px;color:#EAEAF5;font-weight:500;">
+                        {{PRODUCT_NAME}}
+                      </p>
+                      <p style="margin:0;font-size:12px;color:#8888AA;">
+                        SKU: {{PRODUCT_SKU}} &nbsp;·&nbsp; Cant: {{PRODUCT_QTY}}
+                      </p>
+                    </td>
+                    <td valign="top" align="right" style="white-space:nowrap;">
+                      <p style="margin:0;font-size:14px;font-weight:600;color:#EAEAF5;">
+                        {{PRODUCT_TOTAL}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+                ══ FIN BLOQUE ITEM ══
+              -->
+
+              <!-- EJEMPLO con datos ficticios (eliminar en producción) -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding:16px 0;border-bottom:1px solid #1A1A2E;">
+                <tr>
+                  <td class="item-img" width="56" valign="top">
+                    <div style="width:52px;height:52px;background-color:#1A1A2E;
+                                border-radius:8px;border:1px solid #2A2A45;"></div>
+                  </td>
+                  <td valign="top" style="padding-left:12px;">
+                    <p style="margin:0 0 2px;font-size:14px;color:#EAEAF5;font-weight:500;">
+                      Telescopio Refractor 70/700 AZ
+                    </p>
+                    <p style="margin:0;font-size:12px;color:#8888AA;">
+                      SKU: TEL-0042 &nbsp;·&nbsp; Cant: 1
+                    </p>
+                  </td>
+                  <td valign="top" align="right" style="white-space:nowrap;">
+                    <p style="margin:0;font-size:14px;font-weight:600;color:#EAEAF5;">
+                      $1,299.00
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding:16px 0;border-bottom:1px solid #1A1A2E;">
+                <tr>
+                  <td class="item-img" width="56" valign="top">
+                    <div style="width:52px;height:52px;background-color:#1A1A2E;
+                                border-radius:8px;border:1px solid #2A2A45;"></div>
+                  </td>
+                  <td valign="top" style="padding-left:12px;">
+                    <p style="margin:0 0 2px;font-size:14px;color:#EAEAF5;font-weight:500;">
+                      Ocular Kellner 25mm
+                    </p>
+                    <p style="margin:0;font-size:12px;color:#8888AA;">
+                      SKU: OC-025K &nbsp;·&nbsp; Cant: 2
+                    </p>
+                  </td>
+                  <td valign="top" align="right" style="white-space:nowrap;">
+                    <p style="margin:0;font-size:14px;font-weight:600;color:#EAEAF5;">
+                      $198.00
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <!-- FIN EJEMPLO -->
+
+            </td>
+          </tr>
+
+          <!-- ── TOTALES ──────────────────────────────────────────── -->
+          <tr>
+            <td style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:0 40px 8px;">
+
+              <!-- Subtotal -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding:16px 0 8px;">
+                <tr>
+                  <td style="font-size:13px;color:#8888AA;">Subtotal</td>
+                  <td align="right" style="font-size:13px;color:#BBBBD0;">{{SUBTOTAL}}</td>
+                </tr>
+              </table>
+
+              <!-- Envío -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding:4px 0;">
+                <tr>
+                  <td style="font-size:13px;color:#8888AA;">Envío</td>
+                  <td align="right" style="font-size:13px;color:#BBBBD0;">{{SHIPPING}}</td>
+                </tr>
+              </table>
+
+              <!-- Descuento puntos (omitir si no aplica) -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding:4px 0;">
+                <tr>
+                  <td style="font-size:13px;color:#8888AA;">Descuento (puntos)</td>
+                  <td align="right" style="font-size:13px;color:#A78BFA;">{{DISCOUNT}}</td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <div style="height:1px;background-color:#1E1E30;margin:16px 0;"></div>
+
+              <!-- Total -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="padding-bottom:24px;">
+                <tr>
+                  <td style="font-size:15px;font-weight:700;color:#EAEAF5;">Total</td>
+                  <td align="right" style="font-size:18px;font-weight:700;color:#EAEAF5;">
+                    {{TOTAL}}
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- ── PUNTOS GANADOS ──────────────────────────────────── -->
+          <tr>
+            <td style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:0 40px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="background-color:#13103A;border:1px solid #2A2245;
+                              border-radius:10px;padding:14px 18px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td>
+                          <p style="margin:0 0 2px;font-size:12px;font-weight:600;color:#A78BFA;">
+                            + {{POINTS_EARNED}} puntos ganados en esta compra
+                          </p>
+                          <p style="margin:0;font-size:12px;color:#8888AA;">
+                            Tu saldo total es de <strong style="color:#A78BFA;">{{POINTS_BALANCE}} pts</strong>
+                          </p>
+                        </td>
+                        <td align="right" style="white-space:nowrap;">
+                          <p style="margin:0;font-size:22px;font-weight:700;color:#7C5CE8;">★</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── DIRECCIÓN DE ENVÍO ──────────────────────────────── -->
+          <tr>
+            <td style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:0 40px 32px;">
+
+              <p style="margin:0 0 12px;font-size:12px;font-weight:600;color:#8888AA;
+                        letter-spacing:0.06em;text-transform:uppercase;
+                        padding-top:24px;border-top:1px solid #1E1E30;">
+                Dirección de entrega
+              </p>
+
+              <p style="margin:0;font-size:13px;color:#BBBBD0;line-height:1.7;">
+                <strong style="color:#EAEAF5;">{{SHIP_NAME}}</strong><br />
+                {{SHIP_ADDRESS}}<br />
+                {{SHIP_CITY}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── CTA ────────────────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:none;border-bottom:none;padding:0 40px 40px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center"
+                      style="background-color:#7C5CE8;border-radius:10px;
+                             mso-padding-alt:0;padding:0;">
+                    <a href="{{ORDER_URL}}"
+                       style="display:inline-block;padding:13px 32px;font-size:14px;
+                              font-weight:600;color:#FFFFFF;text-decoration:none;
+                              border-radius:10px;mso-hide:all;">
+                      Ver mi pedido →
+                    </a>
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                                 href="{{ORDER_URL}}"
+                                 style="height:44px;v-text-anchor:middle;width:160px;"
+                                 arcsize="23%" fillcolor="#7C5CE8" stroke="f">
+                      <w:anchorlock/>
+                      <center style="color:#FFFFFF;font-family:sans-serif;font-size:14px;font-weight:600;">
+                        Ver mi pedido →
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── INFO ADICIONAL ─────────────────────────────────── -->
+          <tr>
+            <td style="background-color:#0E0E1C;border:1px solid #1E1E30;
+                       border-top:1px solid #1E1E30;border-bottom:none;
+                       padding:24px 40px;border-top:1px solid #1E1E30;">
+              <p style="margin:0;font-size:12px;color:#5555775;color:#666688;
+                        line-height:1.7;text-align:center;">
+                Si tienes alguna pregunta sobre tu pedido, contáctanos en<br />
+                <a href="mailto:legal@andromedaastroshop.com"
+                   style="color:#A78BFA;">legal@andromedaastroshop.com</a>
+                &nbsp;o por WhatsApp al
+                <a href="https://wa.me/525512672026" style="color:#A78BFA;">55 1267 2026</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── FOOTER ─────────────────────────────────────────── -->
+          <tr>
+            <td align="center"
+                style="background-color:#080812;border:1px solid #1E1E30;
+                       border-top:none;border-radius:0 0 16px 16px;
+                       padding:24px 40px 28px;">
+
+              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;
+                        font-size:11px;color:#44445A;letter-spacing:0.1em;">
+                // andromeda astroshop · 2026
+              </p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+                     style="margin:0 auto 16px;">
+                <tr>
+                  <td style="padding:0 10px;">
+                    <a href="{{ORDER_URL}}"
+                       style="font-size:11px;color:#666688;text-decoration:none;">
+                      Ver pedido
+                    </a>
+                  </td>
+                  <td style="padding:0 10px;border-left:1px solid #2A2A45;">
+                    <a href="https://andromedaastroshop.com/terminos"
+                       style="font-size:11px;color:#666688;text-decoration:none;">
+                      Términos
+                    </a>
+                  </td>
+                  <td style="padding:0 10px;border-left:1px solid #2A2A45;">
+                    <a href="https://andromedaastroshop.com/privacidad"
+                       style="font-size:11px;color:#666688;text-decoration:none;">
+                      Privacidad
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:11px;color:#44445A;line-height:1.6;">
+                Recibiste este correo porque realizaste una compra en Andromeda Astroshop.<br />
+                Si no reconoces esta compra, contáctanos de inmediato.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- / Card -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

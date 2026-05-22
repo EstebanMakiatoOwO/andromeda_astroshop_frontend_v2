@@ -1,0 +1,87 @@
+<div class="relative min-h-screen overflow-hidden bg-surface-1 flex flex-col">
+
+  <app-star-field [count]="120" [seed]="3" class="absolute inset-0 z-0" />
+  <span class="orbit" style="width:600px;height:600px;top:-150px;left:-200px;opacity:0.3;"></span>
+
+  <!-- Topbar -->
+  <div class="relative z-10 h-14 px-6 flex items-center">
+    <a href="/"><app-logo [size]="22" /></a>
+  </div>
+
+  <!-- Contenido centrado -->
+  <div class="relative z-10 flex-1 flex items-center justify-center p-6">
+    <div class="w-full max-w-sm text-center flex flex-col items-center gap-6">
+
+      <!-- Estado: cargando -->
+      @if (state() === 'loading') {
+        <div class="w-14 h-14 rounded-full border border-line bg-surface-2 flex items-center justify-center">
+          <span class="w-6 h-6 border-2 border-line border-t-accent rounded-full animate-spin"></span>
+        </div>
+        <div class="flex flex-col gap-2">
+          <h1 class="text-lg font-semibold text-ink-1">Verificando tu correo…</h1>
+          <p class="text-sm text-ink-3">Un momento, por favor.</p>
+        </div>
+      }
+
+      <!-- Estado: éxito -->
+      @if (state() === 'success') {
+        <div class="w-16 h-16 rounded-full border border-line bg-surface-2 flex items-center justify-center">
+          <svg class="w-7 h-7 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="font-mono text-xs text-accent">// cuenta activada</span>
+          <h1 class="text-xl font-semibold text-ink-1">¡Correo confirmado!</h1>
+          <p class="text-sm text-ink-3 leading-relaxed">
+            Tu cuenta está lista. Ya puedes iniciar sesión y empezar a explorar.
+          </p>
+        </div>
+        <a routerLink="/login"
+           class="inline-flex items-center justify-center h-10 px-6 rounded-lg text-sm font-medium text-white"
+           style="background-color:var(--color-accent);"
+           onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+           onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+          Iniciar sesión →
+        </a>
+      }
+
+      <!-- Estado: error -->
+      @if (state() === 'error') {
+        <div class="w-16 h-16 rounded-full border border-line bg-surface-2 flex items-center justify-center">
+          <svg class="w-7 h-7 text-error" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="font-mono text-xs text-error">// link inválido</span>
+          <h1 class="text-xl font-semibold text-ink-1">El link no es válido</h1>
+          <p class="text-sm text-ink-3 leading-relaxed">
+            Este link ya fue usado o expiró. Si necesitas uno nuevo,
+            contáctanos por WhatsApp.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <a href="https://wa.me/525512672026" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center justify-center h-10 px-6 rounded-lg text-sm font-medium text-white"
+             style="background-color:var(--color-accent);"
+             onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+             onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+            Pedir nuevo link por WhatsApp
+          </a>
+          <a routerLink="/login"
+             class="inline-flex items-center justify-center h-9 rounded-lg border border-line
+                    text-sm text-ink-2 hover:text-ink-1 hover:border-accent transition-colors">
+            Volver al login
+          </a>
+        </div>
+      }
+
+    </div>
+  </div>
+
+</div>

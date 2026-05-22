@@ -1,6 +1,8 @@
 <app-hero-section />
 
-<app-loyalty-banner />
+@if (!auth.isAuthenticated()) {
+  <app-loyalty-banner />
+}
 
 <app-featured-products
   [products]="featuredProducts()"

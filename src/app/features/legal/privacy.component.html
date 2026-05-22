@@ -1,0 +1,167 @@
+<div class="relative min-h-screen bg-surface-1">
+
+  <app-star-field [count]="80" [seed]="7" class="absolute inset-0 z-0" />
+
+  <!-- Topbar -->
+  <div class="relative z-10 h-14 px-6 flex items-center gap-4 border-b border-line bg-surface-2/60 backdrop-blur-md">
+    <a href="/"><app-logo [size]="22" /></a>
+    <div class="flex-1"></div>
+    <a routerLink="/login" class="inline-flex items-center h-7 px-3 rounded border border-line text-xs text-ink-2
+                                  hover:text-ink-1 hover:border-accent transition-colors">
+      ← Volver
+    </a>
+  </div>
+
+  <!-- Contenido -->
+  <div class="relative z-10 max-w-3xl mx-auto px-6 py-12">
+
+    <div class="rounded-xl border border-line bg-surface-2 p-8 flex flex-col gap-8">
+
+      <!-- Header -->
+      <div class="flex flex-col gap-2 pb-6 border-b border-line">
+        <span class="font-mono text-xs text-accent">// legal</span>
+        <h1 class="text-xl font-semibold text-ink-1">Política de Privacidad</h1>
+        <p class="text-xs text-ink-3">Última actualización: {{ lastUpdated }}</p>
+      </div>
+
+      <!-- Secciones -->
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">1. Responsable del tratamiento</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          <strong class="text-ink-1">Andromeda Astroshop</strong> es el responsable del tratamiento
+          de los datos personales recabados a través de este sitio, en términos de lo dispuesto por
+          la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).
+          Puedes contactarnos en <strong class="text-ink-1">legal&#64;andromedaastroshop.com</strong>
+          para cualquier asunto relacionado con tus datos.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">2. Datos que recabamos</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Recabamos únicamente los datos necesarios para brindarte nuestros servicios:
+        </p>
+        <ul class="flex flex-col gap-1.5 pl-4">
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Datos de registro:</strong> nombre, correo electrónico y contraseña (almacenada de forma cifrada).
+          </li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Datos de compra:</strong> domicilio de entrega, historial de pedidos y puntos de loyalty acumulados.
+          </li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Datos de navegación:</strong> páginas visitadas, búsquedas realizadas y preferencias de uso del sitio.
+          </li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Datos de pago:</strong> gestionados exclusivamente por Mercado Pago. No almacenamos datos de tarjetas ni información financiera.
+          </li>
+        </ul>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">3. Finalidades del tratamiento</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Usamos tus datos para:
+        </p>
+        <ul class="flex flex-col gap-1.5 pl-4">
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">Crear y administrar tu cuenta y el programa de puntos Loyalty.</li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">Procesar y dar seguimiento a tus pedidos.</li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">Enviarte confirmaciones de compra y actualizaciones de estado.</li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">Mejorar la experiencia de navegación y las recomendaciones de productos.</li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">Cumplir con obligaciones legales y fiscales ante el SAT y demás autoridades competentes.</li>
+        </ul>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">4. Transferencia de datos a terceros</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          No vendemos ni cedemos tus datos personales a terceros con fines comerciales.
+          Compartimos información estrictamente necesaria con:
+        </p>
+        <ul class="flex flex-col gap-1.5 pl-4">
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Mercado Pago:</strong> para el procesamiento de pagos, sujeto a su propia política de privacidad.
+          </li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Empresas de paquetería:</strong> nombre y domicilio de entrega para gestionar el envío de tu pedido.
+          </li>
+          <li class="text-sm text-ink-2 leading-relaxed list-disc">
+            <strong class="text-ink-1">Autoridades competentes:</strong> cuando sea requerido por ley, resolución judicial o mandato del SAT.
+          </li>
+        </ul>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">5. Seguridad de los datos</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Implementamos medidas técnicas y administrativas para proteger tus datos: cifrado en
+          tránsito mediante HTTPS, contraseñas almacenadas con hash seguro, acceso restringido
+          al personal autorizado y revisiones periódicas de seguridad. En caso de cualquier
+          incidente que afecte tus datos, te notificaremos en los plazos establecidos por la LFPDPPP.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">6. Uso de cookies</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Utilizamos cookies esenciales para el funcionamiento del sitio (sesión de usuario,
+          carrito de compras) y cookies analíticas propias para comprender cómo se usa el sitio.
+          No usamos cookies de publicidad de terceros. Puedes configurar tu navegador para rechazar
+          cookies, aunque esto puede afectar algunas funciones del sitio.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">7. Derechos ARCO</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          De acuerdo con la LFPDPPP, tienes derecho a <strong class="text-ink-1">Acceder</strong> a tus
+          datos personales, <strong class="text-ink-1">Rectificarlos</strong> si son incorrectos o
+          incompletos, <strong class="text-ink-1">Cancelar</strong> su tratamiento u
+          <strong class="text-ink-1">Oponerte</strong> al mismo en los supuestos previstos por la ley.
+          Para ejercer estos derechos escríbenos a
+          <strong class="text-ink-1">legal&#64;andromedaastroshop.com</strong> desde el correo asociado
+          a tu cuenta. Responderemos dentro de los 20 días hábiles que establece la ley.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">8. Conservación de datos</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Conservamos tus datos mientras tu cuenta esté activa y por el periodo adicional que
+          exijan las obligaciones fiscales y legales aplicables en México. Al eliminar tu cuenta,
+          los datos de pedidos se conservan el tiempo mínimo requerido por la normativa del SAT,
+          después de lo cual son eliminados de forma definitiva.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">9. Menores de edad</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Nuestros servicios están dirigidos a personas mayores de 18 años. No recabamos
+          intencionalmente datos de menores de edad. Si detectamos que un menor ha creado
+          una cuenta, procederemos a eliminarla junto con todos sus datos.
+        </p>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <h2 class="text-sm font-semibold text-ink-1">10. Cambios a este aviso</h2>
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Podemos actualizar este aviso de privacidad en cualquier momento. Cuando los cambios
+          sean relevantes, te lo notificaremos por correo electrónico. La fecha de la última
+          actualización siempre aparece al inicio del documento.
+        </p>
+      </section>
+
+      <!-- Footer -->
+      <div class="pt-4 border-t border-line flex gap-4">
+        <a routerLink="/terminos" class="text-xs text-accent hover:underline">
+          Términos y condiciones →
+        </a>
+        <a routerLink="/login" class="text-xs text-ink-3 hover:text-ink-2 transition-colors">
+          Volver al login
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
