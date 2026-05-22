@@ -27,7 +27,7 @@ export class PublicAuthService {
       .post<PublicLoginResponse>(`${API_BASE}/api/v1/auth/login`, { email, password })
       .pipe(
         tap(response => {
-          localStorage.setItem(TOKEN_KEY, response.token);
+          localStorage.setItem(TOKEN_KEY, response.jwt);
           const user: PublicUser = { id: 0, name: response.name, email, role: 'USER' };
           localStorage.setItem(USER_KEY, JSON.stringify(user));
           this._currentUser.set(user);
@@ -67,17 +67,22 @@ export class PublicAuthService {
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token || token === 'undefined' || token === 'null') return null;
+    return token;
   }
 
   private isTokenExpired(): boolean {
     const token = this.getAccessToken();
     if (!token) return true;
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const parts = token.split('.');
+      if (parts.length !== 3) return false;
+      const payload = JSON.parse(atob(parts[1]));
+      if (!payload.exp) return false;
       return payload.exp * 1000 < Date.now();
     } catch {
-      return true;
+      return false;
     }
   }
 
@@ -87,12 +92,17 @@ export class PublicAuthService {
       if (!raw) return null;
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.exp * 1000 < Date.now()) {
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(USER_KEY);
-          return null;
-        }
+        try {
+          const parts = token.split('.');
+          if (parts.length === 3) {
+            const payload = JSON.parse(atob(parts[1]));
+            if (payload.exp && payload.exp * 1000 < Date.now()) {
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem(USER_KEY);
+              return null;
+            }
+          }
+        } catch { /* no se puede decodificar, se ignora la expiración */ }
       }
       return JSON.parse(raw) as PublicUser;
     } catch {
