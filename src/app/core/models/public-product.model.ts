@@ -18,9 +18,15 @@ export interface PublicProductBrand {
   logoUrl: string;
 }
 
+export interface PublicProductSpec {
+  key: string;
+  value: string;
+}
+
 export interface PublicProduct {
   id: number;
   sku: string | null;
+  slug: string | null;
   barcode: string | null;
   name: string;
   shortDescription: string;
@@ -34,6 +40,9 @@ export interface PublicProduct {
   images: string[];
   categories: PublicProductCategory[];
   brand: PublicProductBrand | null;
+  rating: number | null;
+  reviewCount: number;
+  specifications: PublicProductSpec[];
   createdAt: string;
   updatedAt: string;
 }

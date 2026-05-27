@@ -1,0 +1,94 @@
+<!-- Tab bar -->
+<div class="flex gap-0 border-b border-line mb-6 overflow-x-auto">
+  @for (tab of tabs; track tab.id) {
+    <button (click)="activeTab.set(tab.id)"
+            class="shrink-0 px-4 h-10 text-sm transition-colors border-b-2 -mb-px whitespace-nowrap"
+            [class.border-accent]="activeTab() === tab.id"
+            [class.text-ink-1]="activeTab() === tab.id"
+            [class.font-medium]="activeTab() === tab.id"
+            [class.border-transparent]="activeTab() !== tab.id"
+            [class.text-ink-3]="activeTab() !== tab.id">
+      {{ tab.id === 'reviews' ? reviewLabel : tab.label }}
+    </button>
+  }
+</div>
+
+<!-- Descripción -->
+@if (activeTab() === 'desc') {
+  @if (descParts().length === 0) {
+    <p class="text-sm text-ink-3 italic">Sin descripción disponible.</p>
+  } @else {
+    <div class="flex flex-col gap-6 max-w-3xl">
+
+      <!-- Primer chunk = párrafo introductorio (antes del primer •) -->
+      <p class="text-sm text-ink-2 leading-relaxed">{{ descParts()[0] }}</p>
+
+      <!-- Resto = bullets -->
+      @if (descParts().length > 1) {
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3">
+          @for (bullet of descParts().slice(1); track $index) {
+            <li class="flex items-start gap-2.5 text-sm text-ink-2 leading-snug">
+              <span class="mt-1 shrink-0 w-3.5 h-3.5 rounded-full flex items-center justify-center
+                           text-[8px] font-bold"
+                    style="background:var(--color-accent-soft);color:var(--color-accent)">✓</span>
+              {{ bullet }}
+            </li>
+          }
+        </ul>
+      }
+
+    </div>
+  }
+}
+
+<!-- Especificaciones -->
+@if (activeTab() === 'specs') {
+  @if (product().specifications.length) {
+    <table class="w-full max-w-2xl text-sm border-collapse">
+      <tbody>
+        @for (spec of product().specifications; track spec.key) {
+          <tr class="border-b border-line">
+            <td class="py-2.5 pr-6 text-ink-3 w-48">{{ spec.key }}</td>
+            <td class="py-2.5 text-ink-1 font-medium">{{ spec.value }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="text-sm text-ink-3 italic">Sin especificaciones disponibles.</p>
+  }
+}
+
+<!-- Reseñas -->
+@if (activeTab() === 'reviews') {
+  <div class="flex flex-col items-center justify-center h-40 rounded-xl border border-line bg-surface-2">
+    <span class="font-mono text-xs text-ink-3">// reseñas · próximamente</span>
+  </div>
+}
+
+<!-- Envíos y devoluciones -->
+@if (activeTab() === 'shipping') {
+  <div class="flex flex-col gap-6 max-w-2xl text-sm text-ink-2 leading-relaxed">
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold text-ink-1">Tiempos de entrega</h3>
+      <p>Los pedidos se procesan en 1-2 días hábiles. Los plazos de entrega corren a partir
+         de la confirmación del pago.</p>
+      <ul class="flex flex-col gap-1 pl-4 list-disc text-ink-3">
+        <li>Envío estándar: 5-7 días hábiles</li>
+        <li>Envío express: 2-3 días hábiles</li>
+        <li>Retiro en sucursal: sin costo, disponible en 24 h</li>
+      </ul>
+    </div>
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold text-ink-1">Devoluciones</h3>
+      <p>Si el producto llega con defectos o dañado, tienes <strong class="text-ink-1">5 días hábiles</strong>
+         desde la recepción para notificarnos. Los productos en buen estado sin desperfectos
+         no admiten devolución una vez abierto el embalaje, salvo disposición legal contraria.</p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <h3 class="text-sm font-semibold text-ink-1">Garantía</h3>
+      <p>Todos los productos cuentan con garantía oficial de fábrica. Ante cualquier falla,
+         contáctanos en <span class="text-accent">legal&#64;andromedaastroshop.com</span>.</p>
+    </div>
+  </div>
+}

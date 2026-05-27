@@ -96,12 +96,42 @@
                   }
                 </label>
 
-                <app-password-input
-                  [control]="registerForm.controls.password"
-                  label="Contraseña"
-                  placeholder="mínimo 8 caracteres"
-                  [errorMsg]="fieldError('register','password','minlength') ? 'Mínimo 8 caracteres' : null"
-                />
+                <div class="flex flex-col gap-1">
+                  <app-password-input
+                    [control]="registerForm.controls.password"
+                    label="Contraseña"
+                    placeholder="mínimo 8 caracteres"
+                    [errorMsg]="fieldError('register','password','minlength') ? 'Mínimo 8 caracteres' :
+                                fieldError('register','password','passwordStrength') ? 'Usa al menos 3 tipos de caracteres' : null"
+                  />
+
+                  <!-- Requisitos de contraseña -->
+                  @let pw = registerForm.controls.password.value ?? '';
+                  @let cls = pwClasses(pw);
+                  <div class="flex flex-wrap gap-1.5 pt-0.5">
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded border transition-colors"
+                          [class.text-success]="cls.lower" [class.border-success]="cls.lower" [class.bg-success-soft]="cls.lower"
+                          [class.text-ink-3]="!cls.lower" [class.border-line]="!cls.lower">
+                      a–z
+                    </span>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded border transition-colors"
+                          [class.text-success]="cls.upper" [class.border-success]="cls.upper" [class.bg-success-soft]="cls.upper"
+                          [class.text-ink-3]="!cls.upper" [class.border-line]="!cls.upper">
+                      A–Z
+                    </span>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded border transition-colors"
+                          [class.text-success]="cls.digit" [class.border-success]="cls.digit" [class.bg-success-soft]="cls.digit"
+                          [class.text-ink-3]="!cls.digit" [class.border-line]="!cls.digit">
+                      0–9
+                    </span>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded border transition-colors"
+                          [class.text-success]="cls.special" [class.border-success]="cls.special" [class.bg-success-soft]="cls.special"
+                          [class.text-ink-3]="!cls.special" [class.border-line]="!cls.special">
+                      !@#…
+                    </span>
+                    <span class="text-[10px] text-ink-3 self-center">mín. 3 de 4</span>
+                  </div>
+                </div>
 
                 <app-password-input
                   [control]="registerForm.controls.confirmPassword"

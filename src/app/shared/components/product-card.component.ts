@@ -1,4 +1,5 @@
 import { Component, input, signal, OnDestroy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PublicProduct } from '../../core/models/public-product.model';
 import { AssetUrlPipe } from '../pipes/asset-url.pipe';
 import { StarRatingComponent } from './star-rating.component';
@@ -6,7 +7,7 @@ import { StarRatingComponent } from './star-rating.component';
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [AssetUrlPipe, StarRatingComponent],
+  imports: [AssetUrlPipe, StarRatingComponent, RouterLink],
   templateUrl: './product-card.component.html',
 })
 export class ProductCardComponent implements OnDestroy {

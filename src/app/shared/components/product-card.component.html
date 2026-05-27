@@ -1,5 +1,6 @@
-<article class="flex flex-col gap-2 cursor-pointer transition-transform duration-200 hover:-translate-y-1"
-         (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+<a [routerLink]="['/productos', product().id]"
+   class="flex flex-col gap-2 cursor-pointer transition-transform duration-200 hover:-translate-y-1"
+   (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 
   <!-- Image carousel -->
   <div class="relative aspect-square rounded-md overflow-hidden border border-line"
@@ -76,4 +77,4 @@
     <app-star-rating [value]="4" [of]="5" />
   </div>
 
-</article>
+</a>

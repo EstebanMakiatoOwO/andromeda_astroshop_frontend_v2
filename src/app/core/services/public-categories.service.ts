@@ -28,7 +28,7 @@ export class PublicCategoriesService {
     }
 
     for (const cat of map.values()) {
-      if (cat.parentId === null) {
+      if (cat.parentId == null) {
         roots.push(cat);
       } else {
         const parent = map.get(cat.parentId);

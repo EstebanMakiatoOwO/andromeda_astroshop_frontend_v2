@@ -13,6 +13,21 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   return password === confirmPassword ? null : { passwordMismatch: true };
 }
 
+function passwordStrength(control: AbstractControl): ValidationErrors | null {
+  const v: string = control.value ?? '';
+  const classes = [/[a-z]/, /[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].filter(r => r.test(v)).length;
+  return classes >= 3 ? null : { passwordStrength: true };
+}
+
+export function pwClasses(pw: string) {
+  return {
+    lower:   /[a-z]/.test(pw),
+    upper:   /[A-Z]/.test(pw),
+    digit:   /[0-9]/.test(pw),
+    special: /[^a-zA-Z0-9]/.test(pw),
+  };
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -45,7 +60,7 @@ export class LoginComponent {
   protected readonly registerForm = this.fb.group({
     name:            ['', Validators.required],
     email:           ['', [Validators.required, Validators.email]],
-    password:        ['', [Validators.required, Validators.minLength(8)]],
+    password:        ['', [Validators.required, Validators.minLength(8), passwordStrength]],
     confirmPassword: ['', Validators.required],
     terms:           [false, Validators.requiredTrue],
   }, { validators: passwordsMatch });
@@ -95,6 +110,8 @@ export class LoginComponent {
   protected onGuest(): void {
     this.router.navigateByUrl(this.returnUrl);
   }
+
+  protected pwClasses = pwClasses;
 
   protected fieldError(form: 'login' | 'register', field: string, rule: string): boolean {
     const f = (form === 'login' ? this.loginForm : this.registerForm) as FormGroup;

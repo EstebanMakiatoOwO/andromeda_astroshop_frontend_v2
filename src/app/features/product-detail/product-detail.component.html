@@ -1,0 +1,190 @@
+<!-- Loading -->
+@if (isLoading()) {
+  <div class="flex items-center justify-center min-h-[60vh]">
+    <span class="w-8 h-8 border-2 border-line border-t-accent rounded-full animate-spin"></span>
+  </div>
+}
+
+<!-- Error -->
+@if (hasError()) {
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <span class="font-mono text-xs text-error">// producto no encontrado</span>
+    <h2 class="text-lg font-semibold text-ink-1">No pudimos cargar este producto</h2>
+    <a routerLink="/" class="text-xs text-accent hover:underline">← Volver al inicio</a>
+  </div>
+}
+
+@if (!isLoading() && !hasError() && product()) {
+
+  <!-- Breadcrumb -->
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 border-b border-line">
+    <div class="flex items-center gap-1.5 font-mono text-[11px] text-ink-3 flex-wrap">
+      @for (crumb of breadcrumb(); track $index; let last = $last; let i = $index) {
+        @if (!last) {
+          <a routerLink="/" class="hover:text-accent transition-colors cursor-pointer">{{ crumb }}</a>
+          <span class="text-ink-3/40">›</span>
+        } @else {
+          <span class="text-ink-2">{{ crumb }}</span>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-8">
+
+      <!-- Galería -->
+      <app-product-gallery
+        [images]="product()!.images"
+        [stock]="product()!.stock"
+      />
+
+      <!-- Ficha -->
+      <div class="flex flex-col gap-5">
+
+        <!-- Nombre y meta -->
+        <div class="flex flex-col gap-2">
+          <span class="font-mono text-xs text-accent">
+            {{ product()!.brand?.name ?? '' }}
+            @if (product()!.categories.length > 0) { · {{ product()!.categories[0].name }} }
+          </span>
+          <h1 class="text-2xl font-semibold text-ink-1 leading-snug">{{ product()!.name }}</h1>
+
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <!-- Stars -->
+            @if (product()!.rating) {
+              <div class="flex items-center gap-0.5">
+                @for (s of stars(product()!.rating); track $index) {
+                  <span class="text-sm" [style.color]="s ? 'var(--color-accent)' : 'var(--color-ink-3)'">★</span>
+                }
+              </div>
+              <small class="text-xs text-ink-2">{{ product()!.rating }} · {{ product()!.reviewCount }} reseñas</small>
+              <span class="text-ink-3/40 text-xs">·</span>
+            }
+            @if (product()!.sku) {
+              <small class="font-mono text-[10px] text-ink-3">SKU {{ product()!.sku }}</small>
+            }
+          </div>
+        </div>
+
+        <!-- Descripción corta -->
+        @if (product()!.shortDescription) {
+          <p class="text-sm text-ink-2 leading-relaxed border-l-2 pl-3"
+             style="border-color:var(--color-accent)">
+            {{ product()!.shortDescription }}
+          </p>
+        }
+
+        <!-- Card de precio -->
+        <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-4">
+
+          <!-- Precio -->
+          <div class="flex flex-col gap-1">
+            <div class="flex items-baseline gap-3">
+              <span class="text-3xl font-semibold text-ink-1">{{ formatPrice(product()!.price) }}</span>
+            </div>
+            <small class="text-xs text-ink-3">
+              o 12 cuotas de {{ formatPrice(product()!.price / 12) }} sin interés con Mercado Pago
+            </small>
+          </div>
+
+          <!-- Loyalty -->
+          <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg border"
+               style="background:var(--color-accent-soft);
+                      border-color:color-mix(in oklch,var(--color-accent) 25%,transparent)">
+            <span class="text-sm" style="color:var(--color-accent)">★</span>
+            <small class="text-xs font-medium" style="color:var(--color-accent)">
+              Sumas {{ loyaltyPts().toLocaleString('es-MX') }} puntos con esta compra
+            </small>
+          </div>
+
+          <!-- Cantidad + CTAs -->
+          <div class="flex gap-2">
+            <!-- Qty -->
+            <div class="flex items-center border border-line rounded-lg overflow-hidden shrink-0">
+              <button (click)="decQty()"
+                      class="w-9 h-10 flex items-center justify-center text-ink-2
+                             hover:text-ink-1 hover:bg-surface-3 transition-colors">−</button>
+              <span class="w-9 text-center text-sm font-medium text-ink-1">{{ qty() }}</span>
+              <button (click)="incQty()"
+                      class="w-9 h-10 flex items-center justify-center text-ink-2
+                             hover:text-ink-1 hover:bg-surface-3 transition-colors">+</button>
+            </div>
+            <!-- Comprar ahora -->
+            <button class="flex-1 h-10 rounded-lg text-sm font-medium text-white
+                           flex items-center justify-center"
+                    style="background-color:var(--color-accent);"
+                    onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+                    onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+              Comprar ahora
+            </button>
+          </div>
+
+          <!-- Agregar al carrito -->
+          <button class="h-10 rounded-lg border border-line text-sm text-ink-2
+                         hover:text-ink-1 hover:border-accent transition-colors">
+            Agregar al carrito
+          </button>
+
+        </div>
+
+        <!-- Calculadora de envío -->
+        <app-shipping-calculator />
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-x-4 gap-y-1.5">
+          <span class="font-mono text-[10px] text-ink-3">✓ garantía oficial 2 años</span>
+          <span class="font-mono text-[10px] text-ink-3">✓ envío asegurado</span>
+          <span class="font-mono text-[10px] text-ink-3">✓ devolución 5 días</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="max-w-7xl mx-auto px-4 md:px-6 pb-12">
+    <app-product-tabs [product]="product()!" />
+  </div>
+
+  <!-- Relacionados -->
+  @if (relatedProducts().length > 0) {
+    <div class="border-t border-line bg-surface-2">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-10">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-base font-semibold text-ink-1">También te puede interesar</h2>
+          <a routerLink="/" class="font-mono text-xs text-accent hover:underline">ver más →</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          @for (p of relatedProducts(); track p.id) {
+            <a [routerLink]="['/productos', p.id]"
+               class="flex flex-col rounded-xl border border-line bg-surface-2
+                      hover:border-accent transition-colors overflow-hidden cursor-pointer">
+              <!-- Imagen -->
+              <div class="aspect-square bg-surface-3 overflow-hidden">
+                @if (p.images.length > 0) {
+                  <img [src]="p.images[0] | assetUrl" [alt]="p.name"
+                       class="w-full h-full object-cover" />
+                } @else {
+                  <div class="w-full h-full"
+                       style="background:repeating-linear-gradient(135deg,var(--color-surface-3) 0 8px,var(--color-surface-2) 8px 16px)">
+                  </div>
+                }
+              </div>
+              <!-- Info -->
+              <div class="p-3 flex flex-col gap-1">
+                @if (p.categories.length > 0) {
+                  <span class="font-mono text-[10px] text-accent">{{ p.categories[0].name }}</span>
+                }
+                <p class="text-xs font-medium text-ink-1 line-clamp-2">{{ p.name }}</p>
+                <span class="text-sm font-semibold text-ink-1 mt-0.5">{{ formatPrice(p.price) }}</span>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+}
