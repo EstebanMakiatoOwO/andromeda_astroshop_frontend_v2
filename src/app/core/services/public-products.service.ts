@@ -4,7 +4,26 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PublicProduct } from '../models/public-product.model';
 
+export interface LoyaltyCalculateResponse {
+  productId: number;
+  qty: number;
+  points: number;
+}
+
 interface ApiResponse<T> { data: T; }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapRelated(rp: any) {
+  return {
+    id:       rp.id,
+    name:     rp.name,
+    slug:     rp.slug ?? null,
+    price:    rp.price ?? 0,
+    priceMxn: rp.priceMxn ?? rp.price ?? 0,
+    priceUsd: rp.priceUsd ?? rp.price ?? 0,
+    image:    rp.image ?? null,
+  };
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapProduct(r: any): PublicProduct {
@@ -20,6 +39,8 @@ function mapProduct(r: any): PublicProduct {
     stockAlertThreshold: r.stockAlertThreshold ?? null,
     costPrice:           r.costPrice ?? null,
     price:               r.price ?? 0,
+    priceMxn:            r.priceMxn ?? r.price ?? 0,
+    priceUsd:            r.priceUsd ?? r.price ?? 0,
     isActive:            r.isActive ?? true,
     isCatalog:           r.isCatalog ?? true,
     images:              r.images ?? [],
@@ -44,8 +65,20 @@ function mapProduct(r: any): PublicProduct {
     rating:         r.rating ?? null,
     reviewCount:    r.reviewCount ?? 0,
     specifications: (r.specifications ?? []).map((s: any) => ({ key: s.key, value: s.value })),
+    tags:           r.tags ?? [],
     createdAt:      r.createdAt,
     updatedAt:      r.updatedAt,
+    relatedProducts: (r.relatedProducts ?? []).map(mapRelated),
+    youMayLike:      (r.youMayLike ?? []).map(mapRelated),
+    loyaltyPoints:   r.loyaltyPoints ?? 0,
+    minSaleQty:      r.minSaleQty ?? 1,
+    maxSaleQty:      r.maxSaleQty ?? null,
+    qtyIncrements:   r.qtyIncrements ?? 1,
+    isInStock:       r.isInStock ?? true,
+    isLowStock:      r.isLowStock ?? false,
+    isNew:           r.isNew ?? false,
+    isOnSale:        r.isOnSale ?? false,
+    salePrice:       r.salePrice ?? null,
   };
 }
 
@@ -70,5 +103,12 @@ export class PublicProductsService {
     const params = new HttpParams().set('name', name);
     return this.http.get<ApiResponse<PublicProduct[]>>(`${this.base}/search`, { params })
       .pipe(map(r => r.data));
+  }
+
+  calculateLoyaltyPoints(productId: number, qty: number): Observable<LoyaltyCalculateResponse> {
+    return this.http.post<LoyaltyCalculateResponse>(
+      `${environment.apiBase}/api/v1/loyalty/calculate`,
+      { productId, qty }
+    );
   }
 }

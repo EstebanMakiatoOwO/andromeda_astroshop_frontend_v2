@@ -1,8 +1,9 @@
-import { Component, input, signal, OnDestroy } from '@angular/core';
+import { Component, inject, input, signal, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PublicProduct } from '../../core/models/public-product.model';
 import { AssetUrlPipe } from '../pipes/asset-url.pipe';
 import { StarRatingComponent } from './star-rating.component';
+import { CurrencyService } from '../../core/services/currency.service';
 
 @Component({
   selector: 'app-product-card',
@@ -12,6 +13,7 @@ import { StarRatingComponent } from './star-rating.component';
 })
 export class ProductCardComponent implements OnDestroy {
   product = input.required<PublicProduct>();
+  private readonly currency = inject(CurrencyService);
 
   protected currentIndex = signal(0);
   private intervalId: ReturnType<typeof setInterval> | null = null;
@@ -36,11 +38,8 @@ export class ProductCardComponent implements OnDestroy {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  protected formatPrice(value: number): string {
-    return new Intl.NumberFormat('es-MX', {
-      style: 'currency',
-      currency: 'MXN',
-      maximumFractionDigits: 2,
-    }).format(value);
+  protected formatPrice(): string {
+    const p = this.product();
+    return this.currency.format(p.priceMxn, p.priceUsd);
   }
 }

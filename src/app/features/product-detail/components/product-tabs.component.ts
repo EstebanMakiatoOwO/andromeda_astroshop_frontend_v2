@@ -1,9 +1,11 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { PublicProduct } from '../../../core/models/public-product.model';
+import { ProductReviewsComponent } from './product-reviews.component';
 
 @Component({
   selector: 'app-product-tabs',
   standalone: true,
+  imports: [ProductReviewsComponent],
   templateUrl: './product-tabs.component.html',
 })
 export class ProductTabsComponent {
@@ -22,6 +24,17 @@ export class ProductTabsComponent {
     const text = this.product().longDescription ?? '';
     return text.split('•').map(s => s.replace(/ /g, ' ').trim()).filter(Boolean);
   });
+
+  protected readonly warrantyExclusions = [
+    'El producto haya sido utilizado en condiciones diferentes a las normales.',
+    'El producto NO haya sido operado conforme al instructivo.',
+    'El producto haya sido dañado por mal uso, caídas o movimientos bruscos.',
+    'El producto haya sido reparado o alterado por personas no autorizadas.',
+  ];
+
+  activateReviews(): void {
+    this.activeTab.set('reviews');
+  }
 
   protected get reviewLabel(): string {
     const n = this.product().reviewCount;

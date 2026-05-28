@@ -8,6 +8,8 @@ import { LoyaltyAccount } from '../../../core/models/loyalty.model';
 import { PublicAuthService } from '../../../core/services/public-auth.service';
 import { PublicProductsService } from '../../../core/services/public-products.service';
 import { LoyaltyService } from '../../../core/services/loyalty.service';
+import { CurrencyService } from '../../../core/services/currency.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 
@@ -22,6 +24,8 @@ export class PublicNavbarComponent {
   private readonly loyaltyService  = inject(LoyaltyService);
   private readonly destroyRef      = inject(DestroyRef);
   protected readonly auth          = inject(PublicAuthService);
+  protected readonly currency      = inject(CurrencyService);
+  protected readonly theme         = inject(ThemeService);
 
   categories = input<PublicCategory[]>([]);
 
@@ -100,10 +104,8 @@ export class PublicNavbarComponent {
     this.userMenuOpen.set(false);
   }
 
-  protected formatPrice(value: number): string {
-    return new Intl.NumberFormat('es-MX', {
-      style: 'currency', currency: 'MXN', maximumFractionDigits: 0,
-    }).format(value);
+  protected formatPrice(product: PublicProduct): string {
+    return this.currency.format(product.priceMxn, product.priceUsd);
   }
 
   // ── Mega menu ─────────────────────────────────────────────────────────

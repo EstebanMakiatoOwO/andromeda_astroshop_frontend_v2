@@ -45,27 +45,45 @@
 
         <!-- Nombre y meta -->
         <div class="flex flex-col gap-2">
-          <span class="font-mono text-xs text-accent">
-            {{ product()!.brand?.name ?? '' }}
-            @if (product()!.categories.length > 0) { · {{ product()!.categories[0].name }} }
-          </span>
+
+          <!-- Tags: celestron · computarizado · 150mm -->
+          @if (productTags().length) {
+            <div class="flex items-center gap-1.5 flex-wrap">
+              @for (tag of productTags(); track $index; let last = $last) {
+                <span class="font-mono text-[11px] lowercase"
+                      style="color:var(--color-accent)">{{ tag }}</span>
+                @if (!last) {
+                  <span class="font-mono text-[11px] opacity-40" style="color:var(--color-accent)">·</span>
+                }
+              }
+            </div>
+          }
+
           <h1 class="text-2xl font-semibold text-ink-1 leading-snug">{{ product()!.name }}</h1>
 
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <!-- Stars -->
-            @if (product()!.rating) {
-              <div class="flex items-center gap-0.5">
-                @for (s of stars(product()!.rating); track $index) {
-                  <span class="text-sm" [style.color]="s ? 'var(--color-accent)' : 'var(--color-ink-3)'">★</span>
-                }
-              </div>
-              <small class="text-xs text-ink-2">{{ product()!.rating }} · {{ product()!.reviewCount }} reseñas</small>
-              <span class="text-ink-3/40 text-xs">·</span>
+          <!-- Calificación + reseñas -->
+          <button (click)="goToReviews()"
+                  class="flex items-center gap-2 group w-fit">
+            <div class="flex items-center gap-0.5">
+              @for (s of stars(avgRating()); track $index) {
+                <span class="text-xs leading-none transition-colors"
+                      [style.color]="s ? 'var(--color-accent)' : 'var(--color-ink-3)'">★</span>
+              }
+            </div>
+            @if (reviewCount() > 0) {
+              <small class="text-xs text-ink-3 group-hover:text-accent transition-colors">
+                {{ avgRating() }} · {{ reviewCount() }} reseña{{ reviewCount() !== 1 ? 's' : '' }}
+              </small>
+            } @else {
+              <small class="text-xs text-ink-3 group-hover:text-accent transition-colors">
+                Sin reseñas aún
+              </small>
             }
-            @if (product()!.sku) {
-              <small class="font-mono text-[10px] text-ink-3">SKU {{ product()!.sku }}</small>
-            }
-          </div>
+          </button>
+
+          @if (product()!.sku) {
+            <small class="font-mono text-[10px] text-ink-3">SKU {{ product()!.sku }}</small>
+          }
         </div>
 
         <!-- Descripción corta -->
@@ -82,10 +100,10 @@
           <!-- Precio -->
           <div class="flex flex-col gap-1">
             <div class="flex items-baseline gap-3">
-              <span class="text-3xl font-semibold text-ink-1">{{ formatPrice(product()!.price) }}</span>
+              <span class="text-3xl font-semibold text-ink-1">{{ formatPrice(product()!) }}</span>
             </div>
             <small class="text-xs text-ink-3">
-              o 12 cuotas de {{ formatPrice(product()!.price / 12) }} sin interés con Mercado Pago
+              Pago en una sola exhibición
             </small>
           </div>
 
@@ -129,14 +147,50 @@
 
         </div>
 
+        <!-- También te puede gustar -->
+        @if (youMayLike().length > 0) {
+          <div class="rounded-xl border border-line bg-surface-2 p-4 flex flex-col gap-3">
+            <p class="text-[11px] font-semibold text-ink-3 uppercase tracking-wider">
+              Suelen comprarse juntos
+            </p>
+            <div class="flex flex-col gap-2">
+              @for (p of youMayLike(); track p.id) {
+                <a [routerLink]="['/productos', p.id]"
+                   class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-3 transition-colors group">
+                  <div class="w-12 h-12 rounded-lg bg-surface-3 shrink-0 overflow-hidden border border-line">
+                    @if (p.image) {
+                      <img [src]="p.image | assetUrl" [alt]="p.name" class="w-full h-full object-cover" />
+                    }
+                  </div>
+                  <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                    <span class="text-xs text-ink-1 font-medium line-clamp-1 group-hover:text-accent transition-colors">
+                      {{ p.name }}
+                    </span>
+                    <span class="text-xs font-semibold" style="color:var(--color-accent)">
+                      {{ formatPrice(p) }}
+                    </span>
+                  </div>
+                  <svg class="w-4 h-4 text-ink-3 group-hover:text-accent transition-colors shrink-0"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </a>
+              }
+            </div>
+          </div>
+        }
+
         <!-- Calculadora de envío -->
-        <app-shipping-calculator />
+        <app-shipping-calculator
+          [productId]="product()!.id"
+          [qty]="qty()" />
 
         <!-- Trust badges -->
         <div class="flex flex-wrap gap-x-4 gap-y-1.5">
-          <span class="font-mono text-[10px] text-ink-3">✓ garantía oficial 2 años</span>
+          <span class="font-mono text-[10px] text-ink-3">✓ garantía 30 días Andrómeda</span>
           <span class="font-mono text-[10px] text-ink-3">✓ envío asegurado</span>
-          <span class="font-mono text-[10px] text-ink-3">✓ devolución 5 días</span>
+          <span class="font-mono text-[10px] text-ink-3">✓ garantía de fabricante</span>
         </div>
 
       </div>
@@ -144,41 +198,31 @@
   </div>
 
   <!-- Tabs -->
-  <div class="max-w-7xl mx-auto px-4 md:px-6 pb-12">
+  <div #tabsSection class="max-w-7xl mx-auto px-4 md:px-6 pb-12">
     <app-product-tabs [product]="product()!" />
   </div>
 
-  <!-- Relacionados -->
+  <!-- Productos relacionados -->
   @if (relatedProducts().length > 0) {
-    <div class="border-t border-line bg-surface-2">
+    <div class="border-t border-line">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-base font-semibold text-ink-1">También te puede interesar</h2>
-          <a routerLink="/" class="font-mono text-xs text-accent hover:underline">ver más →</a>
-        </div>
+        <h2 class="text-base font-semibold text-ink-1 mb-6">También te puede interesar</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           @for (p of relatedProducts(); track p.id) {
             <a [routerLink]="['/productos', p.id]"
                class="flex flex-col rounded-xl border border-line bg-surface-2
                       hover:border-accent transition-colors overflow-hidden cursor-pointer">
-              <!-- Imagen -->
               <div class="aspect-square bg-surface-3 overflow-hidden">
-                @if (p.images.length > 0) {
-                  <img [src]="p.images[0] | assetUrl" [alt]="p.name"
-                       class="w-full h-full object-cover" />
+                @if (p.image) {
+                  <img [src]="p.image | assetUrl" [alt]="p.name" class="w-full h-full object-cover" />
                 } @else {
                   <div class="w-full h-full"
-                       style="background:repeating-linear-gradient(135deg,var(--color-surface-3) 0 8px,var(--color-surface-2) 8px 16px)">
-                  </div>
+                       style="background:repeating-linear-gradient(135deg,var(--color-surface-3) 0 8px,var(--color-surface-2) 8px 16px)"></div>
                 }
               </div>
-              <!-- Info -->
               <div class="p-3 flex flex-col gap-1">
-                @if (p.categories.length > 0) {
-                  <span class="font-mono text-[10px] text-accent">{{ p.categories[0].name }}</span>
-                }
                 <p class="text-xs font-medium text-ink-1 line-clamp-2">{{ p.name }}</p>
-                <span class="text-sm font-semibold text-ink-1 mt-0.5">{{ formatPrice(p.price) }}</span>
+                <span class="text-sm font-semibold text-ink-1 mt-0.5">{{ formatPrice(p) }}</span>
               </div>
             </a>
           }

@@ -1,5 +1,5 @@
 <!-- Tab bar -->
-<div class="flex gap-0 border-b border-line mb-6 overflow-x-auto">
+<div class="flex gap-0 border-b border-line mb-6 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
   @for (tab of tabs; track tab.id) {
     <button (click)="activeTab.set(tab.id)"
             class="shrink-0 px-4 h-10 text-sm transition-colors border-b-2 -mb-px whitespace-nowrap"
@@ -61,34 +61,61 @@
 
 <!-- Reseñas -->
 @if (activeTab() === 'reviews') {
-  <div class="flex flex-col items-center justify-center h-40 rounded-xl border border-line bg-surface-2">
-    <span class="font-mono text-xs text-ink-3">// reseñas · próximamente</span>
-  </div>
+  <app-product-reviews [productId]="product().id" />
 }
 
-<!-- Envíos y devoluciones -->
+<!-- Envíos y garantía -->
 @if (activeTab() === 'shipping') {
-  <div class="flex flex-col gap-6 max-w-2xl text-sm text-ink-2 leading-relaxed">
-    <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-8 max-w-2xl">
+
+    <!-- Tiempos de entrega -->
+    <div class="flex flex-col gap-4">
       <h3 class="text-sm font-semibold text-ink-1">Tiempos de entrega</h3>
-      <p>Los pedidos se procesan en 1-2 días hábiles. Los plazos de entrega corren a partir
-         de la confirmación del pago.</p>
-      <ul class="flex flex-col gap-1 pl-4 list-disc text-ink-3">
-        <li>Envío estándar: 5-7 días hábiles</li>
-        <li>Envío express: 2-3 días hábiles</li>
-        <li>Retiro en sucursal: sin costo, disponible en 24 h</li>
-      </ul>
+
+      <div class="rounded-xl border border-line bg-surface-2 divide-y divide-line">
+        <div class="px-4 py-3 flex flex-col gap-1">
+          <p class="text-xs font-medium text-ink-1">Productos en stock</p>
+          <p class="text-sm text-ink-2 leading-relaxed">
+            Los pedidos recibidos antes de las <strong class="text-ink-1">12:00 p.m.</strong> se envían el mismo día.
+            Las compras realizadas después de este horario se despacharán el siguiente día hábil.
+          </p>
+        </div>
+        <div class="px-4 py-3 flex flex-col gap-1">
+          <p class="text-xs font-medium text-ink-1">Productos sin stock (a pedido)</p>
+          <p class="text-sm text-ink-2 leading-relaxed">
+            Una vez recibida la orden, el equipo será entregado en un plazo máximo de
+            <strong class="text-ink-1">30 días hábiles</strong>. Si el proveedor requiriera más tiempo,
+            se notificará de inmediato y el cliente podrá aceptar el nuevo plazo o cancelar el pedido.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="flex flex-col gap-2">
-      <h3 class="text-sm font-semibold text-ink-1">Devoluciones</h3>
-      <p>Si el producto llega con defectos o dañado, tienes <strong class="text-ink-1">5 días hábiles</strong>
-         desde la recepción para notificarnos. Los productos en buen estado sin desperfectos
-         no admiten devolución una vez abierto el embalaje, salvo disposición legal contraria.</p>
-    </div>
-    <div class="flex flex-col gap-2">
+
+    <!-- Garantía -->
+    <div class="flex flex-col gap-4">
       <h3 class="text-sm font-semibold text-ink-1">Garantía</h3>
-      <p>Todos los productos cuentan con garantía oficial de fábrica. Ante cualquier falla,
-         contáctanos en <span class="text-accent">legal&#64;andromedaastroshop.com</span>.</p>
+
+      <div class="rounded-xl border border-line bg-surface-2 p-4 flex flex-col gap-3">
+        <p class="text-sm text-ink-2 leading-relaxed">
+          Andrómeda AstroShop ofrece una garantía de <strong class="text-ink-1">30 días naturales</strong>
+          a partir de la fecha de entrega. Se recibirá el equipo o parte dañada y se enviará un repuesto
+          si después de inspeccionar se determina que es un defecto de fabricación. Después de este tiempo
+          aplica la garantía del fabricante.
+        </p>
+
+        <div class="flex flex-col gap-1.5 pt-1 border-t border-line">
+          <p class="text-xs font-medium text-ink-3 uppercase tracking-wider">La garantía no aplica cuando:</p>
+          <ul class="flex flex-col gap-1.5">
+            @for (item of warrantyExclusions; track $index) {
+              <li class="flex items-start gap-2 text-xs text-ink-2 leading-snug">
+                <span class="mt-0.5 shrink-0 text-error">✕</span>
+                {{ item }}
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
     </div>
+
   </div>
 }

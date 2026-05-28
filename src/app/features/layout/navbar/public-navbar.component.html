@@ -74,7 +74,7 @@
                       }
                     </div>
                     <span class="text-xs font-bold text-ink-1 shrink-0">
-                      {{ formatPrice(product.price) }}
+                      {{ formatPrice(product) }}
                     </span>
                   </li>
                 }
@@ -153,6 +153,43 @@
         </a>
       }
 
+      <!-- Toggle de tema — solo desktop -->
+      <button (click)="theme.toggle()"
+              class="hidden md:flex items-center justify-center w-7.5 h-7.5 rounded border border-line
+                     text-ink-2 hover:text-ink-1 hover:border-accent transition-colors">
+        @if (theme.isDark()) {
+          <!-- Sol -->
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        } @else {
+          <!-- Luna -->
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        }
+      </button>
+
+      <!-- Toggle de divisa — solo desktop -->
+      <button (click)="currency.toggle()"
+              class="hidden md:flex items-center h-7.5 rounded border border-line overflow-hidden
+                     text-[11px] font-mono transition-colors hover:border-accent">
+        <span class="px-2 py-1 transition-colors"
+              [class.bg-accent]="currency.isMxn()"
+              [class.text-white]="currency.isMxn()"
+              [class.text-ink-3]="!currency.isMxn()">MXN</span>
+        <span class="px-2 py-1 transition-colors"
+              [class.bg-accent]="!currency.isMxn()"
+              [class.text-white]="!currency.isMxn()"
+              [class.text-ink-3]="currency.isMxn()">USD</span>
+      </button>
+
       <!-- Cart — siempre visible -->
       <button class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
                      hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
@@ -223,7 +260,7 @@
                   <span class="text-xs text-ink-1 font-medium truncate">{{ product.name }}</span>
                 </div>
                 <span class="text-xs font-bold text-ink-1 shrink-0">
-                  {{ formatPrice(product.price) }}
+                  {{ formatPrice(product) }}
                 </span>
               </li>
             }
