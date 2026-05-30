@@ -1,0 +1,33 @@
+<div class="rounded-xl border border-line bg-surface-2 p-5">
+  <h3 class="text-sm font-semibold text-ink-1 mb-5">Estado del pedido</h3>
+
+  <div class="flex items-start">
+    @for (s of steps(); track $index; let i = $index; let last = $last) {
+      <div class="flex flex-col items-center gap-2 flex-1 min-w-0">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
+             [class.bg-success]="s.done"
+             [class.text-white]="s.done || s.active"
+             [class.bg-ink-1]="s.active && !s.done"
+             [class.bg-surface-3]="!s.done && !s.active"
+             [class.text-ink-3]="!s.done && !s.active">
+          {{ s.done ? '✓' : i + 1 }}
+        </div>
+        <div class="flex flex-col items-center gap-0.5 text-center px-1">
+          <span class="text-[11px] font-medium leading-snug"
+                [class.text-ink-1]="s.done || s.active"
+                [class.text-ink-3]="!s.done && !s.active">
+            {{ s.label }}
+          </span>
+          <span class="text-[10px] text-ink-3 leading-snug">{{ s.sub }}</span>
+        </div>
+      </div>
+
+      @if (!last) {
+        <div class="h-0.5 flex-1 mt-3.5 mx-1 shrink-0"
+             [class.bg-success]="s.done"
+             [class.bg-line]="!s.done">
+        </div>
+      }
+    }
+  </div>
+</div>

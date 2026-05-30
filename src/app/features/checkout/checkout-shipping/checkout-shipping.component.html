@@ -1,0 +1,87 @@
+<app-checkout-bar [step]="2" />
+
+<div class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-8 items-start">
+
+    <!-- Izquierda: formulario -->
+    <div class="flex flex-col gap-5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-semibold text-ink-1">Datos de envío</h2>
+        <a routerLink="/carrito" class="font-mono text-[11px] text-accent hover:underline">← volver al carrito</a>
+      </div>
+
+      <app-address-form [submitted]="submitted()" />
+
+      <!-- Métodos de envío -->
+      <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-3">
+        <h3 class="text-sm font-semibold text-ink-1">Método de envío</h3>
+
+        @for (opt of shippingOptions; track opt.id) {
+          <label class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors"
+                 [class.border-accent]="selectedOption() === opt.id"
+                 [class.bg-accent-soft]="selectedOption() === opt.id"
+                 [class.border-line]="selectedOption() !== opt.id"
+                 [class.hover:border-accent]="selectedOption() !== opt.id">
+            <input type="radio" name="shipping" [value]="opt.id"
+                   [checked]="selectedOption() === opt.id"
+                   (change)="selectedOption.set(opt.id)"
+                   class="accent-accent shrink-0" />
+            <div class="flex flex-col gap-0.5 flex-1">
+              <span class="text-xs font-medium text-ink-1">{{ opt.carrier }} · {{ opt.method }}</span>
+              <span class="text-[10px] text-ink-3 font-mono">{{ opt.days }}</span>
+            </div>
+            <span class="text-sm font-semibold text-ink-1 shrink-0">
+              {{ fmt(opt.priceMxn, opt.priceUsd) }}
+            </span>
+          </label>
+        }
+      </div>
+
+      <button (click)="onContinue()"
+              class="w-full h-11 rounded-lg text-sm font-medium text-white transition-colors"
+              style="background-color:var(--color-accent);"
+              onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+              onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+        Continuar al pago →
+      </button>
+    </div>
+
+    <!-- Derecha: resumen -->
+    <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-4 sticky top-24">
+      <h3 class="text-sm font-semibold text-ink-1">Resumen</h3>
+
+      <div class="flex flex-col gap-2.5 text-xs">
+        @for (item of cart.items(); track item.id) {
+          <div class="flex justify-between items-start gap-2">
+            <span class="text-ink-2 leading-snug flex-1">
+              {{ item.name }}
+              <span class="text-ink-3"> × {{ item.qty }}</span>
+            </span>
+            <span class="text-ink-1 shrink-0">
+              {{ fmt(item.unitPriceMxn * item.qty, item.unitPriceUsd * item.qty) }}
+            </span>
+          </div>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2 text-xs border-t border-line pt-3">
+        <div class="flex justify-between">
+          <span class="text-ink-2">Subtotal</span>
+          <span class="text-ink-1">{{ fmt(subtotalMxn, subtotalUsd) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-ink-2">Envío · {{ selected.carrier }}</span>
+          <span class="text-ink-1">{{ fmt(selected.priceMxn, selected.priceUsd) }}</span>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-baseline border-t border-dashed border-line pt-3">
+        <span class="text-sm font-semibold text-ink-1">Total</span>
+        <span class="text-lg font-semibold text-ink-1">{{ fmt(totalMxn, totalUsd) }}</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-public-footer />

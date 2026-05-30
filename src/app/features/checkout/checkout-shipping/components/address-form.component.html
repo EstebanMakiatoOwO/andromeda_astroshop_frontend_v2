@@ -1,0 +1,107 @@
+<div class="flex flex-col gap-5">
+
+  <!-- Datos de contacto -->
+  <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-4">
+    <h3 class="text-sm font-semibold text-ink-1">Datos de contacto</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Nombre completo *</label>
+        <input type="text" [value]="v.name()" (input)="set('name', $any($event.target).value)"
+               placeholder="Juan Pérez"
+               class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+               [class.border-error]="isRequired('name')"
+               [class.border-line]="!isRequired('name')"
+               [class.focus:border-accent]="true" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Teléfono *</label>
+        <input type="tel" [value]="v.phone()" (input)="set('phone', $any($event.target).value)"
+               placeholder="55 1234 5678"
+               class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+               [class.border-error]="isRequired('phone')"
+               [class.border-line]="!isRequired('phone')" />
+      </div>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-ink-2">Correo electrónico *</label>
+      <input type="email" [value]="v.email()" (input)="set('email', $any($event.target).value)"
+             placeholder="juan@email.com"
+             class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+             [class.border-error]="isRequired('email')"
+             [class.border-line]="!isRequired('email')" />
+    </div>
+  </div>
+
+  <!-- Dirección -->
+  <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-4">
+    <h3 class="text-sm font-semibold text-ink-1">Dirección de envío</h3>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-ink-2">Calle *</label>
+      <input type="text" [value]="v.street()" (input)="set('street', $any($event.target).value)"
+             placeholder="Av. Insurgentes Sur"
+             class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+             [class.border-error]="isRequired('street')"
+             [class.border-line]="!isRequired('street')" />
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Núm. exterior *</label>
+        <input type="text" [value]="v.numExt()" (input)="set('numExt', $any($event.target).value)"
+               placeholder="1234"
+               class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+               [class.border-error]="isRequired('numExt')"
+               [class.border-line]="!isRequired('numExt')" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Núm. interior</label>
+        <input type="text" [value]="v.numInt()" (input)="set('numInt', $any($event.target).value)"
+               placeholder="3B"
+               class="h-9 px-3 rounded-lg border border-line text-sm text-ink-1 placeholder-ink-3 outline-none bg-surface-3" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Código postal *</label>
+        <input type="text" [value]="v.cp()" (input)="set('cp', $any($event.target).value)"
+               placeholder="06600" maxlength="5"
+               class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+               [class.border-error]="isRequired('cp')"
+               [class.border-line]="!isRequired('cp')" />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-ink-2">Colonia *</label>
+      <input type="text" [value]="v.colonia()" (input)="set('colonia', $any($event.target).value)"
+             placeholder="Del Valle"
+             class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+             [class.border-error]="isRequired('colonia')"
+             [class.border-line]="!isRequired('colonia')" />
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Ciudad *</label>
+        <input type="text" [value]="v.city()" (input)="set('city', $any($event.target).value)"
+               placeholder="Ciudad de México"
+               class="h-9 px-3 rounded-lg border text-sm text-ink-1 placeholder-ink-3 outline-none transition-colors bg-surface-3"
+               [class.border-error]="isRequired('city')"
+               [class.border-line]="!isRequired('city')" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-ink-2">Estado *</label>
+        <select [value]="v.state()" (change)="set('state', $any($event.target).value)"
+                class="h-9 px-3 rounded-lg border text-sm text-ink-1 outline-none transition-colors bg-surface-3 cursor-pointer"
+                [class.border-error]="isRequired('state')"
+                [class.border-line]="!isRequired('state')">
+          <option value="">Seleccionar...</option>
+          @for (s of states; track s) {
+            <option [value]="s">{{ s }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+</div>

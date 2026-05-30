@@ -10,6 +10,7 @@ import { PublicProductsService } from '../../../core/services/public-products.se
 import { LoyaltyService } from '../../../core/services/loyalty.service';
 import { CurrencyService } from '../../../core/services/currency.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { CartService } from '../../../core/services/cart.service';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 
@@ -26,6 +27,7 @@ export class PublicNavbarComponent {
   protected readonly auth          = inject(PublicAuthService);
   protected readonly currency      = inject(CurrencyService);
   protected readonly theme         = inject(ThemeService);
+  protected readonly cartService   = inject(CartService);
 
   categories = input<PublicCategory[]>([]);
 

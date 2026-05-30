@@ -191,13 +191,14 @@
       </button>
 
       <!-- Cart — siempre visible -->
-      <button class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
-                     hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
+      <a routerLink="/carrito"
+         class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
+                hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
         🛒
-        @if (cartCount() > 0) {
-          <span class="font-mono">{{ cartCount() }}</span>
+        @if (cartService.count() > 0) {
+          <span class="font-mono">{{ cartService.count() }}</span>
         }
-      </button>
+      </a>
 
       <!-- Hamburger — solo móvil -->
       <button

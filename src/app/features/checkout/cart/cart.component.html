@@ -1,0 +1,61 @@
+<div class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+
+  @if (cart.items().length === 0) {
+    <div class="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+      <span class="text-4xl">🛒</span>
+      <h2 class="text-lg font-semibold text-ink-1">Tu carrito está vacío</h2>
+      <a routerLink="/" class="text-xs text-accent hover:underline">← Volver al catálogo</a>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-8 items-start">
+
+      <!-- Lista -->
+      <div class="flex flex-col gap-5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold text-ink-1">
+            Tu carrito
+            <span class="font-normal text-ink-3 ml-1">· {{ cart.count() }} productos</span>
+          </h2>
+          <a routerLink="/" class="font-mono text-[11px] text-accent hover:underline">
+            ← seguir comprando
+          </a>
+        </div>
+
+        <div class="rounded-xl border border-line bg-surface-2 divide-y divide-line">
+          @for (item of cart.items(); track item.id) {
+            <app-cart-item
+              [item]="item"
+              (qtyChange)="onQtyChange(item.id, $event)"
+              (removed)="onRemove(item.id)"
+            />
+          }
+        </div>
+
+        <!-- Loyalty nudge -->
+        <div class="flex items-center justify-between px-4 py-3 rounded-xl border"
+             style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
+          <div class="flex items-center gap-2.5">
+            <span class="text-sm" style="color:var(--color-accent)">★</span>
+            <small class="text-xs" style="color:var(--color-accent)">
+              Con esta compra sumás <strong>{{ loyaltyPts().toLocaleString('es-MX') }} puntos</strong>
+            </small>
+          </div>
+          <a class="font-mono text-[11px] hover:underline cursor-pointer" style="color:var(--color-accent)">
+            ver mis puntos →
+          </a>
+        </div>
+      </div>
+
+      <!-- Resumen -->
+      <app-cart-summary
+        [subtotal]="cart.subtotal()"
+        [subtotalUsd]="subtotalUsd()"
+        [itemCount]="cart.count()"
+        [loyaltyPts]="loyaltyPts()"
+        (checkout)="onCheckout()"
+      />
+
+    </div>
+  }
+
+</div>

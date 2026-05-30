@@ -1,0 +1,47 @@
+<div class="flex items-start gap-4 p-4">
+
+  <!-- Imagen -->
+  <div class="w-20 h-20 rounded-lg bg-surface-3 border border-line shrink-0 overflow-hidden flex items-center justify-center">
+    @if (item().image) {
+      <img [src]="item().image! | assetUrl" [alt]="item().name" class="w-full h-full object-cover" />
+    } @else {
+      <span class="font-mono text-[9px] text-ink-3">img</span>
+    }
+  </div>
+
+  <!-- Info -->
+  <div class="flex flex-col gap-1.5 flex-1 min-w-0">
+    <span class="font-mono text-[10px] text-ink-3">{{ item().meta }}</span>
+    <p class="text-sm font-semibold text-ink-1 leading-snug">{{ item().name }}</p>
+    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-success-soft text-success self-start">
+      en stock · {{ item().stock }}
+    </span>
+
+    <div class="flex items-center gap-3 mt-1">
+      <!-- Qty -->
+      <div class="flex items-center border border-line rounded-lg overflow-hidden">
+        <button (click)="qtyChange.emit(-1)"
+                class="w-8 h-8 flex items-center justify-center text-ink-2
+                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base">−</button>
+        <span class="w-8 text-center text-sm font-medium text-ink-1">{{ item().qty }}</span>
+        <button (click)="qtyChange.emit(1)"
+                class="w-8 h-8 flex items-center justify-center text-ink-2
+                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base">+</button>
+      </div>
+
+      <button (click)="removed.emit()"
+              class="text-[11px] text-ink-3 hover:text-error transition-colors font-mono">
+        quitar
+      </button>
+    </div>
+  </div>
+
+  <!-- Precio -->
+  <div class="flex flex-col items-end gap-1 shrink-0">
+    <span class="text-sm font-semibold text-ink-1">{{ formatTotal() }}</span>
+    @if (item().qty > 1) {
+      <span class="text-[10px] text-ink-3">{{ formatUnit() }} c/u</span>
+    }
+  </div>
+
+</div>

@@ -37,7 +37,27 @@ export const routes: Routes = [
         path: 'guias/:slug',
         loadComponent: () => import('./features/article/article-detail.component').then(m => m.ArticleDetailComponent),
       },
+      {
+        path: 'carrito',
+        loadComponent: () => import('./features/checkout/cart/cart.component').then(m => m.CartComponent),
+      },
     ],
+  },
+  {
+    path: 'checkout/envio',
+    loadComponent: () => import('./features/checkout/checkout-shipping/checkout-shipping.component').then(m => m.CheckoutShippingComponent),
+  },
+  {
+    path: 'checkout/pago',
+    loadComponent: () => import('./features/checkout/mp-handoff/mp-handoff.component').then(m => m.MPHandoffComponent),
+  },
+  {
+    path: 'checkout/confirmacion',
+    loadComponent: () => import('./features/checkout/order-success/order-success.component').then(m => m.OrderSuccessComponent),
+  },
+  {
+    path: 'checkout/error',
+    loadComponent: () => import('./features/checkout/order-failure/order-failure.component').then(m => m.OrderFailureComponent),
   },
   {
     path: 'admin',
