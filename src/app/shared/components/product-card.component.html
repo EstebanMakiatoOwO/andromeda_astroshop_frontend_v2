@@ -17,7 +17,7 @@
         />
       }
 
-      <!-- Dot indicators (only shown when multiple images exist) -->
+      <!-- Dot indicators -->
       @if (product().images.length > 1) {
         <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1 pointer-events-none z-10">
           @for (img of product().images; track $index; let i = $index) {
@@ -37,16 +37,29 @@
       </div>
     }
 
-    <!-- Stock badge -->
-    @if (product().stock === 0) {
-      <span class="absolute top-2 left-2 z-20 text-[10px] font-mono px-2 py-0.5 rounded-full
-                   bg-error-soft text-error border border-error/20">
-        Sin stock
-      </span>
-    } @else if (product().stockAlertThreshold !== null && product().stock <= product().stockAlertThreshold!) {
-      <span class="absolute top-2 left-2 z-20 text-[10px] font-mono px-2 py-0.5 rounded-full
-                   bg-warn-soft text-warn border border-warn/20">
-        Últimas unidades
+    <!-- Badges — esquina superior izquierda -->
+    <div class="absolute top-2 left-2 z-20 flex flex-col gap-1">
+      @if (!product().isInStock) {
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-error-soft text-error border border-error/20">
+          Agotado
+        </span>
+      } @else if (product().isLowStock) {
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-warn-soft text-warn border border-warn/20">
+          Últimas unidades
+        </span>
+      }
+      @if (product().isNew) {
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accent-soft text-accent border border-accent/20">
+          Nuevo
+        </span>
+      }
+    </div>
+
+    <!-- Badge OFERTA — esquina superior derecha -->
+    @if (product().isOnSale) {
+      <span class="absolute top-2 right-2 z-20 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+            style="background-color:var(--color-accent)">
+        OFERTA
       </span>
     }
   </div>
@@ -71,10 +84,23 @@
 
   <!-- Price + stars -->
   <div class="flex items-center justify-between gap-2">
-    <span class="text-[13px] font-semibold text-ink-1">
-      {{ formatPrice() }}
-    </span>
-    <app-star-rating [value]="4" [of]="5" />
+    @if (product().isOnSale && product().salePriceMxn !== null) {
+      <div class="flex flex-col gap-0">
+        <span class="text-[13px] font-semibold" style="color:var(--color-accent)">
+          {{ formatSalePrice() }}
+        </span>
+        <span class="text-[10px] text-ink-3 line-through leading-none">
+          {{ formatPrice() }}
+        </span>
+      </div>
+    } @else {
+      <span class="text-[13px] font-semibold text-ink-1">
+        {{ formatPrice() }}
+      </span>
+    }
+    @if (product().rating !== null) {
+      <app-star-rating [value]="product().rating!" [of]="5" />
+    }
   </div>
 
 </a>

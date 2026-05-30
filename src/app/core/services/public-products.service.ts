@@ -71,14 +71,16 @@ function mapProduct(r: any): PublicProduct {
     relatedProducts: (r.relatedProducts ?? []).map(mapRelated),
     youMayLike:      (r.youMayLike ?? []).map(mapRelated),
     loyaltyPoints:   r.loyaltyPoints ?? 0,
+    isNew:           r.isNew ?? false,
+    isOnSale:        r.isOnSale ?? false,
+    isLowStock:      r.isLowStock ?? false,
+    isInStock:       r.isInStock ?? true,
+    salePrice:       r.salePrice ?? null,
+    salePriceMxn:    r.salePriceMxn ?? null,
+    salePriceUsd:    r.salePriceUsd ?? null,
     minSaleQty:      r.minSaleQty ?? 1,
     maxSaleQty:      r.maxSaleQty ?? null,
     qtyIncrements:   r.qtyIncrements ?? 1,
-    isInStock:       r.isInStock ?? true,
-    isLowStock:      r.isLowStock ?? false,
-    isNew:           r.isNew ?? false,
-    isOnSale:        r.isOnSale ?? false,
-    salePrice:       r.salePrice ?? null,
   };
 }
 

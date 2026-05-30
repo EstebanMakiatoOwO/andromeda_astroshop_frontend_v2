@@ -59,6 +59,8 @@ export interface PublicProduct {
   isNew: boolean;
   isOnSale: boolean;
   salePrice: number | null;
+  salePriceMxn: number | null;
+  salePriceUsd: number | null;
 }
 
 export interface RelatedProductSummary {

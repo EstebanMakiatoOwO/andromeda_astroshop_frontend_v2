@@ -42,4 +42,9 @@ export class ProductCardComponent implements OnDestroy {
     const p = this.product();
     return this.currency.format(p.priceMxn, p.priceUsd);
   }
+
+  protected formatSalePrice(): string {
+    const p = this.product();
+    return this.currency.format(p.salePriceMxn ?? p.priceMxn, p.salePriceUsd ?? p.priceUsd);
+  }
 }
