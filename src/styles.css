@@ -113,6 +113,26 @@
   --radius-lg:   10px;
 }
 
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-fade { animation: heroFade 0.5s ease forwards; }
+
+@keyframes brandScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
+}
+
+.brand-scroll-track {
+  animation: brandScroll 55s linear infinite;
+}
+
+.brand-scroll-track:hover {
+  animation-play-state: paused;
+}
+
 .orbit {
   position: absolute;
   border-radius: 50%;

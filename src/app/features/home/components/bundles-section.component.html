@@ -1,0 +1,78 @@
+<section class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
+
+  <!-- Header -->
+  <div class="flex items-end justify-between mb-6">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl md:text-2xl font-bold text-ink-1">Kits armados por nuestros astrónomos</h2>
+      <small class="text-xs text-ink-3">¿No sabés qué comprar? Empezá con un kit · todos vienen con descuento</small>
+    </div>
+    <a class="font-mono text-xs cursor-pointer hover:underline" style="color:var(--color-accent)">
+      ver todos los kits →
+    </a>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    @for (k of bundles; track k.name) {
+      <div class="rounded-xl overflow-hidden flex flex-col relative"
+           [class.border-2]="k.featured"
+           [class.border]="!k.featured"
+           [class.border-line]="!k.featured"
+           [style.border-color]="k.featured ? 'var(--color-accent)' : ''">
+
+        @if (k.featured) {
+          <span class="absolute top-3 right-3 z-10 text-[10px] font-bold px-2 py-0.5 rounded
+                       uppercase tracking-wider text-white"
+                style="background:var(--color-accent)">
+            + vendido
+          </span>
+        }
+
+        <!-- Placeholder imagen -->
+        <div class="aspect-video bg-surface-3 border-b border-line flex items-center justify-center">
+          <span class="font-mono text-[10px] text-ink-3">// {{ k.tag }}</span>
+        </div>
+
+        <!-- Contenido -->
+        <div class="flex flex-col gap-4 p-5 flex-1">
+          <div class="flex flex-col gap-1">
+            <span class="font-mono text-[10px]" style="color:var(--color-accent)">// {{ k.tag }}</span>
+            <h3 class="text-base font-semibold text-ink-1">{{ k.name }}</h3>
+            <p class="text-xs text-ink-3">{{ k.desc }}</p>
+          </div>
+
+          <ul class="flex flex-col gap-2 flex-1">
+            @for (item of k.items; track $index) {
+              <li class="flex items-start gap-2">
+                <span class="text-[10px] mt-0.5 shrink-0" style="color:var(--color-accent)">✓</span>
+                <span class="text-xs text-ink-2 leading-snug">{{ item }}</span>
+              </li>
+            }
+          </ul>
+
+          <div class="flex flex-col gap-3 pt-3 border-t border-dashed border-line">
+            <div class="flex items-baseline justify-between">
+              <div class="flex items-baseline gap-2">
+                <strong class="text-xl text-ink-1">{{ k.price }}</strong>
+                <span class="text-xs text-ink-3 line-through">{{ k.strike }}</span>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-success-soft text-success">
+                {{ k.saving }}
+              </span>
+            </div>
+            <button class="w-full h-10 rounded-lg text-sm font-medium transition-colors"
+                    [class.text-white]="k.featured"
+                    [class.border]="!k.featured"
+                    [class.border-line]="!k.featured"
+                    [class.text-ink-2]="!k.featured"
+                    [class.hover:border-accent]="!k.featured"
+                    [style.background-color]="k.featured ? 'var(--color-accent)' : ''">
+              Armar carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+</section>

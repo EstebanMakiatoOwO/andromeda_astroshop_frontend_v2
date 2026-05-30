@@ -1,44 +1,96 @@
 <section id="guias" style="background: var(--color-surface-1);">
   <div class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-14">
 
-    <!-- Header -->
     <div class="mb-6 md:mb-8">
       <h2 class="text-xl md:text-2xl font-bold text-ink-1">Guías para empezar</h2>
     </div>
 
-    <!-- Cards — scroll horizontal en móvil, grid en desktop -->
-    <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
-                sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
-      @for (card of cards; track card.title) {
-        <article class="snap-start shrink-0 w-72 sm:w-auto
-                        rounded-xl border border-line bg-surface-3 overflow-hidden
-                        hover:border-accent transition-colors cursor-pointer group">
-
-          <!-- Image placeholder -->
-          <div class="bg-surface-4 relative overflow-hidden" style="aspect-ratio: 16/10;">
-            <div class="absolute inset-0 flex items-center justify-center">
-              <svg class="w-10 h-10 text-ink-3 opacity-20" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="12" r="3"/>
-                <line x1="12" y1="2" x2="12" y2="5"/>
-                <line x1="12" y1="19" x2="12" y2="22"/>
-                <line x1="2" y1="12" x2="5" y2="12"/>
-                <line x1="19" y1="12" x2="22" y2="12"/>
-              </svg>
+    <!-- Skeleton mientras carga -->
+    @if (isLoading()) {
+      <div class="flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+        @for (s of [1,2,3]; track s) {
+          <div class="snap-start shrink-0 w-72 sm:w-auto rounded-xl border border-line bg-surface-3 overflow-hidden animate-pulse">
+            <div class="bg-surface-4" style="aspect-ratio: 16/10;"></div>
+            <div class="p-4 flex flex-col gap-2">
+              <div class="h-2 w-10 rounded bg-surface-4"></div>
+              <div class="h-3 w-full rounded bg-surface-4"></div>
+              <div class="h-3 w-3/4 rounded bg-surface-4"></div>
             </div>
           </div>
+        }
+      </div>
+    }
 
-          <!-- Body -->
-          <div class="flex flex-col gap-2 p-4">
-            <span class="font-mono text-[10px] text-ink-3">{{ card.tag }}</span>
-            <h3 class="text-sm font-semibold text-ink-1 leading-snug group-hover:text-accent transition-colors">
-              {{ card.title }}
-            </h3>
-          </div>
-        </article>
-      }
-    </div>
+    <!-- Artículos reales del backend -->
+    @else if (displayItems()) {
+      <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
+                  sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+        @for (article of displayItems()!; track article.id) {
+          <a [routerLink]="['/guias', article.slug]"
+             class="snap-start shrink-0 w-72 sm:w-auto
+                    rounded-xl border border-line bg-surface-3 overflow-hidden
+                    hover:border-accent transition-colors cursor-pointer group">
+
+            <!-- Cover image o placeholder -->
+            <div class="bg-surface-4 relative overflow-hidden" style="aspect-ratio: 16/10;">
+              @if (article.coverImage) {
+                <img [src]="article.coverImage" [alt]="article.title"
+                     class="w-full h-full object-cover" loading="lazy" />
+              } @else {
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <svg class="w-10 h-10 text-ink-3 opacity-20" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+                    <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+                  </svg>
+                </div>
+              }
+            </div>
+
+            <div class="flex flex-col gap-2 p-4">
+              <span class="font-mono text-[10px] text-ink-3">Guía</span>
+              <h3 class="text-sm font-semibold text-ink-1 leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                {{ article.title }}
+              </h3>
+              @if (article.excerpt) {
+                <p class="text-xs text-ink-3 leading-relaxed line-clamp-2">{{ article.excerpt }}</p>
+              }
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+    <!-- Fallback hardcodeado mientras no hay artículos -->
+    @else {
+      <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
+                  sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+        @for (card of fallback; track card.title) {
+          <article class="snap-start shrink-0 w-72 sm:w-auto
+                          rounded-xl border border-line bg-surface-3 overflow-hidden
+                          hover:border-accent transition-colors cursor-pointer group">
+            <div class="bg-surface-4 relative overflow-hidden" style="aspect-ratio: 16/10;">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="w-10 h-10 text-ink-3 opacity-20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+                  <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                  <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+                </svg>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 p-4">
+              <span class="font-mono text-[10px] text-ink-3">{{ card.tag }}</span>
+              <h3 class="text-sm font-semibold text-ink-1 leading-snug group-hover:text-accent transition-colors">
+                {{ card.title }}
+              </h3>
+              <p class="text-xs text-ink-3 leading-relaxed line-clamp-2">{{ card.excerpt }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    }
 
   </div>
 </section>

@@ -1,14 +1,30 @@
-<app-hero-section />
+<app-hero-carousel />
 
 @if (!auth.isAuthenticated()) {
   <app-loyalty-banner />
 }
 
-<app-featured-products
-  [products]="featuredProducts()"
-  [isLoading]="isLoadingProducts()"
+<app-product-carousel
+  title="Lo más buscado"
+  subtitle="Los favoritos de nuestra comunidad"
+  [products]="popularProducts()"
 />
 
-<app-editorial-section />
+@if (isLoadingNew() || newProducts().length > 0) {
+  <div class="bg-surface-2 border-t border-b border-line">
+    <app-product-carousel
+      title="Recién llegados"
+      subtitle="Lo último que entró al catálogo"
+      [products]="newProducts()"
+    />
+  </div>
+}
+
+<app-bundles-section />
+
+<app-editorial-section
+  [articles]="articles()"
+  [isLoading]="isLoadingArticles()"
+/>
 
 <app-brands-section [brands]="brands()" />

@@ -1,34 +1,43 @@
-<section class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-14">
+<section class="border-t border-line py-10 md:py-14">
 
-  <h4 class="text-sm font-semibold text-ink-1 mb-4">Marcas oficiales</h4>
+  <p class="font-mono text-[10px] text-ink-3 text-center uppercase tracking-widest mb-8">
+    Distribuidores oficiales
+  </p>
 
-  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
-    @for (brand of brands(); track brand.id) {
-      <div class="rounded border border-line bg-surface-3 flex items-center justify-center
-                  hover:border-accent transition-colors cursor-pointer p-2"
-           style="height: 48px;">
-        @if (brand.logoUrl) {
-          <img [src]="brand.logoUrl | assetUrl" [alt]="brand.name"
-               class="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity" />
-        } @else {
-          <span class="font-mono text-[10px] md:text-[11px] text-ink-3 hover:text-accent
-                       transition-colors text-center leading-tight">
-            {{ brand.name }}
-          </span>
-        }
-      </div>
-    }
+  <div class="relative w-full overflow-hidden">
+    <!-- Fade masks -->
+    <div class="absolute left-0 top-0 bottom-0 w-28 z-10 pointer-events-none"
+         style="background: linear-gradient(to right, var(--color-surface-1), transparent)"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-28 z-10 pointer-events-none"
+         style="background: linear-gradient(to left, var(--color-surface-1), transparent)"></div>
 
-    @if (brands().length === 0) {
-      @for (placeholder of ['Celestron','Meade','SkyWatcher','Bushnell','Orion','Vixen']; track placeholder) {
-        <div class="rounded border border-line flex items-center justify-center p-2"
-             style="height: 48px;">
-          <span class="font-mono text-[10px] md:text-[11px] text-ink-3 text-center leading-tight">
-            {{ placeholder }}
-          </span>
+    <div class="flex brand-scroll-track" style="width: max-content; gap: 10px;">
+      @for (brand of track(); track $index) {
+        <div class="flex flex-col items-center justify-center gap-1.5
+                    px-5 py-3 rounded-xl border border-line bg-surface-2
+                    hover:border-accent hover:bg-surface-3
+                    transition-all cursor-pointer group shrink-0"
+             style="height: 150px; min-width: 220px;">
+
+          @if (brand.logoUrl) {
+            <img [src]="brand.logoUrl | assetUrl"
+                 [alt]="brand.name"
+                 class="w-auto object-contain opacity-75 group-hover:opacity-100 transition-opacity"
+                 style="max-height: 200px; max-width: 250px;" />
+            <span class="font-mono text-[9px] text-ink-3 group-hover:text-accent
+                         transition-colors whitespace-nowrap opacity-0 group-hover:opacity-100">
+              {{ brand.name }}
+            </span>z
+          } @else {
+            <span class="font-mono text-[11px] font-medium text-ink-2 group-hover:text-accent
+                         transition-colors whitespace-nowrap text-center leading-snug">
+              {{ brand.name }}
+            </span>
+          }
+
         </div>
       }
-    }
+    </div>
   </div>
 
 </section>

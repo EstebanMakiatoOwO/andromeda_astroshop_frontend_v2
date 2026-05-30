@@ -12,6 +12,7 @@ export interface LoyaltyCalculateResponse {
 
 interface ApiResponse<T> { data: T; }
 
+// camelCaseInterceptor converts all snake_case keys to camelCase before reaching here
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapRelated(rp: any) {
   return {
@@ -62,12 +63,12 @@ function mapProduct(r: any): PublicProduct {
       description: r.brand.description ?? '',
       logoUrl:     r.brand.logoUrl ?? '',
     } : null,
-    rating:         r.rating ?? null,
-    reviewCount:    r.reviewCount ?? 0,
-    specifications: (r.specifications ?? []).map((s: any) => ({ key: s.key, value: s.value })),
-    tags:           r.tags ?? [],
-    createdAt:      r.createdAt,
-    updatedAt:      r.updatedAt,
+    rating:          r.rating ?? null,
+    reviewCount:     r.reviewCount ?? 0,
+    specifications:  (r.specifications ?? []).map((s: any) => ({ key: s.key, value: s.value })),
+    tags:            r.tags ?? [],
+    createdAt:       r.createdAt,
+    updatedAt:       r.updatedAt,
     relatedProducts: (r.relatedProducts ?? []).map(mapRelated),
     youMayLike:      (r.youMayLike ?? []).map(mapRelated),
     loyaltyPoints:   r.loyaltyPoints ?? 0,
@@ -97,14 +98,26 @@ export class PublicProductsService {
     return this.getProducts().pipe(map(products => products.slice(0, size)));
   }
 
+  getPopular(size = 12): Observable<PublicProduct[]> {
+    const params = new HttpParams().set('size', size);
+    return this.http.get<ApiResponse<any[]>>(`${this.base}/popular`, { params })
+      .pipe(map(r => r.data.map(mapProduct)));
+  }
+
+  getNew(size = 12): Observable<PublicProduct[]> {
+    const params = new HttpParams().set('size', size);
+    return this.http.get<ApiResponse<any[]>>(`${this.base}/new`, { params })
+      .pipe(map(r => r.data.map(mapProduct)));
+  }
+
   getProduct(id: number): Observable<PublicProduct> {
     return this.http.get<ApiResponse<any>>(`${this.base}/${id}`).pipe(map(r => mapProduct(r.data)));
   }
 
   search(name: string): Observable<PublicProduct[]> {
     const params = new HttpParams().set('name', name);
-    return this.http.get<ApiResponse<PublicProduct[]>>(`${this.base}/search`, { params })
-      .pipe(map(r => r.data));
+    return this.http.get<ApiResponse<any[]>>(`${this.base}/search`, { params })
+      .pipe(map(r => r.data.map(mapProduct)));
   }
 
   calculateLoyaltyPoints(productId: number, qty: number): Observable<LoyaltyCalculateResponse> {
