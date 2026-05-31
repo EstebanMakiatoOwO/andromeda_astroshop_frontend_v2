@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CartService } from './core/services/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,10 @@ import { RouterOutlet } from '@angular/router';
   template: '<router-outlet />',
   styles: [':host { display: block; height: 100%; }'],
 })
-export class App {}
+export class App implements OnInit {
+  private readonly cart = inject(CartService);
+
+  ngOnInit(): void {
+    this.cart.load().subscribe();
+  }
+}

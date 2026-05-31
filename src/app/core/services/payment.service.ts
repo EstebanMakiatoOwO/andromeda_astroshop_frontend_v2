@@ -23,13 +23,9 @@ export class PaymentService {
     shippingMethod: string,
     shippingPrice: number,
   ): Observable<MpPreference> {
-    return this.http.post<MpPreference>(`${this.base}/payments/mp/preference`, {
-      cartToken,
-      address,
-      shippingCarrier,
-      shippingMethod,
-      shippingPrice,
-    });
+    const body: Record<string, unknown> = { address, shippingCarrier, shippingMethod, shippingPrice };
+    if (cartToken) body['cartToken'] = cartToken;
+    return this.http.post<MpPreference>(`${this.base}/payments/mp/preference`, body);
   }
 
   getOrderByRef(ref: string): Observable<OrderSummary> {
