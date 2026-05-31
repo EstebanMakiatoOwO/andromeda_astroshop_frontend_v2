@@ -19,7 +19,8 @@
     </div>
 
     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto">
-      <button class="flex-1 sm:flex-none px-4 py-1.5 rounded-lg border border-line text-xs text-ink-2
+      <button (click)="openModal()"
+              class="flex-1 sm:flex-none px-4 py-1.5 rounded-lg border border-line text-xs text-ink-2
                      hover:text-ink-1 hover:border-accent transition-colors text-center">
         Cómo funciona
       </button>
@@ -33,3 +34,93 @@
     </div>
   </div>
 </section>
+
+<!-- Modal -->
+@if (modalOpen()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4"
+       (click)="closeModal()">
+
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+    <!-- Panel -->
+    <div class="relative bg-surface-2 rounded-2xl border border-line shadow-2xl w-full max-w-md"
+         (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-line">
+        <div class="flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs"
+                style="background-color: var(--color-accent);">★</span>
+          <h2 class="text-sm font-semibold text-ink-1">Programa de puntos Andromeda</h2>
+        </div>
+        <button (click)="closeModal()"
+                class="w-7 h-7 flex items-center justify-center rounded-lg text-ink-3
+                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base leading-none">
+          ✕
+        </button>
+      </div>
+
+      <!-- Pasos -->
+      <div class="px-6 py-5 flex flex-col gap-5">
+
+        <div class="flex gap-4 items-start">
+          <div class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
+               style="background-color: var(--color-accent);">1</div>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm font-medium text-ink-1">Creá tu cuenta gratis</p>
+            <p class="text-xs text-ink-3 leading-relaxed">
+              Registrarte es opcional, pero es la única forma de acumular puntos entre compras.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 items-start">
+          <div class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
+               style="background-color: var(--color-accent);">2</div>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm font-medium text-ink-1">Comprá y acumulá puntos</p>
+            <p class="text-xs text-ink-3 leading-relaxed">
+              Ganás <strong class="text-ink-2">1 punto por cada $100 MXN</strong> en tus pedidos.
+              Los puntos se acreditan automáticamente al confirmar el pago.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 items-start">
+          <div class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
+               style="background-color: var(--color-accent);">3</div>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm font-medium text-ink-1">Canjeá por descuentos</p>
+            <p class="text-xs text-ink-3 leading-relaxed">
+              Usá tus puntos acumulados como descuento en tu próxima compra.
+              <strong class="text-ink-2">100 puntos = $100 MXN de descuento.</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Info extra -->
+        <div class="rounded-xl bg-surface-3 border border-line px-4 py-3 flex flex-col gap-1.5">
+          <p class="text-[11px] font-mono text-ink-3 uppercase tracking-wide">Notas</p>
+          <ul class="text-xs text-ink-3 leading-relaxed flex flex-col gap-1">
+            <li>· Los puntos no expiran mientras tu cuenta tenga actividad en los últimos 12 meses.</li>
+            <li>· No aplican en productos en liquidación con descuento mayor al 30%.</li>
+            <li>· El canje mínimo es de 500 puntos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 pb-6">
+        <button (click)="closeModal()"
+                class="w-full py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
+                style="background-color: var(--color-accent);"
+                onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+                onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+          Entendido
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

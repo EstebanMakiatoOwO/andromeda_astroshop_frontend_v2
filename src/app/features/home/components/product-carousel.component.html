@@ -1,7 +1,7 @@
 <section class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
 
   <!-- Header -->
-  <div class="flex items-end justify-between mb-6">
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
     <div class="flex flex-col gap-1">
       <h2 class="text-xl md:text-2xl font-bold text-ink-1">{{ title() }}</h2>
       @if (subtitle()) {
@@ -21,7 +21,7 @@
                      disabled:opacity-30 disabled:cursor-not-allowed text-base">
         ›
       </button>
-      <a class="font-mono text-xs ml-2 cursor-pointer hover:underline"
+      <a class="hidden sm:inline font-mono text-xs ml-2 cursor-pointer hover:underline"
          style="color:var(--color-accent)">
         catálogo completo →
       </a>

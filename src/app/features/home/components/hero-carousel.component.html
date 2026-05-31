@@ -1,84 +1,53 @@
-<div class="relative overflow-hidden border-b border-line" style="min-height: 380px;">
+@if (loading()) {
+  <div class="min-h-65 sm:min-h-80 md:min-h-95 bg-surface-2 border-b border-line animate-pulse"></div>
+} @else if (banners().length === 0) {
+  <!-- Sin banners: espacio vacío, no rompe el layout -->
+  <div class="hidden"></div>
+} @else {
+  <div class="relative overflow-hidden border-b border-line min-h-65 sm:min-h-80 md:min-h-95">
 
-  @for (slide of slides; track $index; let i = $index) {
-    @if (i === current()) {
-      <div class="absolute inset-0 transition-none" [style.background]="slide.bg">
-
-        <app-star-field class="absolute inset-0 z-0"
-          [count]="slide.dark ? 140 : 80" [seed]="i + 7" />
-
-        <span class="orbit hidden sm:block absolute"
-              [style.border-color]="'color-mix(in oklch,' + slide.accent + ' 30%, transparent)'"
-              style="width:600px;height:600px;top:50%;right:-200px;transform:translateY(-50%)"></span>
-        <span class="orbit hidden sm:block absolute opacity-30"
-              [style.border-color]="'color-mix(in oklch,' + slide.accent + ' 30%, transparent)'"
-              style="width:800px;height:800px;top:50%;right:-300px;transform:translateY(-50%)"></span>
-
-        <div class="absolute inset-0 z-10 flex items-center">
-          <div class="max-w-7xl mx-auto px-6 md:px-8 w-full py-12 md:py-16">
-            <div class="flex flex-col gap-4 max-w-lg hero-fade">
-              <span class="font-mono text-xs" [style.color]="slide.accent">{{ slide.kicker }}</span>
-              <h1 class="font-bold leading-none text-4xl md:text-5xl"
-                  [class.text-white]="slide.dark"
-                  [class.text-ink-1]="!slide.dark">
-                {{ slide.titleLine1 }}<br>{{ slide.titleLine2 }}
-              </h1>
-              <p class="text-sm leading-relaxed max-w-sm"
-                 [class.text-white]="slide.dark"
-                 [class.text-ink-2]="!slide.dark"
-                 [class.opacity-80]="slide.dark">
-                {{ slide.desc }}
-              </p>
-              <div class="flex flex-wrap gap-2 pt-1">
-                <button class="px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-                        [style.background-color]="slide.accent">
-                  {{ slide.cta1 }}
-                </button>
-                <button class="px-5 py-2.5 rounded-lg text-sm transition-colors"
-                        [class.border]="true"
-                        [class.text-ink-2]="!slide.dark"
-                        [class.text-white]="slide.dark"
-                        [class.border-line]="!slide.dark"
-                        [class.hover:border-accent]="!slide.dark"
-                        [style.border-color]="slide.dark ? 'rgba(255,255,255,0.4)' : ''">
-                  {{ slide.cta2 }}
-                </button>
-              </div>
-            </div>
-          </div>
+    @for (banner of banners(); track banner.id; let i = $index) {
+      @if (i === current()) {
+        <div class="absolute inset-0">
+          @if (banner.linkUrl) {
+            <a [href]="banner.linkUrl" class="block w-full h-full">
+              <img [src]="banner.imageUrl" [alt]="banner.title"
+                   class="w-full h-full object-cover" />
+            </a>
+          } @else {
+            <img [src]="banner.imageUrl" [alt]="banner.title"
+                 class="w-full h-full object-cover" />
+          }
         </div>
+      }
+    }
 
+    <!-- Flechas -->
+    @if (banners().length > 1) {
+      <button (click)="prev()"
+              class="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
+                     border border-white/30 bg-black/30 backdrop-blur-sm
+                     items-center justify-center text-white hover:bg-black/50 transition-colors text-lg">
+        ‹
+      </button>
+      <button (click)="next()"
+              class="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
+                     border border-white/30 bg-black/30 backdrop-blur-sm
+                     items-center justify-center text-white hover:bg-black/50 transition-colors text-lg">
+        ›
+      </button>
+
+      <!-- Dots -->
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+        @for (banner of banners(); track banner.id; let i = $index) {
+          <button (click)="goTo(i)"
+                  class="h-2 rounded-full transition-all duration-300 border-none cursor-pointer bg-white"
+                  [style.width]="i === current() ? '24px' : '8px'"
+                  [style.opacity]="i === current() ? '1' : '0.5'">
+          </button>
+        }
       </div>
     }
-  }
 
-  <!-- Flechas -->
-  <button (click)="prev()"
-          class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
-                 border border-line bg-surface-2/80 backdrop-blur-sm
-                 flex items-center justify-center text-ink-2
-                 hover:text-ink-1 hover:border-accent transition-colors text-lg">
-    ‹
-  </button>
-  <button (click)="next()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
-                 border border-line bg-surface-2/80 backdrop-blur-sm
-                 flex items-center justify-center text-ink-2
-                 hover:text-ink-1 hover:border-accent transition-colors text-lg">
-    ›
-  </button>
-
-  <!-- Dots -->
-  <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
-    @for (slide of slides; track $index; let i = $index) {
-      <button (click)="goTo(i)"
-              class="h-2 rounded-full transition-all duration-300 border-none cursor-pointer"
-              [style.width]="i === current() ? '24px' : '8px'"
-              [style.background]="i === current()
-                ? slides[current()].accent
-                : (slides[current()].dark ? 'rgba(255,255,255,0.4)' : 'var(--color-line-strong)')">
-      </button>
-    }
   </div>
-
-</div>
+}

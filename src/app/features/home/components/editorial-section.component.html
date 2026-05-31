@@ -7,9 +7,10 @@
 
     <!-- Skeleton mientras carga -->
     @if (isLoading()) {
-      <div class="flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+      <div class="grid grid-cols-[repeat(3,17rem)] md:grid-cols-2 lg:grid-cols-3
+                  gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0">
         @for (s of [1,2,3]; track s) {
-          <div class="snap-start shrink-0 w-72 sm:w-auto rounded-xl border border-line bg-surface-3 overflow-hidden animate-pulse">
+          <div class="rounded-xl border border-line bg-surface-3 overflow-hidden animate-pulse">
             <div class="bg-surface-4" style="aspect-ratio: 16/10;"></div>
             <div class="p-4 flex flex-col gap-2">
               <div class="h-2 w-10 rounded bg-surface-4"></div>
@@ -23,15 +24,13 @@
 
     <!-- Artículos reales del backend -->
     @else if (displayItems()) {
-      <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
-                  sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+      <div class="grid grid-cols-[repeat(3,17rem)] md:grid-cols-2 lg:grid-cols-3
+                  gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 snap-x snap-mandatory">
         @for (article of displayItems()!; track article.id) {
           <a [routerLink]="['/guias', article.slug]"
-             class="snap-start shrink-0 w-72 sm:w-auto
-                    rounded-xl border border-line bg-surface-3 overflow-hidden
+             class="snap-start rounded-xl border border-line bg-surface-3 overflow-hidden
                     hover:border-accent transition-colors cursor-pointer group">
 
-            <!-- Cover image o placeholder -->
             <div class="bg-surface-4 relative overflow-hidden" style="aspect-ratio: 16/10;">
               @if (article.coverImage) {
                 <img [src]="article.coverImage" [alt]="article.title"
@@ -64,11 +63,10 @@
 
     <!-- Fallback hardcodeado mientras no hay artículos -->
     @else {
-      <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
-                  sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+      <div class="grid grid-cols-[repeat(3,17rem)] md:grid-cols-2 lg:grid-cols-3
+                  gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 snap-x snap-mandatory">
         @for (card of fallback; track card.title) {
-          <article class="snap-start shrink-0 w-72 sm:w-auto
-                          rounded-xl border border-line bg-surface-3 overflow-hidden
+          <article class="snap-start rounded-xl border border-line bg-surface-3 overflow-hidden
                           hover:border-accent transition-colors cursor-pointer group">
             <div class="bg-surface-4 relative overflow-hidden" style="aspect-ratio: 16/10;">
               <div class="absolute inset-0 flex items-center justify-center">

@@ -44,6 +44,11 @@ export const ADMIN_ROUTES: Routes = [
           import('./categories/categories.component').then(m => m.CategoriesComponent),
       },
       {
+        path: 'banners',
+        loadComponent: () =>
+          import('./banners/banners.component').then(m => m.AdminBannersComponent),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
