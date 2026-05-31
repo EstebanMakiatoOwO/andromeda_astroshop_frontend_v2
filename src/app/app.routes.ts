@@ -60,10 +60,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/checkout/order-failure/order-failure.component').then(m => m.OrderFailureComponent),
   },
   {
-    path: 'admin',
-    loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
-  },
-  {
     path: '**',
     redirectTo: '',
   },

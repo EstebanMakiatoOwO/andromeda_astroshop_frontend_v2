@@ -4,18 +4,30 @@
   <div class="rounded-xl border border-line bg-surface-2 p-10 max-w-md w-full
               flex flex-col items-center gap-6 text-center">
 
-    <!-- Spinner -->
-    <div class="relative w-16 h-16">
-      <div class="absolute inset-0 rounded-full border-[3px] border-line border-t-accent animate-spin"></div>
-      <div class="absolute inset-0 flex items-center justify-center text-2xl">💳</div>
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <h2 class="text-base font-semibold text-ink-1">Te estamos llevando a Mercado Pago</h2>
-      <p class="text-sm text-ink-2 leading-relaxed max-w-72">
-        No cierres ni recargues esta página. En unos segundos podrás elegir cómo pagar de forma segura.
-      </p>
-    </div>
+    @if (isError()) {
+      <!-- Error state -->
+      <div class="text-3xl">⚠️</div>
+      <div class="flex flex-col gap-2">
+        <h2 class="text-base font-semibold text-ink-1">No se pudo procesar el pedido</h2>
+        <p class="text-sm text-ink-3 leading-relaxed max-w-72">{{ errorMsg() }}</p>
+      </div>
+      <a routerLink="/checkout/envio"
+         class="text-sm font-medium px-6 py-2 rounded-lg border border-accent text-accent hover:bg-accent hover:text-white transition-colors">
+        Volver e intentar de nuevo
+      </a>
+    } @else {
+      <!-- Spinner -->
+      <div class="relative w-16 h-16">
+        <div class="absolute inset-0 rounded-full border-[3px] border-line border-t-accent animate-spin"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-2xl">💳</div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <h2 class="text-base font-semibold text-ink-1">Creando tu pedido…</h2>
+        <p class="text-sm text-ink-2 leading-relaxed max-w-72">
+          No cierres ni recargues esta página. En unos segundos te llevaremos a Mercado Pago.
+        </p>
+      </div>
+    }
 
     <div class="w-full flex flex-col gap-2.5 py-4 border-t border-b border-line">
       <div class="flex justify-between items-baseline text-sm">
@@ -24,7 +36,7 @@
       </div>
       <div class="flex justify-between text-xs text-ink-3">
         <span>Orden</span>
-        <span class="font-mono">#{{ orderNumber }}</span>
+        <span class="font-mono text-ink-3">pendiente de confirmar</span>
       </div>
     </div>
 
@@ -39,9 +51,11 @@
       </div>
     </div>
 
-    <a class="font-mono text-[11px] text-ink-3 hover:text-accent transition-colors cursor-pointer">
-      ¿no redirige? hacé clic acá →
-    </a>
+    @if (!isError()) {
+      <p class="font-mono text-[11px] text-ink-3">
+        Redirigiendo a Mercado Pago…
+      </p>
+    }
 
   </div>
 </div>

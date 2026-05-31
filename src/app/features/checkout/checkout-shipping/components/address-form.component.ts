@@ -71,4 +71,19 @@ export class AddressFormComponent {
     const required: (keyof typeof this.v)[] = ['name','email','phone','street','numExt','colonia','city','state','cp'];
     return required.every(k => !!this.v[k]());
   }
+
+  getValue(): AddressFormValue {
+    return {
+      name:    this.v.name(),
+      email:   this.v.email(),
+      phone:   this.v.phone(),
+      street:  this.v.street(),
+      numExt:  this.v.numExt(),
+      numInt:  this.v.numInt(),
+      colonia: this.v.colonia(),
+      city:    this.v.city(),
+      state:   this.v.state(),
+      cp:      this.v.cp(),
+    };
+  }
 }

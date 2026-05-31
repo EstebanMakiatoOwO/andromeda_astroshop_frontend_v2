@@ -11,7 +11,9 @@
 
   <!-- Info -->
   <div class="flex flex-col gap-1.5 flex-1 min-w-0">
-    <span class="font-mono text-[10px] text-ink-3">{{ item().meta }}</span>
+    @if (item().sku) {
+      <span class="font-mono text-[10px] text-ink-3">SKU {{ item().sku }}</span>
+    }
     <p class="text-sm font-semibold text-ink-1 leading-snug">{{ item().name }}</p>
     <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-success-soft text-success self-start">
       en stock · {{ item().stock }}

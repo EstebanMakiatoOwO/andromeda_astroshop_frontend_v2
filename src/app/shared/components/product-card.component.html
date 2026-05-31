@@ -98,9 +98,23 @@
         {{ formatPrice() }}
       </span>
     }
-    @if (product().rating !== null) {
-      <app-star-rating [value]="product().rating!" [of]="5" />
-    }
+    <button (click)="onAddToCart($event)"
+            [disabled]="adding() || !product().isInStock"
+            class="w-7 h-7 rounded-lg border flex items-center justify-center text-xs
+                   transition-all shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+            [class.border-accent]="added()"
+            [class.bg-accent]="added()"
+            [class.text-white]="added()"
+            [class.border-line]="!added()"
+            [class.text-ink-2]="!added()"
+            [class.hover:border-accent]="!added()"
+            [class.hover:text-accent]="!added()">
+      {{ added() ? '✓' : adding() ? '…' : '+' }}
+    </button>
   </div>
+
+  @if (product().rating !== null) {
+    <app-star-rating [value]="product().rating!" [of]="5" />
+  }
 
 </a>

@@ -130,19 +130,30 @@
                              hover:text-ink-1 hover:bg-surface-3 transition-colors">+</button>
             </div>
             <!-- Comprar ahora -->
-            <button class="flex-1 h-10 rounded-lg text-sm font-medium text-white
-                           flex items-center justify-center"
+            <button (click)="onBuyNow()"
+                    [disabled]="buyingNow()"
+                    class="flex-1 h-10 rounded-lg text-sm font-medium text-white
+                           flex items-center justify-center disabled:opacity-50 transition-colors"
                     style="background-color:var(--color-accent);"
                     onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
                     onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-              Comprar ahora
+              {{ buyingNow() ? 'Un momento…' : 'Comprar ahora' }}
             </button>
           </div>
 
           <!-- Agregar al carrito -->
-          <button class="h-10 rounded-lg border border-line text-sm text-ink-2
-                         hover:text-ink-1 hover:border-accent transition-colors">
-            Agregar al carrito
+          <button (click)="onAddToCart()"
+                  [disabled]="adding()"
+                  class="h-10 rounded-lg border text-sm transition-colors"
+                  [class.border-accent]="added()"
+                  [class.bg-accent-soft]="added()"
+                  [class.text-accent]="added()"
+                  [class.border-line]="!added()"
+                  [class.text-ink-2]="!added()"
+                  [class.hover:border-accent]="!added()"
+                  [class.hover:text-ink-1]="!added()"
+                  [class.disabled:opacity-50]="true">
+            {{ added() ? '✓ Agregado al carrito' : adding() ? 'Agregando…' : 'Agregar al carrito' }}
           </button>
 
         </div>
@@ -222,7 +233,14 @@
               </div>
               <div class="p-3 flex flex-col gap-1">
                 <p class="text-xs font-medium text-ink-1 line-clamp-2">{{ p.name }}</p>
-                <span class="text-sm font-semibold text-ink-1 mt-0.5">{{ formatPrice(p) }}</span>
+                <div class="flex items-center justify-between mt-0.5">
+                  <span class="text-sm font-semibold text-ink-1">{{ formatPrice(p) }}</span>
+                  <button (click)="cartService.addItem(p.id, 1).subscribe(); $event.preventDefault(); $event.stopPropagation()"
+                          class="w-6 h-6 rounded border border-line text-xs text-ink-3
+                                 hover:border-accent hover:text-accent transition-colors flex items-center justify-center">
+                    +
+                  </button>
+                </div>
               </div>
             </a>
           }

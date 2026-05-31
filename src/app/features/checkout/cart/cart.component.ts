@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart.service';
+import { PublicAuthService } from '../../../core/services/public-auth.service';
 import { CartItemComponent } from './components/cart-item.component';
 import { CartSummaryComponent } from './components/cart-summary.component';
 
@@ -12,6 +13,7 @@ import { CartSummaryComponent } from './components/cart-summary.component';
 })
 export class CartComponent {
   protected readonly cart   = inject(CartService);
+  protected readonly auth   = inject(PublicAuthService);
   private readonly router   = inject(Router);
 
   protected readonly subtotalUsd = computed(() =>

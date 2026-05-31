@@ -2,68 +2,79 @@
 
 <div class="max-w-2xl mx-auto px-4 md:px-6 py-10 flex flex-col gap-5">
 
-  <!-- Hero éxito -->
-  <div class="flex flex-col items-center text-center gap-3 pb-2">
-    <div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
-         style="background:var(--color-success-soft);color:var(--color-success)">✓</div>
-    <h1 class="text-2xl font-semibold text-ink-1">¡Gracias por tu compra!</h1>
-    <p class="text-sm text-ink-2 max-w-sm leading-relaxed">
-      Tu pago fue <strong class="text-success">aprobado</strong> por Mercado Pago.
-      Te enviamos la confirmación a <strong class="text-ink-1">{{ email }}</strong>.
-    </p>
-    <div class="flex items-center gap-2 mt-1">
-      <span class="text-[11px] font-mono px-2.5 py-1 rounded-full bg-success-soft text-success">
-        pago aprobado
-      </span>
-      <span class="text-[11px] font-mono px-2.5 py-1 rounded-full border border-line bg-surface-3 text-ink-2">
-        orden #{{ orderNumber }}
-      </span>
+  @if (isLoading()) {
+    <div class="flex flex-col items-center gap-4 py-16">
+      <div class="w-10 h-10 rounded-full border-[3px] border-line border-t-accent animate-spin"></div>
+      <p class="text-sm text-ink-3">Cargando tu orden…</p>
     </div>
-  </div>
+  } @else {
 
-  <!-- Tracking -->
-  <app-order-tracking [steps]="trackingSteps" />
-
-  <!-- Items -->
-  <app-order-items
-    [items]="cart.items()"
-    [subtotalMxn]="subtotalMxn()"
-    [subtotalUsd]="subtotalUsd()"
-  />
-
-  <!-- Envío + Loyalty -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div class="rounded-xl border border-line bg-surface-2 p-4 flex flex-col gap-2">
-      <h4 class="text-xs font-semibold text-ink-1">Envío a</h4>
-      <div class="flex flex-col gap-0.5 text-xs text-ink-2">
-        <span>Usuario Ejemplo</span>
-        <span>Dirección confirmada al finalizar</span>
+    <!-- Hero éxito -->
+    <div class="flex flex-col items-center text-center gap-3 pb-2">
+      <div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
+           style="background:var(--color-success-soft);color:var(--color-success)">✓</div>
+      <h1 class="text-2xl font-semibold text-ink-1">¡Gracias por tu compra!</h1>
+      <p class="text-sm text-ink-2 max-w-sm leading-relaxed">
+        Tu pago fue <strong class="text-success">aprobado</strong> por Mercado Pago.
+      </p>
+      <div class="flex items-center gap-2 mt-1">
+        <span class="text-[11px] font-mono px-2.5 py-1 rounded-full bg-success-soft text-success">
+          pago aprobado
+        </span>
+        @if (order()) {
+          <span class="text-[11px] font-mono px-2.5 py-1 rounded-full border border-line bg-surface-3 text-ink-2">
+            orden #{{ order()!.orderNumber }}
+          </span>
+        }
       </div>
     </div>
-    <div class="rounded-xl border p-4 flex flex-col gap-2"
-         style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
-      <h4 class="text-xs font-semibold" style="color:var(--color-accent)">Puntos ganados</h4>
-      <div class="flex items-baseline gap-2">
-        <strong class="text-2xl" style="color:var(--color-accent)">
-          +{{ loyaltyPts().toLocaleString('es-MX') }}
-        </strong>
-        <small style="color:var(--color-accent)">puntos loyalty</small>
-      </div>
-    </div>
-  </div>
 
-  <!-- CTAs -->
-  <div class="flex gap-3 justify-center pt-2">
-    <button class="px-5 py-2.5 rounded-lg text-sm font-medium text-white"
-            style="background-color:var(--color-accent)">
-      Seguir mi pedido
-    </button>
-    <a routerLink="/"
-       class="px-5 py-2.5 rounded-lg border border-line text-sm text-ink-2
-              hover:border-accent hover:text-ink-1 transition-colors">
-      Volver a la tienda
-    </a>
-  </div>
+    <!-- Tracking -->
+    <app-order-tracking [steps]="trackingSteps" />
+
+    <!-- Resumen -->
+    @if (order()) {
+      <div class="rounded-xl border border-line bg-surface-2 p-4 flex justify-between items-center">
+        <div class="flex flex-col gap-0.5">
+          <span class="text-xs text-ink-3">Total pagado</span>
+          <strong class="text-lg text-ink-1">
+            ${{ order()!.totalMxn.toLocaleString('es-MX', { minimumFractionDigits: 2 }) }} MXN
+          </strong>
+          <span class="text-xs text-ink-3">
+            ~${{ order()!.totalUsd.toLocaleString('en-US', { minimumFractionDigits: 2 }) }} USD
+          </span>
+        </div>
+        <div class="rounded-lg px-3 py-1 text-xs font-mono"
+             style="background:var(--color-success-soft);color:var(--color-success)">
+          {{ order()!.status }}
+        </div>
+      </div>
+
+      <!-- Loyalty -->
+      @if (order()!.loyaltyPointsEarned > 0) {
+        <div class="rounded-xl border p-4 flex items-center justify-between"
+             style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
+          <div class="flex flex-col gap-0.5">
+            <h4 class="text-xs font-semibold" style="color:var(--color-accent)">Puntos ganados</h4>
+            <small style="color:var(--color-accent)">Se acreditaron a tu cuenta loyalty</small>
+          </div>
+          <strong class="text-2xl" style="color:var(--color-accent)">
+            +{{ order()!.loyaltyPointsEarned.toLocaleString('es-MX') }}
+          </strong>
+        </div>
+      }
+    }
+
+    <!-- CTAs -->
+    <div class="flex gap-3 justify-center pt-2">
+      <a routerLink="/"
+         class="px-5 py-2.5 rounded-lg text-sm font-medium text-white"
+         style="background-color:var(--color-accent)">
+        Volver a la tienda
+      </a>
+    </div>
+
+  }
 
 </div>
 

@@ -1,18 +1,11 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild, computed, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart.service';
 import { CurrencyService } from '../../../core/services/currency.service';
+import { ShippingService, ShippingRate } from '../../../core/services/shipping.service';
 import { CheckoutBarComponent } from '../components/checkout-bar.component';
 import { PublicFooterComponent } from '../../layout/footer/public-footer.component';
-import { AddressFormComponent } from './components/address-form.component';
-
-interface ShippingOption { id: string; carrier: string; method: string; days: string; priceMxn: number; priceUsd: number; }
-
-const MOCK_OPTIONS: ShippingOption[] = [
-  { id: 'fedex-std',    carrier: 'FedEx',   method: 'Estándar',       days: '3-5 días hábiles', priceMxn: 14500, priceUsd: 841 },
-  { id: 'fedex-exp',    carrier: 'FedEx',   method: 'Express',        days: '1-2 días hábiles', priceMxn: 24900, priceUsd: 1445 },
-  { id: 'dhl-std',      carrier: 'DHL',     method: 'Estándar',       days: '3-5 días hábiles', priceMxn: 13800, priceUsd: 801 },
-];
+import { AddressFormComponent, AddressFormValue } from './components/address-form.component';
 
 @Component({
   selector: 'app-checkout-shipping',
@@ -20,31 +13,92 @@ const MOCK_OPTIONS: ShippingOption[] = [
   imports: [RouterLink, CheckoutBarComponent, PublicFooterComponent, AddressFormComponent],
   templateUrl: './checkout-shipping.component.html',
 })
-export class CheckoutShippingComponent {
+export class CheckoutShippingComponent implements OnInit {
   protected readonly cart     = inject(CartService);
   protected readonly currency = inject(CurrencyService);
   private readonly router     = inject(Router);
+  private readonly shipping   = inject(ShippingService);
 
   @ViewChild(AddressFormComponent) private addressForm!: AddressFormComponent;
 
-  protected readonly shippingOptions = MOCK_OPTIONS;
-  protected readonly selectedOption  = signal(MOCK_OPTIONS[0].id);
-  protected readonly submitted       = signal(false);
+  protected readonly rates          = signal<ShippingRate[]>([]);
+  protected readonly loadingRates   = signal(false);
+  protected readonly selectedRateId = signal('');
+  protected readonly submitted      = signal(false);
+  protected readonly formValue      = signal<AddressFormValue | null>(null);
+  private lastCp = '';
 
-  protected get selected(): ShippingOption {
-    return this.shippingOptions.find(o => o.id === this.selectedOption()) ?? MOCK_OPTIONS[0];
-  }
+  protected readonly selectedRate = computed(() =>
+    this.rates().find(r => r.carrierCode + '_' + r.methodCode === this.selectedRateId())
+    ?? this.rates()[0]
+    ?? null
+  );
 
   protected get subtotalMxn(): number { return this.cart.subtotal(); }
-  protected get subtotalUsd(): number { return this.cart.items().reduce((s, i) => s + i.unitPriceUsd * i.qty, 0); }
-  protected get totalMxn(): number    { return this.subtotalMxn + this.selected.priceMxn; }
-  protected get totalUsd(): number    { return this.subtotalUsd + this.selected.priceUsd; }
+  protected get subtotalUsd(): number { return this.cart.subtotalUsd(); }
+  protected get shippingMxn(): number { return this.selectedRate()?.price ?? 0; }
+  protected get totalMxn(): number    { return this.subtotalMxn + this.shippingMxn; }
 
   protected fmt(mxn: number, usd: number): string { return this.currency.format(mxn, usd); }
+
+  ngOnInit(): void {
+    // Ensure cart is loaded before we need productId for shipping estimate
+    if (this.cart.isEmpty()) {
+      this.cart.load().subscribe();
+    }
+  }
+
+  protected onFormChange(val: AddressFormValue): void {
+    this.formValue.set(val);
+    if (val.cp && val.cp.length >= 5 && val.cp !== this.lastCp) {
+      this.lastCp = val.cp;
+      this.loadRates(val.cp);
+    }
+  }
+
+  private loadRates(postcode: string): void {
+    const items = this.cart.items();
+    const firstItem = items[0];
+    if (!firstItem) {
+      // Cart not loaded yet — load it then retry
+      this.cart.load().subscribe(() => {
+        const item = this.cart.items()[0];
+        if (item) this.fetchRates(postcode, item.productId);
+      });
+      return;
+    }
+    this.fetchRates(postcode, firstItem.productId);
+  }
+
+  private fetchRates(postcode: string, productId: number): void {
+
+    this.loadingRates.set(true);
+    this.shipping.estimate(postcode, productId, 1).subscribe({
+      next: rates => {
+        this.rates.set(rates);
+        if (rates.length) {
+          this.selectedRateId.set(rates[0].carrierCode + '_' + rates[0].methodCode);
+        }
+        this.loadingRates.set(false);
+      },
+      error: () => this.loadingRates.set(false),
+    });
+  }
 
   protected onContinue(): void {
     this.submitted.set(true);
     if (!this.addressForm?.isValid()) return;
-    this.router.navigateByUrl('/checkout/pago');
+
+    const form = this.addressForm.getValue();
+    const rate = this.selectedRate();
+
+    this.router.navigateByUrl('/checkout/pago', {
+      state: {
+        form,
+        shippingCarrier:  rate?.carrierCode ?? 'flatrate',
+        shippingMethod:   rate?.methodCode  ?? 'flatrate',
+        shippingPriceMxn: rate?.price ?? 0,
+      }
+    });
   }
 }

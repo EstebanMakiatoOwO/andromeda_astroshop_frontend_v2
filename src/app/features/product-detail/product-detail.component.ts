@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PublicProduct } from '../../core/models/public-product.model';
 import { PublicProductsService } from '../../core/services/public-products.service';
 import { ReviewsService } from '../../core/services/reviews.service';
 import { CurrencyService } from '../../core/services/currency.service';
+import { CartService } from '../../core/services/cart.service';
 import { ProductGalleryComponent } from './components/product-gallery.component';
 import { ShippingCalculatorComponent } from './components/shipping-calculator.component';
 import { ProductTabsComponent } from './components/product-tabs.component';
@@ -23,9 +24,15 @@ import { AssetUrlPipe } from '../../shared/pipes/asset-url.pipe';
 })
 export class ProductDetailComponent implements OnInit {
   private readonly route           = inject(ActivatedRoute);
+  private readonly router          = inject(Router);
   private readonly productsService = inject(PublicProductsService);
   private readonly reviewsService  = inject(ReviewsService);
   protected readonly currency      = inject(CurrencyService);
+  protected readonly cartService   = inject(CartService);
+
+  protected readonly adding     = signal(false);
+  protected readonly added      = signal(false);
+  protected readonly buyingNow  = signal(false);
 
   @ViewChild(ProductTabsComponent)  private tabsRef!: ProductTabsComponent;
   @ViewChild('tabsSection') private tabsSection!: ElementRef<HTMLElement>;
@@ -104,6 +111,28 @@ export class ProductDetailComponent implements OnInit {
   protected goToReviews(): void {
     this.tabsRef.activateReviews();
     this.tabsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  protected onBuyNow(): void {
+    if (this.buyingNow()) return;
+    this.buyingNow.set(true);
+    this.cartService.addItem(this.product()!.id, this.qty()).subscribe({
+      next:  () => this.router.navigateByUrl('/carrito'),
+      error: () => this.buyingNow.set(false),
+    });
+  }
+
+  protected onAddToCart(): void {
+    if (this.adding()) return;
+    this.adding.set(true);
+    this.cartService.addItem(this.product()!.id, this.qty()).subscribe({
+      next: () => {
+        this.adding.set(false);
+        this.added.set(true);
+        setTimeout(() => this.added.set(false), 2000);
+      },
+      error: () => this.adding.set(false),
+    });
   }
 
   protected decQty(): void {

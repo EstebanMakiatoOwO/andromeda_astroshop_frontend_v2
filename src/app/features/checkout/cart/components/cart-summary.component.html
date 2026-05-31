@@ -22,18 +22,14 @@
       <span class="text-ink-2">Subtotal ({{ itemCount() }} productos)</span>
       <span class="text-ink-1">{{ fmt(subtotal(), subtotalUsd()) }}</span>
     </div>
-    <div class="flex justify-between">
-      <span class="text-ink-2">Envío estimado</span>
-      <span class="text-ink-1">{{ fmt(14500, 841) }}</span>
-    </div>
   </div>
 
   <!-- Total -->
   <div class="flex justify-between items-baseline border-t border-dashed border-line pt-4">
-    <span class="text-sm font-semibold text-ink-1">Total</span>
-    <span class="text-xl font-semibold text-ink-1">{{ fmt(total, totalUsd) }}</span>
+    <span class="text-sm font-semibold text-ink-1">Subtotal</span>
+    <span class="text-xl font-semibold text-ink-1">{{ fmt(subtotal(), subtotalUsd()) }}</span>
   </div>
-  <p class="text-[10px] text-ink-3 -mt-2">Pago en una sola exhibición</p>
+  <p class="text-[10px] text-ink-3 -mt-2">Envío calculado en el siguiente paso</p>
 
   <!-- Loyalty -->
   @if (loyaltyPts() > 0) {
@@ -46,18 +42,13 @@
     </div>
   }
 
-  <!-- CTAs -->
+  <!-- CTA -->
   <button (click)="onCheckout()"
           class="w-full h-11 rounded-lg text-sm font-medium text-white transition-colors"
           style="background-color:var(--color-accent);"
           onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
           onmouseleave="this.style.backgroundColor='var(--color-accent)'">
     Iniciar compra →
-  </button>
-  <button (click)="onGuest()"
-          class="w-full h-10 rounded-lg border border-line text-sm text-ink-2
-                 hover:border-accent hover:text-ink-1 transition-colors">
-    Pagar como invitado
   </button>
 
   <div class="flex items-center justify-center gap-3 text-[10px] font-mono text-ink-3">

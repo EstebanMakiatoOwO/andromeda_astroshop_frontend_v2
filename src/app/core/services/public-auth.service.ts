@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, map, tap, catchError, throwError } from 'rxjs';
 import { PublicUser, PublicLoginResponse, PublicRegisterResponse } from '../models/public-user.model';
+import { CartService } from './cart.service';
 import { environment } from '../../../environments/environment';
 
 const API_BASE  = environment.apiBase;
@@ -13,8 +14,11 @@ const USER_KEY  = 'astroshop_public_user';
 export class PublicAuthService {
   private readonly http   = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly cart   = inject(CartService);
 
   private readonly _currentUser = signal<PublicUser | null>(this.loadUserFromStorage());
+  // Load cart from server if user is already authenticated on app start
+  private readonly _cartInit = this._currentUser() ? setTimeout(() => this.cart.load().subscribe(), 0) : null;
   private readonly _isLoading   = signal<boolean>(false);
 
   readonly currentUser     = this._currentUser.asReadonly();
@@ -32,6 +36,7 @@ export class PublicAuthService {
           localStorage.setItem(USER_KEY, JSON.stringify(user));
           this._currentUser.set(user);
           this._isLoading.set(false);
+          this.cart.load().subscribe(); // sync server cart on login
         }),
         map(() => void 0),
         catchError(err => {
@@ -63,6 +68,7 @@ export class PublicAuthService {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this._currentUser.set(null);
+    this.cart.resetOnLogout();
     this.router.navigate(['/']);
   }
 

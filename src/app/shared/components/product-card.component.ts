@@ -4,6 +4,7 @@ import { PublicProduct } from '../../core/models/public-product.model';
 import { AssetUrlPipe } from '../pipes/asset-url.pipe';
 import { StarRatingComponent } from './star-rating.component';
 import { CurrencyService } from '../../core/services/currency.service';
+import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -14,8 +15,11 @@ import { CurrencyService } from '../../core/services/currency.service';
 export class ProductCardComponent implements OnDestroy {
   product = input.required<PublicProduct>();
   private readonly currency = inject(CurrencyService);
+  private readonly cart    = inject(CartService);
 
   protected currentIndex = signal(0);
+  protected adding       = signal(false);
+  protected added        = signal(false);
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
   protected onMouseEnter(): void {
@@ -41,6 +45,21 @@ export class ProductCardComponent implements OnDestroy {
   protected formatPrice(): string {
     const p = this.product();
     return this.currency.format(p.priceMxn, p.priceUsd);
+  }
+
+  protected onAddToCart(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.adding()) return;
+    this.adding.set(true);
+    this.cart.addItem(this.product().id, 1).subscribe({
+      next: () => {
+        this.adding.set(false);
+        this.added.set(true);
+        setTimeout(() => this.added.set(false), 1800);
+      },
+      error: () => this.adding.set(false),
+    });
   }
 
   protected formatSalePrice(): string {

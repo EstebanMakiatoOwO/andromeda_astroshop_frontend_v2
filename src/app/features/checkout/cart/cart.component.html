@@ -31,19 +31,29 @@
           }
         </div>
 
-        <!-- Loyalty nudge -->
-        <div class="flex items-center justify-between px-4 py-3 rounded-xl border"
-             style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
-          <div class="flex items-center gap-2.5">
-            <span class="text-sm" style="color:var(--color-accent)">★</span>
-            <small class="text-xs" style="color:var(--color-accent)">
-              Con esta compra sumás <strong>{{ loyaltyPts().toLocaleString('es-MX') }} puntos</strong>
+        <!-- Loyalty nudge — solo para usuarios autenticados -->
+        @if (auth.isAuthenticated()) {
+          <div class="flex items-center justify-between px-4 py-3 rounded-xl border"
+               style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
+            <div class="flex items-center gap-2.5">
+              <span class="text-sm" style="color:var(--color-accent)">★</span>
+              <small class="text-xs" style="color:var(--color-accent)">
+                Con esta compra sumás <strong>{{ loyaltyPts().toLocaleString('es-MX') }} puntos</strong>
+              </small>
+            </div>
+            <a class="font-mono text-[11px] hover:underline cursor-pointer" style="color:var(--color-accent)">
+              ver mis puntos →
+            </a>
+          </div>
+        } @else {
+          <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-line bg-surface-2">
+            <span class="text-sm">⭐</span>
+            <small class="text-xs text-ink-3">
+              <a routerLink="/login" class="text-accent hover:underline">Inicia sesión</a>
+              para ganar puntos loyalty con tu compra
             </small>
           </div>
-          <a class="font-mono text-[11px] hover:underline cursor-pointer" style="color:var(--color-accent)">
-            ver mis puntos →
-          </a>
-        </div>
+        }
       </div>
 
       <!-- Resumen -->
