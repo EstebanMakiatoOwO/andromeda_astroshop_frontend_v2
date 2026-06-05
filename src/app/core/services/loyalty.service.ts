@@ -7,6 +7,13 @@ import { environment } from '../../../environments/environment';
 
 const API_BASE = environment.apiBase;
 
+export interface RedeemPreview {
+  pointsToRedeem: number;
+  discountMxn:    number;
+  finalTotalMxn:  number;
+  maxRedeemable:  number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class LoyaltyService {
   private readonly http = inject(HttpClient);
@@ -15,5 +22,12 @@ export class LoyaltyService {
     return this.http
       .get<ApiResponse<LoyaltyAccount>>(`${API_BASE}/api/v1/loyalty/my`)
       .pipe(map(r => r.data));
+  }
+
+  redeemPreview(pointsToRedeem: number, subtotalMxn: number): Observable<RedeemPreview> {
+    return this.http.post<RedeemPreview>(
+      `${API_BASE}/api/v1/loyalty/redeem-preview`,
+      { pointsToRedeem, subtotalMxn },
+    );
   }
 }

@@ -26,5 +26,7 @@ export class CartComponent {
 
   protected onQtyChange(id: number, delta: 1 | -1): void { this.cart.updateQty(id, delta); }
   protected onRemove(id: number): void                    { this.cart.remove(id); }
-  protected onCheckout(): void                            { this.router.navigateByUrl('/checkout/envio'); }
+  protected onCheckout(ev: { pointsToRedeem: number; discountMxn: number }): void {
+    this.router.navigateByUrl('/checkout/envio', { state: ev });
+  }
 }

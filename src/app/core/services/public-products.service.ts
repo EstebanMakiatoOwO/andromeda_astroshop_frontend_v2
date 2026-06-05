@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PublicProduct } from '../models/public-product.model';
+import { CatalogFilters, CatalogPage, CatalogFacets } from '../models/catalog.model';
 
 export interface LoyaltyCalculateResponse {
   productId: number;
@@ -118,6 +119,49 @@ export class PublicProductsService {
     const params = new HttpParams().set('name', name);
     return this.http.get<ApiResponse<any[]>>(`${this.base}/search`, { params })
       .pipe(map(r => r.data.map(mapProduct)));
+  }
+
+  getByCategory(categoryId: number, size = 12): Observable<PublicProduct[]> {
+    const params = new HttpParams()
+      .set('categoryIds', categoryId)
+      .set('pageSize',    size)
+      .set('page',        1)
+      .set('sortBy',      'relevance');
+    return this.http.get<any[]>(`${this.base}/catalog`, { params }).pipe(
+      map(r => (r[0] as any[]).map(mapProduct))
+    );
+  }
+
+  catalog(filters: CatalogFilters, pageSize = 16): Observable<CatalogPage> {
+    let params = new HttpParams()
+      .set('page',     filters.page)
+      .set('pageSize', pageSize)
+      .set('sortBy',   filters.sortBy);
+
+    if (filters.q)                params = params.set('q',           filters.q);
+    if (filters.categoryIds.length) params = params.set('categoryIds', filters.categoryIds.join(','));
+    if (filters.brandIds.length)  params = params.set('brandIds',    filters.brandIds.join(','));
+    if (filters.inStock)          params = params.set('inStock',     'true');
+    if (filters.onOrder)          params = params.set('onOrder',     'true');
+    if (filters.minPrice != null) params = params.set('minPrice',    filters.minPrice);
+    if (filters.maxPrice != null) params = params.set('maxPrice',    filters.maxPrice);
+
+    // El back devuelve [products[], total, page, pageSize, totalPages, facets]
+    return this.http.get<any[]>(`${this.base}/catalog`, { params }).pipe(
+      map(r => ({
+        products:   (r[0] as any[]).map(mapProduct),
+        total:      r[1] as number,
+        page:       r[2] as number,
+        pageSize:   r[3] as number,
+        totalPages: r[4] as number,
+        facets:     r[5] as CatalogFacets,
+      }))
+    );
+  }
+
+  getPopularSearches(size = 8): Observable<string[]> {
+    const params = new HttpParams().set('size', size);
+    return this.http.get<string[]>(`${this.base}/popular-searches`, { params });
   }
 
   calculateLoyaltyPoints(productId: number, qty: number): Observable<LoyaltyCalculateResponse> {

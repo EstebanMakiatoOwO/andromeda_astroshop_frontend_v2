@@ -1,6 +1,6 @@
 import { Component, DestroyRef, HostListener, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, filter, of, switchMap } from 'rxjs';
 import { PublicCategory } from '../../../core/models/public-category.model';
 import { PublicProduct } from '../../../core/models/public-product.model';
@@ -17,7 +17,7 @@ import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
-  imports: [LogoComponent, AssetUrlPipe, RouterLink],
+  imports: [LogoComponent, AssetUrlPipe, RouterLink, RouterLinkActive],
   templateUrl: './public-navbar.component.html',
 })
 export class PublicNavbarComponent {

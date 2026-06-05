@@ -30,6 +30,14 @@
     }
 
     <div class="w-full flex flex-col gap-2.5 py-4 border-t border-b border-line">
+      @if (discountMxn() > 0) {
+        <div class="flex justify-between text-xs">
+          <span style="color:var(--color-accent)">★ Descuento puntos</span>
+          <span class="font-medium" style="color:var(--color-accent)">
+            -${{ (discountMxn() / 100).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }} MXN
+          </span>
+        </div>
+      }
       <div class="flex justify-between items-baseline text-sm">
         <span class="text-ink-2">Total a pagar</span>
         <strong class="text-lg text-ink-1">{{ total }}</strong>

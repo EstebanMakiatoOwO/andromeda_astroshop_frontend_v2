@@ -37,9 +37,12 @@ export class CheckoutShippingComponent implements OnInit {
   protected get subtotalMxn(): number { return this.cart.subtotal(); }
   protected get subtotalUsd(): number { return this.cart.subtotalUsd(); }
   protected get shippingMxn(): number { return this.selectedRate()?.price ?? 0; }
-  protected get totalMxn(): number    { return this.subtotalMxn + this.shippingMxn; }
+  protected get totalMxn(): number    { return this.subtotalMxn + this.shippingMxn - this.discountMxn; }
 
   protected fmt(mxn: number, usd: number): string { return this.currency.format(mxn, usd); }
+
+  private readonly pointsToRedeem = (history.state as { pointsToRedeem?: number; discountMxn?: number }).pointsToRedeem ?? 0;
+  protected readonly discountMxn  = (history.state as { pointsToRedeem?: number; discountMxn?: number }).discountMxn  ?? 0;
 
   ngOnInit(): void {
     // Ensure cart is loaded before we need productId for shipping estimate
@@ -98,6 +101,8 @@ export class CheckoutShippingComponent implements OnInit {
         shippingCarrier:  rate?.carrierCode ?? 'flatrate',
         shippingMethod:   rate?.methodCode  ?? 'flatrate',
         shippingPriceMxn: rate?.price ?? 0,
+        pointsToRedeem:   this.pointsToRedeem,
+        discountMxn:      this.discountMxn,
       }
     });
   }

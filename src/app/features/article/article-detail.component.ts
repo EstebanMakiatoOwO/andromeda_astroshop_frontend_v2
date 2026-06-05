@@ -89,7 +89,12 @@ export class ArticleDetailComponent implements OnInit {
   protected readonly safeContent = computed((): SafeHtml => {
     const a = this.article();
     if (!a) return '';
-    return this.sanitizer.bypassSecurityTrustHtml(a.content);
+    let html = a.content;
+    if (a.coverImage) {
+      const escaped = a.coverImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      html = html.replace(new RegExp(`<img[^>]*src=["']${escaped}["'][^>]*>`, 'i'), '');
+    }
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   });
 
   protected formatDate(raw: string): string {

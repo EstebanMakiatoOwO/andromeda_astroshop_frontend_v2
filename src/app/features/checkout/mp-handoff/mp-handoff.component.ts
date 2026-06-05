@@ -23,9 +23,10 @@ export class MPHandoffComponent implements OnInit {
   protected readonly errorMsg      = signal('');
   protected readonly isError       = signal(false);
   protected readonly shippingPrice = signal(0);
+  protected readonly discountMxn   = signal(0);
 
   protected get total(): string {
-    const mxn = this.cart.subtotal() + this.shippingPrice();
+    const mxn = this.cart.subtotal() + this.shippingPrice() - this.discountMxn();
     const usd = this.cart.subtotalUsd();
     return this.currency.format(mxn, usd);
   }
@@ -36,9 +37,12 @@ export class MPHandoffComponent implements OnInit {
       shippingCarrier?: string;
       shippingMethod?: string;
       shippingPriceMxn?: number;
+      pointsToRedeem?: number;
+      discountMxn?: number;
     } = history.state ?? {};
 
     this.shippingPrice.set(state.shippingPriceMxn ?? 0);
+    this.discountMxn.set(state.discountMxn ?? 0);
 
     if (!state.form) {
       this.router.navigateByUrl('/checkout/envio');
@@ -63,10 +67,11 @@ export class MPHandoffComponent implements OnInit {
       email:      form.email,
     };
 
-    const cartToken      = this.cart.isAuthenticated ? null : this.cart.guestToken;
-    const shippingCarrier = state.shippingCarrier ?? 'flatrate';
-    const shippingMethod  = state.shippingMethod  ?? 'flatrate';
+    const cartToken       = this.cart.isAuthenticated ? null : this.cart.guestToken;
+    const shippingCarrier = state.shippingCarrier  ?? 'flatrate';
+    const shippingMethod  = state.shippingMethod   ?? 'flatrate';
     const shippingPriceMxn = state.shippingPriceMxn ?? 0;
+    const pointsToRedeem  = state.pointsToRedeem   ?? 0;
 
     // Crea preferencia en MP — la orden de Magento se crea después vía webhook
     this.payment.createMpPreference(
@@ -75,6 +80,7 @@ export class MPHandoffComponent implements OnInit {
       shippingCarrier,
       shippingMethod,
       shippingPriceMxn,
+      pointsToRedeem,
     ).subscribe({
       next: pref => {
         const url = pref.sandboxInitPoint || pref.initPoint;

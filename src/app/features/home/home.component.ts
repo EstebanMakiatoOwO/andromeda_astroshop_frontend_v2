@@ -9,7 +9,7 @@ import { PublicAuthService } from '../../core/services/public-auth.service';
 import { HeroCarouselComponent } from './components/hero-carousel.component';
 import { LoyaltyBannerComponent } from './components/loyalty-banner.component';
 import { ProductCarouselComponent } from './components/product-carousel.component';
-import { BundlesSectionComponent } from './components/bundles-section.component';
+import { CategoryTabsSectionComponent } from './components/category-tabs-section.component';
 import { EditorialSectionComponent } from './components/editorial-section.component';
 import { BrandsSectionComponent } from './components/brands-section.component';
 
@@ -20,7 +20,7 @@ import { BrandsSectionComponent } from './components/brands-section.component';
     HeroCarouselComponent,
     LoyaltyBannerComponent,
     ProductCarouselComponent,
-    BundlesSectionComponent,
+    CategoryTabsSectionComponent,
     EditorialSectionComponent,
     BrandsSectionComponent,
   ],

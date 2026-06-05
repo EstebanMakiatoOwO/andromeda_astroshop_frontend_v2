@@ -1,0 +1,113 @@
+<!-- Header -->
+<div class="flex items-center justify-between px-5 py-4 border-b border-line">
+  <h2 class="text-sm font-semibold text-ink-1">Filtros</h2>
+  <div class="flex items-center gap-2">
+    <button (click)="clearAll()"
+            class="text-[11px] font-mono text-accent hover:underline">
+      limpiar todo
+    </button>
+    <button (click)="close.emit()"
+            class="lg:hidden w-7 h-7 flex items-center justify-center rounded-lg
+                   text-ink-3 hover:text-ink-1 hover:bg-surface-3 transition-colors">
+      ✕
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-col divide-y divide-line">
+
+  <!-- Disponibilidad -->
+  <div class="px-5 py-4 flex flex-col gap-2.5">
+    <h4 class="text-[10px] font-semibold text-ink-3 uppercase tracking-widest mb-1">Disponibilidad</h4>
+
+    <label class="flex items-center gap-2.5 cursor-pointer group">
+      <input type="checkbox"
+             class="accent-accent w-3.5 h-3.5"
+             [checked]="filters().inStock"
+             (change)="setInStock($event)" />
+      <span class="text-xs text-ink-2 flex-1 group-hover:text-ink-1 transition-colors">En stock</span>
+      @if (facets()?.inStockCount != null) {
+        <span class="text-[10px] font-mono text-ink-3">({{ facets()!.inStockCount }})</span>
+      }
+    </label>
+
+    <label class="flex items-center gap-2.5 cursor-pointer group">
+      <input type="checkbox"
+             class="accent-accent w-3.5 h-3.5"
+             [checked]="filters().onOrder"
+             (change)="setOnOrder($event)" />
+      <span class="text-xs text-ink-2 flex-1 group-hover:text-ink-1 transition-colors">A pedido</span>
+      @if (facets()?.onOrderCount != null) {
+        <span class="text-[10px] font-mono text-ink-3">({{ facets()!.onOrderCount }})</span>
+      }
+    </label>
+  </div>
+
+  <!-- Categorías y subcategorías -->
+  @if (categories().length > 0) {
+    <div class="px-5 py-4 flex flex-col gap-2.5">
+      <h4 class="text-[10px] font-semibold text-ink-3 uppercase tracking-widest mb-1">Categoría</h4>
+      @for (cat of categories(); track cat.id) {
+        <!-- Categoría padre -->
+        <label class="flex items-center gap-2.5 cursor-pointer group">
+          <input type="checkbox"
+                 class="accent-accent w-3.5 h-3.5"
+                 [checked]="filters().categoryIds.includes(cat.id)"
+                 (change)="toggleCategory(cat.id)" />
+          <span class="text-xs font-medium text-ink-1 flex-1 group-hover:text-accent transition-colors">{{ cat.name }}</span>
+        </label>
+        <!-- Subcategorías hijas -->
+        @for (child of cat.children; track child.id) {
+          <label class="flex items-center gap-2.5 cursor-pointer group pl-4">
+            <input type="checkbox"
+                   class="accent-accent w-3.5 h-3.5"
+                   [checked]="filters().categoryIds.includes(child.id)"
+                   (change)="toggleCategory(child.id)" />
+            <span class="text-xs text-ink-2 flex-1 group-hover:text-ink-1 transition-colors">{{ child.name }}</span>
+          </label>
+        }
+      }
+    </div>
+  }
+
+  <!-- Marcas (viene de facets) -->
+  @if (facets()?.brands?.length) {
+    <div class="px-5 py-4 flex flex-col gap-2.5">
+      <h4 class="text-[10px] font-semibold text-ink-3 uppercase tracking-widest mb-1">Marca</h4>
+      @for (brand of facets()!.brands; track brand.id) {
+        <label class="flex items-center gap-2.5 cursor-pointer group">
+          <input type="checkbox"
+                 class="accent-accent w-3.5 h-3.5"
+                 [checked]="filters().brandIds.includes(brand.id)"
+                 (change)="toggleBrand(brand.id)" />
+          <span class="text-xs text-ink-2 flex-1 group-hover:text-ink-1 transition-colors">{{ brand.name }}</span>
+          <span class="text-[10px] font-mono text-ink-3">({{ brand.count }})</span>
+        </label>
+      }
+    </div>
+  }
+
+  <!-- Precio -->
+  <div class="px-5 py-4 flex flex-col gap-3">
+    <h4 class="text-[10px] font-semibold text-ink-3 uppercase tracking-widest mb-1">Precio (MXN)</h4>
+    <div class="flex gap-2">
+      <input type="number"
+             placeholder="Mín"
+             min="0"
+             [value]="localMinPrice()"
+             (input)="onMinPriceInput($event)"
+             class="w-full h-8 px-2.5 rounded-lg border border-line bg-surface-3
+                    text-xs text-ink-1 placeholder-ink-3
+                    focus:outline-none focus:border-accent transition-colors" />
+      <input type="number"
+             placeholder="Máx"
+             min="0"
+             [value]="localMaxPrice()"
+             (input)="onMaxPriceInput($event)"
+             class="w-full h-8 px-2.5 rounded-lg border border-line bg-surface-3
+                    text-xs text-ink-1 placeholder-ink-3
+                    focus:outline-none focus:border-accent transition-colors" />
+    </div>
+  </div>
+
+</div>

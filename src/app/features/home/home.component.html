@@ -1,5 +1,7 @@
 <app-hero-carousel />
 
+<app-category-tabs-section />
+
 @if (!auth.isAuthenticated()) {
   <app-loyalty-banner />
 }
@@ -20,7 +22,7 @@
   </div>
 }
 
-<app-bundles-section />
+<!-- <app-bundles-section /> -->
 
 <app-editorial-section
   [articles]="articles()"

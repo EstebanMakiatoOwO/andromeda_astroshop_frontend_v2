@@ -87,6 +87,14 @@
             <span class="text-ink-1">${{ shippingMxn.toLocaleString('es-MX', { minimumFractionDigits: 2 }) }} MXN</span>
           </div>
         }
+        @if (discountMxn > 0) {
+          <div class="flex justify-between">
+            <span style="color:var(--color-accent)">★ Descuento puntos</span>
+            <span class="font-medium" style="color:var(--color-accent)">
+              -${{ (discountMxn / 100).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }} MXN
+            </span>
+          </div>
+        }
       </div>
 
       <div class="flex justify-between items-baseline border-t border-dashed border-line pt-3">

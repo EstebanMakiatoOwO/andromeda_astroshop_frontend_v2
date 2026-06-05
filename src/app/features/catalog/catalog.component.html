@@ -1,0 +1,253 @@
+<!-- ── Breadcrumb + heading + buscador ─────────────────────────── -->
+<div class="border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+
+    <!-- Breadcrumb -->
+    <p class="font-mono text-[11px] text-ink-3 mb-3">
+      <a routerLink="/" class="hover:text-accent transition-colors">inicio</a>
+      <span class="mx-1.5">/</span>
+      <span class="text-ink-2">catálogo</span>
+    </p>
+
+    <!-- Título + sort -->
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-5">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-xl md:text-2xl font-bold text-ink-1">Catálogo</h1>
+        <small class="text-xs text-ink-3">
+          @if (loading()) {
+            Cargando productos…
+          } @else if (result()) {
+            {{ result()!.total }} productos
+            · {{ result()!.facets.inStockCount }} en stock
+            · {{ result()!.facets.onOrderCount }} a pedido
+          }
+        </small>
+      </div>
+      <select (change)="onSortChange($event)"
+              class="h-8 pl-3 pr-8 rounded-lg border border-line bg-surface-3
+                     text-xs text-ink-2 focus:outline-none focus:border-accent
+                     transition-colors appearance-none cursor-pointer">
+        @for (opt of SORT_OPTIONS; track opt.value) {
+          <option [value]="opt.value" [selected]="opt.value === filters().sortBy">
+            {{ opt.label }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- Buscador prominente -->
+    <div class="flex gap-2 max-w-2xl">
+      <input type="text"
+             placeholder="ej: refractor 90mm, ocular plössl, NexStar…"
+             [value]="searchInput()"
+             (input)="searchInput.set($any($event.target).value)"
+             (keydown)="onSearchKeydown($event)"
+             class="flex-1 h-10 pl-4 pr-4 rounded-lg border border-line bg-surface-3
+                    text-sm text-ink-1 placeholder-ink-3
+                    focus:outline-none focus:border-accent transition-colors" />
+      <button (click)="onSearch()"
+              class="h-10 px-5 rounded-lg text-sm font-medium text-white transition-colors shrink-0"
+              style="background-color:var(--color-accent);"
+              onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+              onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+        Buscar
+      </button>
+    </div>
+
+    <!-- Chips populares -->
+    <div class="flex flex-wrap items-center gap-2 mt-3">
+      <span class="font-mono text-[11px] text-ink-3">populares:</span>
+      @for (tag of POPULAR(); track tag) {
+        <button (click)="setPopular(tag)"
+                class="px-2.5 py-1 rounded-full border border-line bg-surface-3
+                       text-[11px] text-ink-2 hover:border-accent hover:text-accent
+                       transition-colors cursor-pointer">
+          {{ tag }}
+        </button>
+      }
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Layout: sidebar + grid ──────────────────────────────────── -->
+<div class="max-w-7xl mx-auto">
+  <div class="flex">
+
+    <!-- Sidebar desktop (lg+) -->
+    <aside class="hidden lg:block w-55 shrink-0 border-r border-line sticky top-12 self-start max-h-[calc(100vh-3rem)] overflow-y-auto">
+      <app-catalog-filters
+        [filters]="filters()"
+        [categories]="categories()"
+        [facets]="result()?.facets ?? null"
+        (filtersChange)="onFiltersChange($event)" />
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="flex-1 min-w-0 px-4 lg:px-6 py-5">
+
+      <!-- Barra: botón filtros (móvil) + chips activos -->
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+
+        <!-- Botón filtros (solo móvil/tablet) -->
+        <button (click)="drawerOpen.set(true)"
+                class="lg:hidden flex items-center gap-1.5 h-8 px-3 rounded-lg border border-line
+                       text-xs text-ink-2 hover:border-accent hover:text-ink-1 transition-colors shrink-0">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+            <line x1="11" y1="18" x2="13" y2="18"/>
+          </svg>
+          Filtros
+          @if (activeChips().length) {
+            <span class="w-4 h-4 rounded-full text-white text-[10px] font-bold flex items-center justify-center"
+                  style="background-color:var(--color-accent)">
+              {{ activeChips().length }}
+            </span>
+          }
+        </button>
+
+        <!-- Chips activos -->
+        @for (chip of activeChips(); track chip.label) {
+          <span class="flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full border text-[11px] font-medium
+                       transition-colors"
+                style="border-color:color-mix(in oklch,var(--color-accent) 40%,transparent);
+                       background:color-mix(in oklch,var(--color-accent) 8%,transparent);
+                       color:var(--color-accent)">
+            {{ chip.label }}
+            <button (click)="removeChip(chip.key, chip.value)"
+                    class="w-4 h-4 rounded-full flex items-center justify-center
+                           hover:bg-accent hover:text-white transition-colors text-xs leading-none">
+              ×
+            </button>
+          </span>
+        }
+
+        @if (activeChips().length > 0) {
+          <button (click)="onFiltersChange(DEFAULT_FILTERS)"
+                  class="font-mono text-[11px] text-accent hover:underline ml-1">
+            limpiar todo
+          </button>
+        }
+
+      </div>
+
+      <!-- Grid de productos -->
+      @if (error()) {
+        <div class="flex flex-col items-center gap-3 py-20 text-center">
+          <p class="text-sm text-ink-2">No se pudieron cargar los productos.</p>
+          <button (click)="onFiltersChange(filters())"
+                  class="text-xs text-accent hover:underline">Reintentar</button>
+        </div>
+
+      } @else if (!loading() && (result()?.products?.length ?? 0) === 0) {
+        <div class="flex flex-col items-center gap-3 py-20 text-center">
+          <p class="text-base font-semibold text-ink-1">Sin resultados</p>
+          <p class="text-sm text-ink-3 max-w-xs">
+            No encontramos productos con estos filtros. Probá con otros términos.
+          </p>
+          <button (click)="onFiltersChange(DEFAULT_FILTERS)"
+                  class="mt-2 px-4 py-2 rounded-lg border border-line text-xs text-ink-2
+                         hover:border-accent hover:text-ink-1 transition-colors">
+            Limpiar filtros
+          </button>
+        </div>
+
+      } @else {
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          @if (loading()) {
+            @for (s of skeletons; track $index) {
+              <div class="flex flex-col gap-2 animate-pulse">
+                <div class="aspect-square rounded-md bg-surface-3"></div>
+                <div class="h-2 w-12 rounded bg-surface-3"></div>
+                <div class="h-3 w-full rounded bg-surface-3"></div>
+                <div class="h-4 w-20 rounded bg-surface-3"></div>
+              </div>
+            }
+          } @else {
+            @for (p of result()!.products; track p.id) {
+              <app-product-card [product]="p" />
+            }
+          }
+        </div>
+
+        <!-- Callout "¿No encontrás lo que buscás?" -->
+        @if (!loading() && result()!.products.length > 0) {
+          <div class="mt-8 rounded-xl border p-5"
+               style="border-color:color-mix(in oklch,var(--color-accent) 25%,var(--color-line));
+                      background:color-mix(in oklch,var(--color-accent) 6%,transparent)">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-sm font-semibold text-ink-1">¿No encontrás lo que buscás?</h3>
+                <p class="text-xs text-ink-3 leading-relaxed max-w-sm">
+                  Importamos a pedido equipamiento de Celestron, Meade y otras marcas.
+                  Te cotizamos en 24–48 hs.
+                </p>
+              </div>
+              <button class="shrink-0 px-4 py-2 rounded-lg border border-line text-xs text-ink-2
+                             hover:border-accent hover:text-ink-1 transition-colors">
+                Pedir cotización
+              </button>
+            </div>
+          </div>
+
+          <!-- Paginación -->
+          @if ((result()?.totalPages ?? 0) > 1) {
+            <div class="flex items-center justify-center gap-1.5 mt-8 flex-wrap">
+              <button (click)="goToPage(filters().page - 1)"
+                      [disabled]="filters().page <= 1"
+                      class="w-8 h-8 rounded-lg border border-line text-xs text-ink-2
+                             hover:border-accent hover:text-ink-1 transition-colors
+                             disabled:opacity-30 disabled:cursor-not-allowed">
+                ‹
+              </button>
+
+              @for (p of pages(); track $index) {
+                @if (p === '...') {
+                  <span class="w-8 h-8 flex items-center justify-center text-xs text-ink-3">…</span>
+                } @else {
+                  <button (click)="goToPage(+p)"
+                          class="w-8 h-8 rounded-lg border text-xs font-medium transition-colors"
+                          [class.border-accent]="p === filters().page"
+                          [class.text-white]="p === filters().page"
+                          [class.border-line]="p !== filters().page"
+                          [class.text-ink-2]="p !== filters().page"
+                          [class.hover:border-accent]="p !== filters().page"
+                          [style.background-color]="p === filters().page ? 'var(--color-accent)' : ''">
+                    {{ p }}
+                  </button>
+                }
+              }
+
+              <button (click)="goToPage(filters().page + 1)"
+                      [disabled]="filters().page >= (result()?.totalPages ?? 1)"
+                      class="w-8 h-8 rounded-lg border border-line text-xs text-ink-2
+                             hover:border-accent hover:text-ink-1 transition-colors
+                             disabled:opacity-30 disabled:cursor-not-allowed">
+                ›
+              </button>
+            </div>
+          }
+        }
+      }
+
+    </main>
+  </div>
+</div>
+
+<!-- ── Drawer filtros móvil/tablet ─────────────────────────────── -->
+@if (drawerOpen()) {
+  <div class="fixed inset-0 z-50 lg:hidden" (click)="drawerOpen.set(false)">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <aside class="absolute left-0 top-0 bottom-0 w-72 bg-surface-2 overflow-y-auto shadow-2xl"
+           (click)="$event.stopPropagation()">
+      <app-catalog-filters
+        [filters]="filters()"
+        [categories]="categories()"
+        [facets]="result()?.facets ?? null"
+        (filtersChange)="onFiltersChange($event)"
+        (close)="drawerOpen.set(false)" />
+    </aside>
+  </div>
+}

@@ -16,22 +16,80 @@
     </button>
   </div>
 
+  <!-- Canje de puntos — solo usuarios autenticados con saldo -->
+  @if (auth.isAuthenticated() && loyaltyBalance() > 0) {
+    <div class="flex flex-col gap-2.5 rounded-lg p-3 border"
+         style="background:var(--color-accent-soft);border-color:color-mix(in oklch,var(--color-accent) 30%,transparent)">
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm" style="color:var(--color-accent)">★</span>
+          <span class="text-xs font-medium" style="color:var(--color-accent)">
+            Usar puntos de lealtad
+          </span>
+        </div>
+        <span class="text-[11px] font-mono" style="color:var(--color-accent)">
+          {{ loyaltyBalance().toLocaleString('es-MX') }} disponibles
+        </span>
+      </div>
+
+      <div class="flex gap-2">
+        <input type="number" min="0" [max]="loyaltyBalance()"
+               [value]="pointsInput()"
+               (input)="onPointsChange($any($event.target).value)"
+               placeholder="0"
+               class="flex-1 h-8 px-2.5 rounded-md border border-line bg-surface-2
+                      text-xs text-ink-1 outline-none focus:border-accent transition-colors" />
+        <button (click)="useAllPoints()"
+                class="h-8 px-2.5 rounded-md text-[11px] font-medium border transition-colors shrink-0"
+                style="border-color:var(--color-accent);color:var(--color-accent)"
+                onmouseenter="this.style.background='var(--color-accent)';this.style.color='white'"
+                onmouseleave="this.style.background='';this.style.color='var(--color-accent)'">
+          Usar todos
+        </button>
+        @if (pointsInput() > 0) {
+          <button (click)="clearPoints()"
+                  class="h-8 px-2 rounded-md text-[11px] text-ink-3 border border-line hover:border-red-400 hover:text-red-500 transition-colors shrink-0">
+            ✕
+          </button>
+        }
+      </div>
+
+      @if (previewLoading()) {
+        <p class="text-[11px] text-ink-3 animate-pulse">Calculando descuento…</p>
+      } @else if (preview()) {
+        <p class="text-[11px]" style="color:var(--color-accent)">
+          Descuento: <strong>-${{ (preview()!.discountMxn / 100).toLocaleString('es-MX', {minimumFractionDigits:2}) }} MXN</strong>
+          con {{ preview()!.pointsToRedeem.toLocaleString('es-MX') }} puntos
+        </p>
+      }
+    </div>
+  }
+
   <!-- Desglose -->
   <div class="flex flex-col gap-2.5 text-xs border-t border-line pt-4">
     <div class="flex justify-between">
       <span class="text-ink-2">Subtotal ({{ itemCount() }} productos)</span>
       <span class="text-ink-1">{{ fmt(subtotal(), subtotalUsd()) }}</span>
     </div>
+    @if (discountMxn > 0) {
+      <div class="flex justify-between">
+        <span style="color:var(--color-accent)">★ Descuento puntos</span>
+        <span class="font-medium" style="color:var(--color-accent)">
+          -${{ discountMxn.toLocaleString('es-MX', {minimumFractionDigits:2}) }} MXN
+        </span>
+      </div>
+    }
   </div>
 
   <!-- Total -->
   <div class="flex justify-between items-baseline border-t border-dashed border-line pt-4">
     <span class="text-sm font-semibold text-ink-1">Subtotal</span>
-    <span class="text-xl font-semibold text-ink-1">{{ fmt(subtotal(), subtotalUsd()) }}</span>
+    <span class="text-xl font-semibold text-ink-1">{{ fmt(subtotal() - discountMxn, subtotalUsd()) }}</span>
   </div>
   <p class="text-[10px] text-ink-3 -mt-2">Envío calculado en el siguiente paso</p>
 
-  <!-- Loyalty -->
+  <!-- Puntos que ganará con esta compra -->
   @if (loyaltyPts() > 0) {
     <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
          style="background:var(--color-accent-soft)">

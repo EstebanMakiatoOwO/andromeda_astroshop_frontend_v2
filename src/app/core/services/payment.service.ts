@@ -22,9 +22,11 @@ export class PaymentService {
     shippingCarrier: string,
     shippingMethod: string,
     shippingPrice: number,
+    pointsToRedeem = 0,
   ): Observable<MpPreference> {
     const body: Record<string, unknown> = { address, shippingCarrier, shippingMethod, shippingPrice };
-    if (cartToken) body['cartToken'] = cartToken;
+    if (cartToken)        body['cartToken']       = cartToken;
+    if (pointsToRedeem > 0) body['pointsToRedeem'] = pointsToRedeem;
     return this.http.post<MpPreference>(`${this.base}/payments/mp/preference`, body);
   }
 

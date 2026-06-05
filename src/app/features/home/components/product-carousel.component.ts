@@ -1,11 +1,12 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PublicProduct } from '../../../core/models/public-product.model';
 import { ProductCardComponent } from '../../../shared/components/product-card.component';
 
 @Component({
   selector: 'app-product-carousel',
   standalone: true,
-  imports: [ProductCardComponent],
+  imports: [ProductCardComponent, RouterLink],
   templateUrl: './product-carousel.component.html',
 })
 export class ProductCarouselComponent implements AfterViewInit {
