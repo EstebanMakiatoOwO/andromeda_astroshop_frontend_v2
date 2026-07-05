@@ -5,12 +5,6 @@ import { environment } from '../../../environments/environment';
 import { PublicProduct } from '../models/public-product.model';
 import { CatalogFilters, CatalogPage, CatalogFacets } from '../models/catalog.model';
 
-export interface LoyaltyCalculateResponse {
-  productId: number;
-  qty: number;
-  points: number;
-}
-
 interface ApiResponse<T> { data: T; }
 
 // camelCaseInterceptor converts all snake_case keys to camelCase before reaching here
@@ -95,10 +89,6 @@ export class PublicProductsService {
     return this.http.get<ApiResponse<any[]>>(this.base).pipe(map(r => r.data.map(mapProduct)));
   }
 
-  getFeatured(size = 8): Observable<PublicProduct[]> {
-    return this.getProducts().pipe(map(products => products.slice(0, size)));
-  }
-
   getPopular(size = 12): Observable<PublicProduct[]> {
     const params = new HttpParams().set('size', size);
     return this.http.get<ApiResponse<any[]>>(`${this.base}/popular`, { params })
@@ -164,10 +154,4 @@ export class PublicProductsService {
     return this.http.get<string[]>(`${this.base}/popular-searches`, { params });
   }
 
-  calculateLoyaltyPoints(productId: number, qty: number): Observable<LoyaltyCalculateResponse> {
-    return this.http.post<LoyaltyCalculateResponse>(
-      `${environment.apiBase}/api/v1/loyalty/calculate`,
-      { productId, qty }
-    );
-  }
 }

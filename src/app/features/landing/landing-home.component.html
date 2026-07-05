@@ -1,0 +1,92 @@
+<!-- Hero -->
+<app-hero-carousel />
+
+<!-- Las 3 marcas Andromeda -->
+<section class="max-w-7xl mx-auto px-4 md:px-6 py-16">
+  <div class="text-center mb-10">
+    <p class="text-xs font-mono text-accent uppercase tracking-widest mb-2">Nuestro universo</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-ink-1">El ecosistema Andromeda</h2>
+    <p class="mt-3 text-sm text-ink-3 max-w-xl mx-auto">
+      Tres marcas, una misión: acercar el universo a todos.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <a routerLink="/astroshop"
+       class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
+              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <div class="h-40 bg-gradient-to-br from-violet-900/40 to-surface-3 flex items-center justify-center">
+        <svg class="w-14 h-14 text-violet-400/60" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+      </div>
+      <div class="p-5">
+        <h3 class="font-bold text-ink-1 text-lg group-hover:text-accent transition-colors">
+          Andromeda AstroShop
+        </h3>
+        <p class="text-xs text-ink-3 mt-1.5 leading-relaxed">
+          Telescopios, binoculares, accesorios y todo lo que necesitas para explorar el cosmos.
+        </p>
+        <span class="mt-4 inline-flex items-center gap-1 text-xs text-accent font-medium">
+          Conoce más &rarr;
+        </span>
+      </div>
+    </a>
+
+    <a routerLink="/astroturismo"
+       class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
+              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <div class="h-40 bg-gradient-to-br from-blue-900/40 to-surface-3 flex items-center justify-center">
+        <svg class="w-14 h-14 text-blue-400/60" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <div class="p-5">
+        <h3 class="font-bold text-ink-1 text-lg group-hover:text-accent transition-colors">
+          Andromeda AstroTurismo
+        </h3>
+        <p class="text-xs text-ink-3 mt-1.5 leading-relaxed">
+          Experiencias únicas de observación astronómica en los mejores cielos de México.
+        </p>
+        <span class="mt-4 inline-flex items-center gap-1 text-xs text-accent font-medium">
+          Conoce más &rarr;
+        </span>
+      </div>
+    </a>
+
+    <a routerLink="/astrodome"
+       class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
+              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <div class="h-40 bg-gradient-to-br from-indigo-900/40 to-surface-3 flex items-center justify-center">
+        <svg class="w-14 h-14 text-indigo-400/60" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div class="p-5">
+        <h3 class="font-bold text-ink-1 text-lg group-hover:text-accent transition-colors">
+          Andromeda AstroDome
+        </h3>
+        <p class="text-xs text-ink-3 mt-1.5 leading-relaxed">
+          Nuestro observatorio y planetario portátil para eventos, escuelas y exhibiciones.
+        </p>
+        <span class="mt-4 inline-flex items-center gap-1 text-xs text-accent font-medium">
+          Conoce más &rarr;
+        </span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- Artículos / Guías -->
+<app-editorial-section [articles]="articles()" [isLoading]="isLoadingArticles()" />
+
+<!-- Marcas -->
+<app-brands-section [brands]="brands()" />

@@ -1,0 +1,38 @@
+<app-landing-hero
+  kicker="// experiencias"
+  title="AstroTurismo"
+  desc="Experiencias únicas de observación astronómica bajo los cielos más oscuros. Viví la magia del universo en persona."
+  [accent]="accent"
+  [minHeight]="280"
+/>
+
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
+
+  <div class="text-center mb-12">
+    <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// experiencias</p>
+    <h2 class="text-2xl font-bold text-ink-1 mb-3">¿Qué podés vivir con nosotros?</h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+    @for (exp of experiences; track exp.title) {
+      <div class="rounded-xl border border-line bg-surface-2 p-6 flex flex-col gap-3 hover:border-accent transition-colors">
+        <span class="text-3xl">{{ exp.icon }}</span>
+        <h3 class="font-semibold text-ink-1">{{ exp.title }}</h3>
+        <p class="text-xs text-ink-3 leading-relaxed flex-1">{{ exp.desc }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
+    <h3 class="font-bold text-ink-1 mb-2">¿Listo para observar las estrellas?</h3>
+    <p class="text-xs text-ink-3 mb-5">Escribinos para conocer disponibilidad y paquetes.</p>
+    <a routerLink="/contacto"
+       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
+       style="background-color:var(--color-accent)"
+       onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+       onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+      Reservar experiencia
+    </a>
+  </div>
+
+</div>

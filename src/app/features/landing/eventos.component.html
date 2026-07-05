@@ -1,0 +1,109 @@
+<app-landing-hero
+  kicker="// agenda"
+  title="Eventos"
+  desc="Noches de observación, talleres y campamentos abiertos al público. Reservá tu lugar — los cupos vuelan."
+  [minHeight]="280"
+  [stars]="80"
+  [accent]="turismo"
+/>
+
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-14">
+
+  <!-- Filtros -->
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+    <div class="flex flex-wrap gap-2">
+      @for (f of filtros; track f) {
+        <button (click)="filtroActivo.set(f)"
+                class="px-3 py-1.5 rounded-full text-xs border transition-colors"
+                [class.border-accent]="filtroActivo() === f"
+                [class.text-accent]="filtroActivo() === f"
+                [class.bg-accent-soft]="filtroActivo() === f"
+                [class.border-line]="filtroActivo() !== f"
+                [class.text-ink-2]="filtroActivo() !== f">
+          {{ f }}
+        </button>
+      }
+    </div>
+    <select class="h-8 px-3 rounded-lg border border-line bg-surface-3 text-xs text-ink-2 outline-none focus:border-accent">
+      <option>Próximos primero</option>
+      <option>Precio: menor</option>
+    </select>
+  </div>
+
+  <!-- Lista de eventos -->
+  <div class="flex flex-col gap-4">
+    @for (e of eventosFiltrados; track e.title) {
+      <div class="rounded-xl border border-line bg-surface-2 overflow-hidden flex flex-col sm:flex-row hover:border-accent transition-colors">
+
+        <!-- Fecha -->
+        <div class="flex sm:flex-col items-center justify-center gap-2 sm:gap-0 sm:w-20 shrink-0
+                    px-5 py-4 sm:px-0 sm:py-0 bg-surface-3 border-b sm:border-b-0 sm:border-r border-line">
+          <span class="text-2xl sm:text-3xl font-bold text-ink-1 leading-none">{{ e.day }}</span>
+          <span class="font-mono text-xs text-ink-3 tracking-widest">{{ e.mes }}</span>
+        </div>
+
+        <!-- Cover placeholder -->
+        <div class="hidden sm:flex items-center justify-center w-36 shrink-0 bg-surface-3
+                    border-r border-line text-[11px] font-mono text-ink-3">
+          {{ e.tipo.toLowerCase() }}
+        </div>
+
+        <!-- Info -->
+        <div class="flex flex-col gap-2 p-4 flex-1 justify-center">
+          <span class="self-start px-2 py-0.5 rounded-full text-[11px] font-mono"
+                [style.color]="e.accent"
+                [style.background]="'color-mix(in oklch,' + e.accent + ' 15%, transparent)'">
+            {{ e.tipo }}
+          </span>
+          <h3 class="text-sm font-bold text-ink-1">{{ e.title }}</h3>
+          <div class="flex flex-wrap gap-4 text-xs text-ink-2">
+            <span>📍 {{ e.place }}</span>
+            <span>🕐 {{ e.time }}</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="flex sm:flex-col justify-between sm:justify-center items-center sm:items-end
+                    gap-3 p-4 sm:w-40 shrink-0 border-t sm:border-t-0 sm:border-l border-line">
+          <strong class="text-lg text-ink-1">{{ e.price }}</strong>
+          <div class="flex flex-col items-end gap-2">
+            <small class="text-xs text-ink-3">{{ e.spots }}</small>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-colors"
+                    [style.background]="e.accent">
+              Reservar
+            </button>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @if (eventosFiltrados.length === 0) {
+      <div class="py-16 text-center text-sm text-ink-3">
+        No hay eventos en esta categoría por el momento.
+      </div>
+    }
+  </div>
+
+</section>
+
+<!-- Newsletter -->
+<section class="border-t border-line" style="background:oklch(0.18 0.04 245)">
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-12">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex flex-col gap-1.5">
+        <h3 class="text-base font-bold text-white">No te pierdas ninguna fecha</h3>
+        <small style="color:oklch(0.8 0.03 245)">Recibí la agenda del mes + el calendario astronómico en tu mail.</small>
+      </div>
+      <div class="flex gap-2 w-full md:w-auto">
+        <input type="email" placeholder="tu@email.com"
+               class="flex-1 md:w-56 h-9 px-3 rounded-lg border border-white/20 bg-white/10
+                      text-xs text-white placeholder-white/40 outline-none focus:border-white/50 transition-colors" />
+        <button class="px-4 py-2 rounded-lg text-xs font-medium text-white shrink-0"
+                [style.background]="turismo">
+          Suscribirme
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

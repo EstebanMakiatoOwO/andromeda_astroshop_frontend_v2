@@ -6,17 +6,20 @@ import { PublicProductsService } from '../../core/services/public-products.servi
 import { BrandsService } from '../../core/services/brands.service';
 import { ArticlesService } from '../../core/services/articles.service';
 import { PublicAuthService } from '../../core/services/public-auth.service';
+import { StoreConfigService } from '../../core/services/store-config.service';
 import { HeroCarouselComponent } from './components/hero-carousel.component';
 import { LoyaltyBannerComponent } from './components/loyalty-banner.component';
 import { ProductCarouselComponent } from './components/product-carousel.component';
 import { CategoryTabsSectionComponent } from './components/category-tabs-section.component';
 import { EditorialSectionComponent } from './components/editorial-section.component';
 import { BrandsSectionComponent } from './components/brands-section.component';
+import { LandingHomeComponent } from '../landing/landing-home.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
+    LandingHomeComponent,
     HeroCarouselComponent,
     LoyaltyBannerComponent,
     ProductCarouselComponent,
@@ -31,6 +34,7 @@ export class HomeComponent implements OnInit {
   private readonly brandsService   = inject(BrandsService);
   private readonly articlesService = inject(ArticlesService);
   protected readonly auth          = inject(PublicAuthService);
+  protected readonly storeConfig   = inject(StoreConfigService);
 
   protected readonly popularProducts  = signal<PublicProduct[]>([]);
   protected readonly newProducts      = signal<PublicProduct[]>([]);
@@ -41,6 +45,8 @@ export class HomeComponent implements OnInit {
   protected readonly isLoadingArticles = signal(true);
 
   ngOnInit(): void {
+    if (!this.storeConfig.ecommerceEnabled()) return;
+
     this.productsService.getPopular(12).subscribe({
       next:  p  => { this.popularProducts.set(p); this.isLoadingPopular.set(false); },
       error: () => this.isLoadingPopular.set(false),

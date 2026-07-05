@@ -10,92 +10,112 @@
       </a>
 
       <!-- Nav links — solo desktop -->
-      <nav class="hidden lg:flex items-center gap-0.5 ml-2"
-           (mouseenter)="openMega()"
-           (mouseleave)="scheduleMegaClose()">
-        <a routerLink="/catalogo"
-           routerLinkActive #rla="routerLinkActive"
-           class="px-3 py-1.5 rounded text-xs transition-colors"
-           [class.text-accent]="rla.isActive"
-           [class.bg-accent-soft]="rla.isActive"
-           [class.font-medium]="rla.isActive"
-           [class.text-ink-2]="!rla.isActive"
-           [class.hover:text-ink-1]="!rla.isActive"
-           [class.hover:bg-surface-3]="!rla.isActive">
-          Catálogo
-        </a>
-        @for (cat of navCategories(); track cat.id) {
-          <a href="#"
-             class="px-3 py-1.5 rounded text-xs text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
-            {{ cat.name }}
+      @if (storeConfig.ecommerceEnabled()) {
+        <nav class="hidden lg:flex items-center gap-0.5 ml-2"
+             (mouseenter)="openMega()"
+             (mouseleave)="scheduleMegaClose()">
+          <a routerLink="/catalogo"
+             routerLinkActive #rla="routerLinkActive"
+             class="px-3 py-1.5 rounded text-xs transition-colors"
+             [class.text-accent]="rla.isActive"
+             [class.bg-accent-soft]="rla.isActive"
+             [class.font-medium]="rla.isActive"
+             [class.text-ink-2]="!rla.isActive"
+             [class.hover:text-ink-1]="!rla.isActive"
+             [class.hover:bg-surface-3]="!rla.isActive">
+            Catálogo
           </a>
-        }
-      </nav>
+          @for (cat of navCategories(); track cat.id) {
+            <a href="#"
+               class="px-3 py-1.5 rounded text-xs text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
+              {{ cat.name }}
+            </a>
+          }
+        </nav>
+      } @else {
+        <nav class="hidden lg:flex items-center gap-0.5 ml-2">
+          @for (link of landingLinks; track link.path) {
+            <a [routerLink]="link.path"
+               routerLinkActive #rll="routerLinkActive"
+               class="px-3 py-1.5 rounded text-xs transition-colors"
+               [class.text-accent]="rll.isActive"
+               [class.bg-accent-soft]="rll.isActive"
+               [class.font-medium]="rll.isActive"
+               [class.text-ink-2]="!rll.isActive"
+               [class.hover:text-ink-1]="!rll.isActive"
+               [class.hover:bg-surface-3]="!rll.isActive">
+              {{ link.label }}
+            </a>
+          }
+        </nav>
+      }
 
       <div class="flex-1"></div>
 
-      <!-- Search — solo desktop -->
-      <div class="hidden lg:block relative" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          placeholder="Buscar productos…"
-          [value]="searchQuery()"
-          (input)="onSearchInput($any($event.target).value)"
-          (keydown.escape)="clearSearch()"
-          class="h-7.5 w-48 pl-3 pr-7 rounded border border-line bg-surface-3
-                 text-xs text-ink-1 placeholder-ink-3
-                 focus:outline-none focus:border-accent transition-colors"
-        />
-        @if (isSearching()) {
-          <span class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3
-                       border-2 border-accent border-t-transparent rounded-full animate-spin"></span>
-        } @else if (searchQuery()) {
-          <button (click)="clearSearch()"
-                  class="absolute right-2 top-1/2 -translate-y-1/2 text-ink-3
-                         hover:text-ink-1 transition-colors text-xs leading-none">✕</button>
-        }
+      <!-- Search — solo desktop, solo cuando ecommerce está activo -->
+      @if (storeConfig.ecommerceEnabled()) {
+        <div class="hidden lg:block relative" (click)="$event.stopPropagation()">
+          <input
+            type="text"
+            placeholder="Buscar productos…"
+            [value]="searchQuery()"
+            (input)="onSearchInput($any($event.target).value)"
+            (keydown.escape)="clearSearch()"
+            class="h-7.5 w-48 pl-3 pr-7 rounded border border-line bg-surface-3
+                   text-xs text-ink-1 placeholder-ink-3
+                   focus:outline-none focus:border-accent transition-colors"
+          />
+          @if (isSearching()) {
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3
+                         border-2 border-accent border-t-transparent rounded-full animate-spin"></span>
+          } @else if (searchQuery()) {
+            <button (click)="clearSearch()"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 text-ink-3
+                           hover:text-ink-1 transition-colors text-xs leading-none">✕</button>
+          }
 
-        @if (showDropdown()) {
-          <div class="absolute top-full left-0 mt-1 w-80 rounded-xl border border-line
-                      bg-surface-2 shadow-xl z-50 overflow-hidden">
-            @if (searchResults().length === 0) {
-              <p class="px-4 py-6 text-xs text-ink-3 text-center">
-                Sin resultados para "{{ searchQuery() }}"
-              </p>
-            } @else {
-              <ul>
-                @for (product of searchResults(); track product.id) {
-                  <li class="flex items-center gap-3 px-3 py-2.5 hover:bg-surface-3
-                              transition-colors cursor-pointer border-b border-line last:border-0">
-                    <div class="w-10 h-10 rounded-lg bg-surface-4 shrink-0 overflow-hidden">
-                      @if (product.images.length > 0) {
-                        <img [src]="product.images[0] | assetUrl" [alt]="product.name"
-                             class="w-full h-full object-cover" />
-                      }
-                    </div>
-                    <div class="flex flex-col gap-0.5 min-w-0 flex-1">
-                      <span class="text-xs text-ink-1 font-medium truncate">{{ product.name }}</span>
-                      @if (product.categories.length > 0) {
-                        <span class="text-[10px] font-mono text-accent truncate">
-                          {{ product.categories[0].name }}
-                        </span>
-                      }
-                    </div>
-                    <span class="text-xs font-bold text-ink-1 shrink-0">
-                      {{ formatPrice(product) }}
-                    </span>
-                  </li>
-                }
-              </ul>
-              <div class="px-3 py-2 border-t border-line bg-surface-3">
-                <button class="text-xs text-accent hover:underline">
-                  Ver todos los resultados para "{{ searchQuery() }}" →
-                </button>
-              </div>
-            }
-          </div>
-        }
-      </div>
+          @if (showDropdown()) {
+            <div class="absolute top-full left-0 mt-1 w-80 rounded-xl border border-line
+                        bg-surface-2 shadow-xl z-50 overflow-hidden">
+              @if (searchResults().length === 0) {
+                <p class="px-4 py-6 text-xs text-ink-3 text-center">
+                  Sin resultados para "{{ searchQuery() }}"
+                </p>
+              } @else {
+                <ul>
+                  @for (product of searchResults(); track product.id) {
+                    <li class="flex items-center gap-3 px-3 py-2.5 hover:bg-surface-3
+                                transition-colors cursor-pointer border-b border-line last:border-0">
+                      <div class="w-10 h-10 rounded-lg bg-surface-4 shrink-0 overflow-hidden">
+                        @if (product.images.length > 0) {
+                          <img [src]="product.images[0] | assetUrl" [alt]="product.name"
+                               class="w-full h-full object-cover" />
+                        }
+                      </div>
+                      <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                        <span class="text-xs text-ink-1 font-medium truncate">{{ product.name }}</span>
+                        @if (product.categories.length > 0) {
+                          <span class="text-[10px] font-mono text-accent truncate">
+                            {{ product.categories[0].name }}
+                          </span>
+                        }
+                      </div>
+                      <span class="text-xs font-bold text-ink-1 shrink-0">
+                        {{ formatPrice(product) }}
+                      </span>
+                    </li>
+                  }
+                </ul>
+                <div class="px-3 py-2 border-t border-line bg-surface-3">
+                  <button class="text-xs text-accent hover:underline">
+                    Ver todos los resultados para "{{ searchQuery() }}" →
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
 
       <!-- Loyalty — solo desktop, solo cuando está logueado -->
       @if (auth.isAuthenticated()) {
@@ -153,7 +173,7 @@
             </div>
           }
         </div>
-      } @else {
+      } @else if (storeConfig.ecommerceEnabled()) {
         <a routerLink="/login"
            class="hidden lg:inline-flex items-center h-7.5 px-3 rounded border border-line text-xs text-ink-2
                   hover:text-ink-1 hover:border-accent transition-colors">
@@ -184,29 +204,33 @@
         }
       </button>
 
-      <!-- Toggle de divisa — solo desktop -->
-      <button (click)="currency.toggle()"
-              class="hidden lg:flex items-center h-7.5 rounded border border-line overflow-hidden
-                     text-[11px] font-mono transition-colors hover:border-accent">
-        <span class="px-2 py-1 transition-colors"
-              [class.bg-accent]="currency.isMxn()"
-              [class.text-white]="currency.isMxn()"
-              [class.text-ink-3]="!currency.isMxn()">MXN</span>
-        <span class="px-2 py-1 transition-colors"
-              [class.bg-accent]="!currency.isMxn()"
-              [class.text-white]="!currency.isMxn()"
-              [class.text-ink-3]="currency.isMxn()">USD</span>
-      </button>
+      <!-- Toggle de divisa — solo cuando ecommerce está activo -->
+      @if (storeConfig.ecommerceEnabled()) {
+        <button (click)="currency.toggle()"
+                class="hidden lg:flex items-center h-7.5 rounded border border-line overflow-hidden
+                       text-[11px] font-mono transition-colors hover:border-accent">
+          <span class="px-2 py-1 transition-colors"
+                [class.bg-accent]="currency.isMxn()"
+                [class.text-white]="currency.isMxn()"
+                [class.text-ink-3]="!currency.isMxn()">MXN</span>
+          <span class="px-2 py-1 transition-colors"
+                [class.bg-accent]="!currency.isMxn()"
+                [class.text-white]="!currency.isMxn()"
+                [class.text-ink-3]="currency.isMxn()">USD</span>
+        </button>
+      }
 
-      <!-- Cart — siempre visible -->
-      <a routerLink="/carrito"
-         class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
-                hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
-        🛒
-        @if (cartService.count() > 0) {
-          <span class="font-mono">{{ cartService.count() }}</span>
-        }
-      </a>
+      <!-- Cart — solo cuando ecommerce está activo -->
+      @if (storeConfig.ecommerceEnabled()) {
+        <a routerLink="/carrito"
+           class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
+                  hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
+          🛒
+          @if (cartService.count() > 0) {
+            <span class="font-mono">{{ cartService.count() }}</span>
+          }
+        </a>
+      }
 
       <!-- Hamburger — móvil y tablet -->
       <button
@@ -277,19 +301,21 @@
         }
 
         <!-- Nav links — 2 columnas en tablet -->
-        <nav class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-          <a routerLink="/catalogo"
-             routerLinkActive="text-accent bg-accent-soft font-medium"
-             class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
-            Catálogo
-          </a>
-          @for (cat of navCategories(); track cat.id) {
-            <a href="#"
+        @if (storeConfig.ecommerceEnabled()) {
+          <nav class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+            <a routerLink="/catalogo"
+               routerLinkActive="text-accent bg-accent-soft font-medium"
                class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
-              {{ cat.name }}
+              Catálogo
             </a>
-          }
-        </nav>
+            @for (cat of navCategories(); track cat.id) {
+              <a href="#"
+                 class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
+                {{ cat.name }}
+              </a>
+            }
+          </nav>
+        }
 
         <div class="border-t border-line"></div>
 

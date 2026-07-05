@@ -1,0 +1,119 @@
+<app-landing-hero
+  kicker="// quiénes somos"
+  title="Acercamos el cielo del sur a la gente."
+  desc="Andromeda nació en 2016 como un grupo de aficionados en las sierras de Córdoba. Hoy divulgamos, hacemos turismo astronómico y equipamos a quienes quieren mirar más lejos."
+  [ctas]="['Conocé al equipo', 'Nuestras verticales']"
+/>
+
+<!-- Historia · timeline -->
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+  <app-landing-section-head kicker="// la historia" title="De un telescopio prestado a tres verticales" />
+  <div class="flex flex-col">
+    @for (m of timeline; track m.year; let last = $last) {
+      <div class="flex gap-6">
+        <div class="flex flex-col items-center w-10 shrink-0">
+          <div class="w-3 h-3 rounded-full mt-1 shrink-0" style="background:var(--color-accent)"></div>
+          @if (!last) {
+            <div class="w-px flex-1 mt-1" style="background:var(--color-line)"></div>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5 pb-10">
+          <span class="font-mono text-xs" style="color:var(--color-accent)">{{ m.year }}</span>
+          <h3 class="text-base font-bold text-ink-1">{{ m.title }}</h3>
+          <p class="text-sm text-ink-2 max-w-lg leading-relaxed">{{ m.body }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Misión / Visión -->
+<section class="bg-surface-2 border-t border-b border-line">
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @for (mv of misionVision; track mv.tag) {
+        <div class="rounded-xl border border-line bg-surface-1 p-6 flex flex-col gap-2">
+          <span class="font-mono text-xs" style="color:var(--color-accent)">{{ mv.tag }}</span>
+          <h3 class="text-lg font-bold text-ink-1">{{ mv.title }}</h3>
+          <p class="text-sm text-ink-2 leading-relaxed">{{ mv.body }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Valores -->
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+  <app-landing-section-head kicker="// lo que nos mueve" title="Valores" [center]="true" />
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    @for (v of valores; track v.title) {
+      <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-3">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
+             style="background:var(--color-accent-soft)">{{ v.ico }}</div>
+        <strong class="text-sm text-ink-1">{{ v.title }}</strong>
+        <small class="text-xs text-ink-2">{{ v.desc }}</small>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Las 3 verticales -->
+<section class="bg-surface-2 border-t border-b border-line">
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+    <app-landing-section-head kicker="// qué hacemos" title="Tres formas de acercarte al cielo" />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      @for (v of verticales; track v.name) {
+        <div class="rounded-xl border border-line bg-surface-1 overflow-hidden flex flex-col"
+             [style.border-top]="'3px solid ' + v.accent">
+          <div class="aspect-video bg-surface-3 flex items-center justify-center text-ink-3 text-sm font-mono">
+            {{ v.tag }}
+          </div>
+          <div class="flex flex-col gap-2 p-5 flex-1">
+            <span class="font-mono text-xs" [style.color]="v.accent">// {{ v.tag }}</span>
+            <h3 class="text-base font-bold text-ink-1">{{ v.name }}</h3>
+            <p class="text-xs text-ink-2 leading-relaxed flex-1">{{ v.body }}</p>
+            <a [routerLink]="v.route" class="font-mono text-xs mt-1 hover:underline" [style.color]="v.accent">
+              {{ v.cta }} →
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Equipo -->
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+  <app-landing-section-head
+    kicker="// el equipo"
+    title="Quiénes están detrás"
+    desc="Astrónomos, docentes, guías y makers que comparten la misma obsesión."
+  />
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    @for (p of equipo; track p.name) {
+      <div class="flex flex-col gap-3">
+        <div class="w-20 h-20 rounded-full bg-surface-3 border border-line flex items-center justify-center text-3xl">
+          {{ p.ico }}
+        </div>
+        <div class="flex flex-col gap-0.5">
+          <strong class="text-sm text-ink-1">{{ p.name }}</strong>
+          <small class="text-xs text-ink-2">{{ p.role }}</small>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Stats band -->
+<section style="background:oklch(0.18 0.04 275)">
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-14">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      @for (s of stats; track s.label) {
+        <div class="flex flex-col gap-1 items-center">
+          <strong class="text-3xl font-bold text-white">{{ s.value }}</strong>
+          <small style="color:oklch(0.75 0.03 275)">{{ s.label }}</small>
+        </div>
+      }
+    </div>
+  </div>
+</section>

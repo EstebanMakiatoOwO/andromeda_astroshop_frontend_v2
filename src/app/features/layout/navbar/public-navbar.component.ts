@@ -11,6 +11,7 @@ import { LoyaltyService } from '../../../core/services/loyalty.service';
 import { CurrencyService } from '../../../core/services/currency.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { CartService } from '../../../core/services/cart.service';
+import { StoreConfigService } from '../../../core/services/store-config.service';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 
@@ -28,14 +29,21 @@ export class PublicNavbarComponent {
   protected readonly currency      = inject(CurrencyService);
   protected readonly theme         = inject(ThemeService);
   protected readonly cartService   = inject(CartService);
+  protected readonly storeConfig   = inject(StoreConfigService);
 
   categories = input<PublicCategory[]>([]);
+
+  protected readonly landingLinks = [
+    { path: '/astroshop',    label: 'AstroShop' },
+    { path: '/astroturismo', label: 'AstroTurismo' },
+    { path: '/astrodome',    label: 'AstroDome' },
+    { path: '/conocenos',    label: 'Conócenos' },
+    { path: '/contacto',     label: 'Contacto' },
+  ];
 
   protected readonly megaOpen       = signal(false);
   protected readonly mobileMenuOpen = signal(false);
   protected readonly userMenuOpen   = signal(false);
-  protected readonly cartCount      = signal(2);
-  protected readonly loyaltyPts     = signal(1240);
 
   protected readonly loyaltyAccount = toSignal<LoyaltyAccount | null>(
     toObservable(this.auth.isAuthenticated).pipe(

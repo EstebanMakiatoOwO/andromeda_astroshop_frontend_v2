@@ -1,0 +1,48 @@
+<app-landing-hero
+  kicker="// domos"
+  title="AstroDome"
+  desc="Nuestro planetario y observatorio portátil para llevar el universo a escuelas, eventos y exhibiciones."
+  [accent]="accent"
+  [minHeight]="280"
+/>
+
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mb-14">
+    <div>
+      <p class="font-mono text-xs mb-3" style="color:var(--color-accent)">// ¿qué es el AstroDome?</p>
+      <h2 class="text-2xl font-bold text-ink-1 mb-4">Un planetario en cualquier lugar</h2>
+      <p class="text-sm text-ink-3 leading-relaxed mb-4">
+        El AstroDome es una cúpula inflable de proyección que lleva una experiencia inmersiva de planetario a cualquier espacio: escuelas, universidades, festivales, eventos corporativos y más.
+      </p>
+      <p class="text-sm text-ink-3 leading-relaxed">
+        Con capacidad para grupos de hasta 30 personas, combina tecnología de proyección de alta calidad con contenido educativo y espectacular.
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-line bg-surface-2 p-6">
+      <h3 class="text-sm font-semibold text-ink-1 mb-4">Ideal para</h3>
+      <ul class="flex flex-col gap-3">
+        @for (use of uses; track use.name) {
+          <li class="flex items-center gap-3 text-sm text-ink-2">
+            <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:var(--color-accent)"></span>
+            {{ use.name }}
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
+    <h3 class="font-bold text-ink-1 mb-2">¿Querés el AstroDome en tu evento?</h3>
+    <p class="text-xs text-ink-3 mb-5">Contáctanos para cotización y disponibilidad.</p>
+    <a routerLink="/contacto"
+       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
+       style="background-color:var(--color-accent)"
+       onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+       onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+      Solicitar cotización
+    </a>
+  </div>
+
+</div>

@@ -1,0 +1,46 @@
+<app-landing-hero
+  kicker="// tienda"
+  title="AstroShop"
+  desc="Tu tienda especializada en equipos de astronomía. Telescopios, binoculares, accesorios y todo lo que necesitas para explorar el universo."
+  [accent]="accent"
+  [minHeight]="280"
+/>
+
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
+
+  <!-- Próximamente -->
+  <div class="text-center mb-14">
+    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-medium mb-6"
+          style="border-color:color-mix(in oklch,var(--color-accent) 30%,transparent);
+                 background:var(--color-accent-soft); color:var(--color-accent)">
+      Próximamente
+    </span>
+    <h2 class="text-2xl font-bold text-ink-1 mb-3">Nuestra tienda está en camino</h2>
+    <p class="text-sm text-ink-3 max-w-md mx-auto">
+      Estamos preparando un catálogo cuidadosamente seleccionado para astrónomos de todos los niveles.
+    </p>
+  </div>
+
+  <!-- Categorías -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
+    @for (cat of categories; track cat.label) {
+      <div class="rounded-xl border border-line bg-surface-2 px-4 py-6 text-center hover:border-accent transition-colors">
+        <p class="text-sm font-medium text-ink-2">{{ cat.label }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- CTA -->
+  <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
+    <h3 class="font-bold text-ink-1 mb-2">¿Interesado en algún producto?</h3>
+    <p class="text-xs text-ink-3 mb-5">Contáctanos y con gusto te asesoramos.</p>
+    <a routerLink="/contacto"
+       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
+       style="background-color:var(--color-accent)"
+       onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+       onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+      Contáctanos
+    </a>
+  </div>
+
+</div>

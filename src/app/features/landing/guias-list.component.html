@@ -1,0 +1,117 @@
+<app-landing-hero
+  kicker="// aprendé a mirar"
+  title="Guías y blog"
+  desc="Todo lo que necesitás saber para empezar, mejorar tus observaciones y sacarle el jugo a tu equipo."
+  [minHeight]="260"
+  [stars]="60"
+/>
+
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-14">
+
+  <!-- Filtros + búsqueda -->
+  <div class="flex flex-col sm:flex-row gap-3 justify-between mb-8">
+    <div class="flex flex-wrap gap-2">
+      @for (c of cats; track c) {
+        <button (click)="catActiva.set(c)"
+                class="px-3 py-1.5 rounded-full text-xs border transition-colors"
+                [class.border-accent]="catActiva() === c"
+                [class.text-accent]="catActiva() === c"
+                [class.bg-accent-soft]="catActiva() === c"
+                [class.border-line]="catActiva() !== c"
+                [class.text-ink-2]="catActiva() !== c">
+          {{ c }}
+        </button>
+      }
+    </div>
+    <input [value]="query()"
+           (input)="query.set($any($event.target).value)"
+           placeholder="Buscar guías…"
+           class="h-9 px-3 rounded-lg border border-line bg-surface-3 text-xs text-ink-1
+                  placeholder-ink-3 outline-none focus:border-accent transition-colors sm:w-52" />
+  </div>
+
+  <!-- Skeleton cargando -->
+  @if (isLoading()) {
+    <div class="rounded-xl border border-line bg-surface-3 animate-pulse mb-6" style="height:300px"></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+      @for (s of [1,2,3,4,5,6]; track s) {
+        <div class="rounded-xl border border-line bg-surface-3 animate-pulse overflow-hidden">
+          <div class="bg-surface-4" style="aspect-ratio:16/10"></div>
+          <div class="p-4 flex flex-col gap-2">
+            <div class="h-2 w-16 rounded bg-surface-4"></div>
+            <div class="h-3 w-full rounded bg-surface-4"></div>
+            <div class="h-3 w-3/4 rounded bg-surface-4"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else if (filtered().length === 0) {
+    <div class="py-20 text-center text-sm text-ink-3">No se encontraron guías para tu búsqueda.</div>
+
+  } @else {
+
+    <!-- Artículo destacado (primero) -->
+    @if (featured()) {
+      <a [routerLink]="['/guias', featured()!.slug]"
+         class="rounded-xl border border-line bg-surface-2 overflow-hidden grid grid-cols-1 md:grid-cols-[1.3fr_1fr] mb-8
+                hover:border-accent transition-colors block">
+        @if (featured()!.coverImage) {
+          <img [src]="featured()!.coverImage!"
+               [alt]="featured()!.title"
+               class="w-full object-cover"
+               style="aspect-ratio:16/9; max-height:320px"
+               loading="lazy" />
+        } @else {
+          <div class="bg-surface-3 flex items-center justify-center text-ink-3 text-xs font-mono"
+               style="aspect-ratio:16/9; min-height:240px">
+            sin imagen
+          </div>
+        }
+        <div class="flex flex-col gap-3 p-6 md:p-8 justify-center">
+          <span class="font-mono text-xs" style="color:var(--color-accent)">// destacado</span>
+          <h2 class="text-xl font-bold text-ink-1 leading-snug">{{ featured()!.title }}</h2>
+          <p class="text-sm text-ink-2 leading-relaxed">{{ featured()!.excerpt }}</p>
+          <div class="flex gap-3 mt-1">
+            <small class="font-mono text-[11px] text-ink-3">{{ formatDate(featured()!.publishedAt) }}</small>
+          </div>
+          <span class="font-mono text-xs text-accent mt-1">Leer guía →</span>
+        </div>
+      </a>
+    }
+
+    <!-- Grid del resto -->
+    @if (rest().length > 0) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        @for (a of rest(); track a.id) {
+          <a [routerLink]="['/guias', a.slug]"
+             class="rounded-xl border border-line bg-surface-2 overflow-hidden flex flex-col
+                    hover:border-accent transition-colors cursor-pointer">
+            @if (a.coverImage) {
+              <img [src]="a.coverImage" [alt]="a.title"
+                   class="w-full object-cover"
+                   style="aspect-ratio:16/10"
+                   loading="lazy" />
+            } @else {
+              <div class="bg-surface-3 flex items-center justify-center text-ink-3 text-[11px] font-mono"
+                   style="aspect-ratio:16/10">
+                sin imagen
+              </div>
+            }
+            <div class="flex flex-col gap-2 p-4 flex-1">
+              <span class="font-mono text-xs" style="color:var(--color-accent)">// guía</span>
+              <h3 class="text-sm font-bold text-ink-1 leading-snug flex-1">{{ a.title }}</h3>
+              <small class="font-mono text-[11px] text-ink-3">{{ formatDate(a.publishedAt) }}</small>
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+    <div class="flex justify-center mt-8">
+      <p class="font-mono text-xs text-ink-3">{{ filtered().length }} guías disponibles</p>
+    </div>
+
+  }
+
+</section>
