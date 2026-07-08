@@ -1,9 +1,9 @@
 <app-landing-hero
   kicker="// hablemos"
   title="Contacto"
-  desc="¿Dudas sobre un producto, una experiencia o querés llevar AstroDome a tu evento? Escribinos y te respondemos dentro de las 24h hábiles."
+  desc="¿Dudas sobre un producto, una experiencia o quieres llevar AstroDome a tu evento? Escríbenos y te respondemos a la brevedad."
+  [dark]="false"
   [minHeight]="260"
-  [stars]="60"
 />
 
 <div class="max-w-5xl mx-auto px-4 md:px-8 py-14">
@@ -11,26 +11,33 @@
 
     <!-- Formulario -->
     <div class="rounded-xl border border-line bg-surface-2 p-6 flex flex-col gap-5">
-      <h3 class="text-base font-semibold text-ink-1">Envianos un mensaje</h3>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-base font-semibold text-ink-1">Envianos un mensaje</h3>
+        <p class="font-mono text-[11px] text-ink-3">→ {{ emailDestino() }}</p>
+      </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="flex flex-col gap-1.5">
           <label class="font-mono text-[10px] text-ink-3">nombre *</label>
           <input class="h-9 px-3 rounded-lg border border-line bg-surface-3 text-xs text-ink-1
                         outline-none focus:border-accent transition-colors"
-                 placeholder="Tu nombre" />
+                 placeholder="Tu nombre"
+                 [value]="nombre()"
+                 (input)="nombre.set($any($event.target).value)" />
         </div>
         <div class="flex flex-col gap-1.5">
           <label class="font-mono text-[10px] text-ink-3">email *</label>
           <input type="email"
                  class="h-9 px-3 rounded-lg border border-line bg-surface-3 text-xs text-ink-1
                         outline-none focus:border-accent transition-colors"
-                 placeholder="tu@email.com" />
+                 placeholder="tu@email.com"
+                 [value]="email()"
+                 (input)="email.set($any($event.target).value)" />
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="font-mono text-[10px] text-ink-3">¿sobre qué querés hablar?</label>
+        <label class="font-mono text-[10px] text-ink-3">¿sobre qué quieres hablar?</label>
         <div class="flex flex-wrap gap-2">
           @for (t of temas; track t) {
             <button (click)="temaActivo.set(t)"
@@ -51,20 +58,18 @@
         <textarea rows="5"
                   class="px-3 py-2.5 rounded-lg border border-line bg-surface-3 text-xs text-ink-1
                          outline-none focus:border-accent transition-colors resize-y"
-                  placeholder="Contanos en qué te podemos ayudar…"></textarea>
+                  placeholder="Contanos en qué te podemos ayudar…"
+                  [value]="mensaje()"
+                  (input)="mensaje.set($any($event.target).value)"></textarea>
       </div>
 
-      <label class="flex items-center gap-2.5 text-xs text-ink-2 cursor-pointer">
-        <input type="checkbox" class="accent-accent" />
-        <span>Quiero recibir novedades y el calendario astronómico mensual</span>
-      </label>
-
-      <button class="self-start px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-              style="background-color:var(--color-accent)"
-              onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
-              onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+      <a [href]="mailtoUrl()"
+         class="self-start px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
+         style="background-color:var(--color-accent)"
+         onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+         onmouseleave="this.style.backgroundColor='var(--color-accent)'">
         Enviar mensaje →
-      </button>
+      </a>
     </div>
 
     <!-- Datos directos -->
@@ -78,23 +83,13 @@
             </div>
             <div class="flex flex-col gap-0.5">
               <small class="font-mono text-[10px] text-ink-3">{{ c.tipo }}</small>
-              <strong class="text-sm text-ink-1">{{ c.valor }}</strong>
-              <small class="text-xs text-ink-2">{{ c.sub }}</small>
+              <strong class="text-xs text-ink-1 break-all">{{ c.valor }}</strong>
+              @if (c.sub) {
+                <small class="text-xs text-ink-2">{{ c.sub }}</small>
+              }
             </div>
           </div>
         }
-      </div>
-
-      <!-- Mapa placeholder -->
-      <div class="rounded-xl border border-line overflow-hidden">
-        <div class="bg-surface-3 flex items-center justify-center text-ink-3 text-xs font-mono"
-             style="height:200px">
-          mapa · Av. Colón 1234, Córdoba
-        </div>
-        <div class="flex justify-between items-center px-4 py-3">
-          <small class="text-xs text-ink-2">Estacionamiento sobre la calle</small>
-          <a class="font-mono text-xs text-accent hover:underline cursor-pointer">cómo llegar →</a>
-        </div>
       </div>
     </div>
 

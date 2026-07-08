@@ -12,13 +12,12 @@ import { CurrencyService } from '../../../core/services/currency.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { CartService } from '../../../core/services/cart.service';
 import { StoreConfigService } from '../../../core/services/store-config.service';
-import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { AssetUrlPipe } from '../../../shared/pipes/asset-url.pipe';
 
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
-  imports: [LogoComponent, AssetUrlPipe, RouterLink, RouterLinkActive],
+  imports: [AssetUrlPipe, RouterLink, RouterLinkActive],
   templateUrl: './public-navbar.component.html',
 })
 export class PublicNavbarComponent {
@@ -34,10 +33,12 @@ export class PublicNavbarComponent {
   categories = input<PublicCategory[]>([]);
 
   protected readonly landingLinks = [
+    { path: '/conocenos',    label: 'Conócenos' },
     { path: '/astroshop',    label: 'AstroShop' },
     { path: '/astroturismo', label: 'AstroTurismo' },
     { path: '/astrodome',    label: 'AstroDome' },
-    { path: '/conocenos',    label: 'Conócenos' },
+    { path: '/guias',        label: 'Guías' },
+    { path: '/galeria',      label: 'Galería' },
     { path: '/contacto',     label: 'Contacto' },
   ];
 

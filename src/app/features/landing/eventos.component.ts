@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { ThemeService } from '../../core/services/theme.service';
 import { LandingHeroComponent, BRAND_ACCENTS } from './components/landing-hero.component';
 
 interface Evento {
@@ -22,7 +23,8 @@ const FILTROS = ['Todos', 'Observación', 'Talleres', 'Campamentos', 'Gratuitos'
   templateUrl: './eventos.component.html',
 })
 export class EventosComponent {
-  protected readonly filtros   = FILTROS;
+  protected readonly theme   = inject(ThemeService);
+  protected readonly filtros = FILTROS;
   protected readonly filtroActivo = signal<string>('Todos');
 
   protected readonly eventos: Evento[] = [

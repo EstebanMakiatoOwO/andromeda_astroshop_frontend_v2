@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { PublicProduct } from '../../core/models/public-product.model';
 import { Brand } from '../../core/models/brand.model';
 import { Article } from '../../core/models/article.model';
@@ -30,6 +31,7 @@ import { LandingHomeComponent } from '../landing/landing-home.component';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
+  private readonly router          = inject(Router);
   private readonly productsService = inject(PublicProductsService);
   private readonly brandsService   = inject(BrandsService);
   private readonly articlesService = inject(ArticlesService);
@@ -45,7 +47,10 @@ export class HomeComponent implements OnInit {
   protected readonly isLoadingArticles = signal(true);
 
   ngOnInit(): void {
-    if (!this.storeConfig.ecommerceEnabled()) return;
+    if (!this.storeConfig.ecommerceEnabled()) {
+      this.router.navigateByUrl('/conocenos', { replaceUrl: true });
+      return;
+    }
 
     this.productsService.getPopular(12).subscribe({
       next:  p  => { this.popularProducts.set(p); this.isLoadingPopular.set(false); },

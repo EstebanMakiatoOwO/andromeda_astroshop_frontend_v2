@@ -1,16 +1,25 @@
 <app-landing-hero
   kicker="// experiencias"
   title="AstroTurismo"
-  desc="Experiencias únicas de observación astronómica bajo los cielos más oscuros. Viví la magia del universo en persona."
+  desc="Experiencias únicas de astrofotografia yobservación astronómica bajo los cielos más oscuros. Vive la magia del universo en persona."
   [accent]="accent"
   [minHeight]="280"
-/>
+>
+  <div heroLogo class="w-full flex justify-center py-8">
+    <img [src]="theme.isDark()
+                  ? '/Astroturismo/AndromedaASTROTURISMO-NEGRO.webp'
+                  : '/Astroturismo/AndromedaASTROTURISMO-COLOR.webp'"
+         alt="Andromeda AstroTurismo"
+         [style]="theme.isDark() ? 'height:180px;width:auto;object-fit:contain;max-width:420px;filter:brightness(0) invert(1)'
+                                 : 'height:180px;width:auto;object-fit:contain;max-width:420px'" />
+  </div>
+</app-landing-hero>
 
 <div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
 
   <div class="text-center mb-12">
     <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// experiencias</p>
-    <h2 class="text-2xl font-bold text-ink-1 mb-3">¿Qué podés vivir con nosotros?</h2>
+    <h2 class="text-2xl font-bold text-ink-1 mb-3">¿Qué puedes vivir con nosotros?</h2>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
@@ -23,15 +32,32 @@
     }
   </div>
 
+  <!-- Collage de imágenes -->
+  <div class="mb-14">
+    <p class="font-mono text-xs mb-4" style="color:var(--color-accent)">// así se vive</p>
+    <div class="columns-2 md:columns-3 lg:columns-4 gap-3">
+      @for (n of [1,2,3,4,5,6,7]; track n) {
+        <div class="break-inside-avoid mb-3 rounded-xl overflow-hidden border border-line">
+          <img [src]="'/Astroturismo/astroturismo-' + n + '.webp'"
+               [alt]="'AstroTurismo experiencia ' + n"
+               class="w-full object-cover block"
+               loading="lazy" />
+        </div>
+      }
+    </div>
+  </div>
+
   <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
     <h3 class="font-bold text-ink-1 mb-2">¿Listo para observar las estrellas?</h3>
-    <p class="text-xs text-ink-3 mb-5">Escribinos para conocer disponibilidad y paquetes.</p>
-    <a routerLink="/contacto"
+    <p class="text-xs text-ink-3 mb-5">Escribenos para conocer fechas, disponibilidad y paquetes.</p>
+    <a href="https://wa.me/524427151880?text=Hola,%20me%20interesa%20reservar%20una%20experiencia%20de%20AstroTurismo."
+       target="_blank"
+       rel="noopener"
        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
        style="background-color:var(--color-accent)"
        onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
        onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-      Reservar experiencia
+      Reservar por WhatsApp
     </a>
   </div>
 

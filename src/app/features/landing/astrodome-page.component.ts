@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
 import { LandingHeroComponent, BRAND_ACCENTS } from './components/landing-hero.component';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-astrodome-page',
   standalone: true,
-  imports: [RouterLink, LandingHeroComponent],
+  imports: [LandingHeroComponent],
   templateUrl: './astrodome-page.component.html',
 })
 export class AstrodomePageComponent {
+  protected readonly theme  = inject(ThemeService);
   protected readonly accent = BRAND_ACCENTS.dome;
   protected readonly uses = [
     { name: 'Escuelas y universidades' },

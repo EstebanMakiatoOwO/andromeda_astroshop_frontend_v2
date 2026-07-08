@@ -1,13 +1,15 @@
 <app-landing-hero
   kicker="// quiénes somos"
-  title="Acercamos el cielo del sur a la gente."
-  desc="Andromeda nació en 2016 como un grupo de aficionados en las sierras de Córdoba. Hoy divulgamos, hacemos turismo astronómico y equipamos a quienes quieren mirar más lejos."
-  [ctas]="['Conocé al equipo', 'Nuestras verticales']"
+  title="Acercamos el universo a las personas."
+  desc="Somos entusiastas de la astronomía que transformaron una pasión en una tienda. Desde 2019 importamos equipos astronómicos de alta calidad para que explorar el cosmos sea accesible en México."
+  [dark]="false"
 />
+
+<app-apod-feature variant="band" />
 
 <!-- Historia · timeline -->
 <section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
-  <app-landing-section-head kicker="// la historia" title="De un telescopio prestado a tres verticales" />
+  <app-landing-section-head kicker="// la historia" title="Cómo surge Andrómeda AstroShop" />
   <div class="flex flex-col">
     @for (m of timeline; track m.year; let last = $last) {
       <div class="flex gap-6">
@@ -47,11 +49,10 @@
   <app-landing-section-head kicker="// lo que nos mueve" title="Valores" [center]="true" />
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
     @for (v of valores; track v.title) {
-      <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-3">
-        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
+      <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-3 items-center text-center">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
              style="background:var(--color-accent-soft)">{{ v.ico }}</div>
-        <strong class="text-sm text-ink-1">{{ v.title }}</strong>
-        <small class="text-xs text-ink-2">{{ v.desc }}</small>
+        <strong class="text-sm text-ink-1 leading-snug">{{ v.title }}</strong>
       </div>
     }
   </div>
@@ -105,13 +106,19 @@
 </section>
 
 <!-- Stats band -->
-<section style="background:oklch(0.18 0.04 275)">
+<section [style.background]="theme.isDark() ? 'oklch(0.18 0.04 275)' : 'var(--color-surface-2)'"
+         class="border-t border-line">
   <div class="max-w-5xl mx-auto px-4 md:px-8 py-14">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
       @for (s of stats; track s.label) {
         <div class="flex flex-col gap-1 items-center">
-          <strong class="text-3xl font-bold text-white">{{ s.value }}</strong>
-          <small style="color:oklch(0.75 0.03 275)">{{ s.label }}</small>
+          <strong class="text-3xl font-bold"
+                  [style.color]="theme.isDark() ? '#fff' : 'var(--color-ink-1)'">
+            {{ s.value }}
+          </strong>
+          <small [style.color]="theme.isDark() ? 'oklch(0.75 0.03 275)' : 'var(--color-ink-3)'">
+            {{ s.label }}
+          </small>
         </div>
       }
     </div>

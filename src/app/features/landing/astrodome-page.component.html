@@ -1,22 +1,50 @@
 <app-landing-hero
-  kicker="// domos"
-  title="AstroDome"
-  desc="Nuestro planetario y observatorio portátil para llevar el universo a escuelas, eventos y exhibiciones."
+  kicker="// Planetario móvil"
+  title="Planetario móvil - Andrómeda AstroDome"
+  desc="Nuestro Planetario Astronómico itinerante está diseñado para acercar la ciencia y el conocimiento del universo a estudiantes y público en general mediante una experiencia educativa inmersiva y didáctica."
   [accent]="accent"
   [minHeight]="280"
-/>
+>
+  <div heroLogo class="w-full flex justify-center py-8">
+    <img [src]="theme.isDark()
+                  ? '/Astrodome/IMAGOTIPO-AndromedaDOME-BLANCO.webp'
+                  : '/Astrodome/IMAGOTIPO-AndromedaDOME-COLOR.webp'"
+         alt="Andromeda AstroDome"
+         style="height:180px; width:auto; object-fit:contain; max-width:420px" />
+  </div>
+</app-landing-hero>
+
+<!-- Imagen del domo -->
+<div class="max-w-5xl mx-auto px-4 md:px-6 pt-12 pb-0">
+  <div class="relative rounded-2xl overflow-hidden border border-line" style="height:500px; max-height:59vw">
+    <img src="/Astrodome/astrodome_dome.webp"
+         alt="AstroDome — cúpula inflable de planetario Andromeda"
+         class="w-full h-full object-cover" />
+    <!-- overlay degradado inferior -->
+    <div class="absolute inset-0"
+         style="background:linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)"></div>
+
+    <!-- texto sobre la imagen -->
+    <div class="absolute bottom-0 left-0 p-6 md:p-8">
+      <span class="font-mono text-xs text-white/60 block mb-1">// andrómeda astrodome</span>
+      <p class="text-white font-semibold text-lg md:text-xl leading-snug max-w-md">
+        Cúpula inflable de proyección · hasta 60 personas por función
+      </p>
+    </div>
+  </div>
+</div>
 
 <div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mb-14">
     <div>
-      <p class="font-mono text-xs mb-3" style="color:var(--color-accent)">// ¿qué es el AstroDome?</p>
+      <p class="font-mono text-xs mb-3" style="color:var(--color-accent)">// ¿Qué es el Planetario móvil?</p>
       <h2 class="text-2xl font-bold text-ink-1 mb-4">Un planetario en cualquier lugar</h2>
       <p class="text-sm text-ink-3 leading-relaxed mb-4">
-        El AstroDome es una cúpula inflable de proyección que lleva una experiencia inmersiva de planetario a cualquier espacio: escuelas, universidades, festivales, eventos corporativos y más.
+        El Planetario móvil es una cúpula inflable de proyección que lleva una experiencia inmersiva de planetario a cualquier espacio: escuelas, universidades, festivales, eventos corporativos y más.
       </p>
       <p class="text-sm text-ink-3 leading-relaxed">
-        Con capacidad para grupos de hasta 30 personas, combina tecnología de proyección de alta calidad con contenido educativo y espectacular.
+        Con capacidad para grupos de hasta 60 personas por función, combina tecnología de proyección de alta calidad con contenido educativo y espectacular.
       </p>
     </div>
 
@@ -34,14 +62,16 @@
   </div>
 
   <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
-    <h3 class="font-bold text-ink-1 mb-2">¿Querés el AstroDome en tu evento?</h3>
+    <h3 class="font-bold text-ink-1 mb-2">¿Quieres el Planetario móvil en tu evento?</h3>
     <p class="text-xs text-ink-3 mb-5">Contáctanos para cotización y disponibilidad.</p>
-    <a routerLink="/contacto"
+    <a href="https://wa.me/524427151880?text=Hola,%20me%20interesa%20el%20Planetario%20móvil%20para%20mi%20evento."
+       target="_blank"
+       rel="noopener"
        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
        style="background-color:var(--color-accent)"
        onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
        onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-      Solicitar cotización
+      Solicitar cotización por WhatsApp
     </a>
   </div>
 

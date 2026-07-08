@@ -1,45 +1,40 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { LandingHeroComponent } from './components/landing-hero.component';
 import { LandingSectionHeadComponent } from './components/landing-section-head.component';
-
-interface GaleriaShot {
-  height: number;
-  cat: string;
-  by: string;
-  title: string;
-}
-
-const CATS = ['Todas', 'Planetaria', 'Cielo profundo', 'Luna', 'Eventos', 'Paisaje nocturno'] as const;
+import { ApodFeatureComponent } from './components/apod-feature.component';
+import { DrivePhotosService, DrivePhoto } from '../../core/services/drive-photos.service';
 
 @Component({
   selector: 'app-galeria',
   standalone: true,
-  imports: [LandingHeroComponent, LandingSectionHeadComponent],
+  imports: [LandingHeroComponent, LandingSectionHeadComponent, ApodFeatureComponent, DatePipe],
   templateUrl: './galeria.component.html',
 })
-export class GaleriaComponent {
-  protected readonly cats = CATS;
-  protected readonly catActiva = signal<string>('Todas');
+export class GaleriaComponent implements OnInit {
+  private readonly drive = inject(DrivePhotosService);
 
-  protected readonly shots: GaleriaShot[] = [
-    { height: 240, cat: 'Cielo profundo',    by: '@martin.avalos', title: 'Nebulosa de Carina' },
-    { height: 180, cat: 'Luna',              by: '@luciaf',        title: 'Luna llena · 400mm' },
-    { height: 300, cat: 'Planetaria',        by: '@diego.r',       title: 'Saturno y sus anillos' },
-    { height: 200, cat: 'Paisaje nocturno',  by: '@sofi.led',      title: 'Vía Láctea sobre las sierras' },
-    { height: 260, cat: 'Eventos',           by: '@andromeda',     title: 'Noche de observación · Alta Gracia' },
-    { height: 190, cat: 'Cielo profundo',    by: '@invitado',      title: 'Galaxia de Andrómeda' },
-    { height: 230, cat: 'Planetaria',        by: '@martin.avalos', title: 'Júpiter y lunas galileanas' },
-    { height: 170, cat: 'Luna',              by: '@nicoastro',     title: 'Cráter Copérnico' },
-    { height: 280, cat: 'Paisaje nocturno',  by: '@luciaf',        title: 'Campamento astronómico' },
-    { height: 210, cat: 'Eventos',           by: '@andromeda',     title: 'Taller de astrofoto' },
-    { height: 250, cat: 'Cielo profundo',    by: '@diego.r',       title: 'Nebulosa de Orión' },
-    { height: 185, cat: 'Planetaria',        by: '@sofi.led',      title: 'Marte en oposición' },
-  ];
+  protected readonly photos    = signal<DrivePhoto[]>([]);
+  protected readonly loading   = signal(true);
+  protected readonly selected  = signal<DrivePhoto | null>(null);
 
-  protected readonly today = new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
-
-  protected get filteredShots(): GaleriaShot[] {
-    const cat = this.catActiva();
-    return cat === 'Todas' ? this.shots : this.shots.filter(s => s.cat === cat);
+  ngOnInit(): void {
+    this.drive.getGallery().subscribe({
+      next:  p  => { this.photos.set(p); this.loading.set(false); },
+      error: () => this.loading.set(false),
+    });
   }
+
+  protected open(photo: DrivePhoto): void {
+    this.selected.set(photo);
+    document.body.style.overflow = 'hidden';
+  }
+
+  protected close(): void {
+    this.selected.set(null);
+    document.body.style.overflow = '';
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void { this.close(); }
 }

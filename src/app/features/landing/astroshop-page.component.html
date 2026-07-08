@@ -1,10 +1,18 @@
 <app-landing-hero
   kicker="// tienda"
   title="AstroShop"
-  desc="Tu tienda especializada en equipos de astronomía. Telescopios, binoculares, accesorios y todo lo que necesitas para explorar el universo."
+  desc="La tienda #1 de Astrofotografía en México. Especialistas en telescopios, cámaras dedicadas, monturas y asesoría experta para revelar los secretos del universo. Elevamos tus capturas del cosmos al siguiente nivel."
   [accent]="accent"
   [minHeight]="280"
-/>
+>
+  <div heroLogo class="w-full flex justify-center py-8">
+    <img [src]="theme.isDark()
+                  ? '/Astroshop/IMAGOTIPO-AndromedaSHOP-BLANCO.webp'
+                  : '/Astroshop/IMAGOTIPO-AndromedaSHOP-COLOR.webp'"
+         alt="Andromeda AstroShop"
+         style="height:300px; width:auto; object-fit:contain; max-width:420px" />
+  </div>
+</app-landing-hero>
 
 <div class="max-w-5xl mx-auto px-4 md:px-6 py-16">
 
@@ -30,16 +38,24 @@
     }
   </div>
 
+  <!-- Carrusel de marcas -->
+  <div class="mb-14">
+    <p class="font-mono text-xs mb-6 text-center" style="color:var(--color-accent)">// Algunas de las marcas que manejamos</p>
+    <app-brands-section />
+  </div>
+
   <!-- CTA -->
   <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
     <h3 class="font-bold text-ink-1 mb-2">¿Interesado en algún producto?</h3>
     <p class="text-xs text-ink-3 mb-5">Contáctanos y con gusto te asesoramos.</p>
-    <a routerLink="/contacto"
+    <a href="https://wa.me/525512672026?text=Hola,%20me%20interesa%20un%20producto%20del%20AstroShop."
+       target="_blank"
+       rel="noopener"
        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
        style="background-color:var(--color-accent)"
        onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
        onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-      Contáctanos
+      Contáctanos por WhatsApp
     </a>
   </div>
 

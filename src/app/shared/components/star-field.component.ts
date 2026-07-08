@@ -25,7 +25,7 @@ interface Star {
           [attr.cx]="star.cx"
           [attr.cy]="star.cy"
           [attr.r]="star.r"
-          fill="white"
+          [attr.fill]="color()"
           [attr.opacity]="star.opacity"
         >
           <animate
@@ -46,6 +46,7 @@ interface Star {
 export class StarFieldComponent {
   count = input(60);
   seed  = input(42);
+  color = input('white');
 
   protected readonly stars = computed<Star[]>(() => {
     const rand = this.lcg(this.seed());
