@@ -1,4 +1,4 @@
-<div class="relative overflow-hidden border-b border-line flex items-center"
+<div class="relative overflow-hidden border-b border-line flex flex-col justify-center"
      [style.min-height.px]="minHeight()"
      [style.background]="bgStyle()">
 
@@ -15,10 +15,18 @@
        style="width:540px; height:540px; top:50%; right:-180px; transform:translateY(-50%)">
   </div>
 
-  <div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-10 py-14 md:py-20">
+  <!-- Banner: full-width, fuera del max-w-5xl -->
+  <div class="relative z-10 w-full">
+    <ng-content select="[heroBanner]" />
+  </div>
 
+  <!-- Logo: dentro del contenedor centrado -->
+  <div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-10 pt-14 md:pt-20">
     <ng-content select="[heroLogo]" />
+  </div>
 
+  <!-- Texto: dentro del contenedor centrado -->
+  <div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-10 pb-14 md:pb-20">
     <div class="flex flex-col gap-4 max-w-2xl">
 
       @if (kicker()) {

@@ -49,9 +49,7 @@
   <app-landing-section-head kicker="// lo que nos mueve" title="Valores" [center]="true" />
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
     @for (v of valores; track v.title) {
-      <div class="rounded-xl border border-line bg-surface-2 p-5 flex flex-col gap-3 items-center text-center">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-             style="background:var(--color-accent-soft)">{{ v.ico }}</div>
+      <div class="rounded-xl border border-line bg-surface-2 p-5 flex items-center justify-center text-center">
         <strong class="text-sm text-ink-1 leading-snug">{{ v.title }}</strong>
       </div>
     }
@@ -64,20 +62,22 @@
     <app-landing-section-head kicker="// qué hacemos" title="Tres formas de acercarte al cielo" />
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       @for (v of verticales; track v.name) {
-        <div class="rounded-xl border border-line bg-surface-1 overflow-hidden flex flex-col"
-             [style.border-top]="'3px solid ' + v.accent">
-          <div class="aspect-video bg-surface-3 flex items-center justify-center text-ink-3 text-sm font-mono">
-            {{ v.tag }}
+        <a [routerLink]="v.route"
+           class="rounded-xl border border-line bg-surface-1 overflow-hidden flex flex-col group transition-transform hover:scale-[1.02]"
+           [style.border-top]="'3px solid ' + v.accent">
+          <div class="aspect-video overflow-hidden">
+            <img [src]="v.img" [alt]="v.name"
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
           </div>
           <div class="flex flex-col gap-2 p-5 flex-1">
             <span class="font-mono text-xs" [style.color]="v.accent">// {{ v.tag }}</span>
             <h3 class="text-base font-bold text-ink-1">{{ v.name }}</h3>
             <p class="text-xs text-ink-2 leading-relaxed flex-1">{{ v.body }}</p>
-            <a [routerLink]="v.route" class="font-mono text-xs mt-1 hover:underline" [style.color]="v.accent">
+            <span class="font-mono text-xs mt-1" [style.color]="v.accent">
               {{ v.cta }} →
-            </a>
+            </span>
           </div>
-        </div>
+        </a>
       }
     </div>
   </div>
@@ -90,14 +90,19 @@
     title="Quiénes están detrás"
     desc="Astrónomos, docentes, guías y makers que comparten la misma obsesión."
   />
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
     @for (p of equipo; track p.name) {
-      <div class="flex flex-col gap-3">
-        <div class="w-20 h-20 rounded-full bg-surface-3 border border-line flex items-center justify-center text-3xl">
-          {{ p.ico }}
-        </div>
+      <div class="flex flex-col items-center text-center gap-3">
+        @if (p.photo) {
+          <img [src]="p.photo" [alt]="p.name"
+               class="w-32 h-32 rounded-full object-cover border-2 border-line" />
+        } @else {
+          <div class="w-32 h-32 rounded-full bg-surface-3 border-2 border-line flex items-center justify-center text-xl font-bold text-ink-2">
+            {{ p.name[0] }}
+          </div>
+        }
         <div class="flex flex-col gap-0.5">
-          <strong class="text-sm text-ink-1">{{ p.name }}</strong>
+          <strong class="text-sm text-ink-1 leading-snug">{{ p.name }}</strong>
           <small class="text-xs text-ink-2">{{ p.role }}</small>
         </div>
       </div>

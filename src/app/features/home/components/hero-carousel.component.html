@@ -1,49 +1,51 @@
 @if (loading()) {
-  <div class="min-h-65 sm:min-h-80 md:min-h-95 bg-surface-2 border-b border-line animate-pulse"></div>
+  <div class="bg-surface-2 border-b border-line animate-pulse" style="aspect-ratio:3/2 ; width:100%"></div>
 } @else if (banners().length === 0) {
-  <!-- Sin banners: espacio vacío, no rompe el layout -->
   <div class="hidden"></div>
 } @else {
-  <div class="relative overflow-hidden border-b border-line min-h-65 sm:min-h-80 md:min-h-95">
+  <div class="relative overflow-hidden border-b border-line w-full bg-black select-none aspect-3/2 md:aspect-16/5"
+       (touchstart)="onTouchStart($event)"
+       (touchend)="onTouchEnd($event)">
 
+    <!-- Imágenes: todas renderizadas, fade con opacity -->
     @for (banner of banners(); track banner.id; let i = $index) {
-      @if (i === current()) {
-        <div class="absolute inset-0">
-          @if (banner.linkUrl) {
-            <a [href]="banner.linkUrl" class="block w-full h-full">
-              <img [src]="banner.imageUrl" [alt]="banner.title"
-                   class="w-full h-full object-cover" />
-            </a>
-          } @else {
+      <div class="absolute inset-0 transition-opacity duration-500"
+           [style.opacity]="i === current() ? '1' : '0'">
+        @if (banner.linkUrl) {
+          <a [href]="banner.linkUrl" class="block w-full h-full">
             <img [src]="banner.imageUrl" [alt]="banner.title"
                  class="w-full h-full object-cover" />
-          }
-        </div>
-      }
+          </a>
+        } @else {
+          <img [src]="banner.imageUrl" [alt]="banner.title"
+               class="w-full h-full object-cover" />
+        }
+      </div>
     }
 
-    <!-- Flechas -->
+    <!-- Flechas (solo sm+) -->
     @if (banners().length > 1) {
       <button (click)="prev()"
-              class="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
+              class="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full
                      border border-white/30 bg-black/30 backdrop-blur-sm
-                     items-center justify-center text-white hover:bg-black/50 transition-colors text-lg">
+                     items-center justify-center text-white hover:bg-black/50 transition-colors text-xl">
         ‹
       </button>
       <button (click)="next()"
-              class="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full
+              class="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full
                      border border-white/30 bg-black/30 backdrop-blur-sm
-                     items-center justify-center text-white hover:bg-black/50 transition-colors text-lg">
+                     items-center justify-center text-white hover:bg-black/50 transition-colors text-xl">
         ›
       </button>
 
       <!-- Dots -->
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
         @for (banner of banners(); track banner.id; let i = $index) {
           <button (click)="goTo(i)"
-                  class="h-2 rounded-full transition-all duration-300 border-none cursor-pointer bg-white"
-                  [style.width]="i === current() ? '24px' : '8px'"
-                  [style.opacity]="i === current() ? '1' : '0.5'">
+                  class="h-2.5 rounded-full transition-all duration-300 border-none cursor-pointer bg-white"
+                  [style.width]="i === current() ? '28px' : '10px'"
+                  [style.opacity]="i === current() ? '1' : '0.45'"
+                  [attr.aria-label]="'Banner ' + (i + 1)">
           </button>
         }
       </div>

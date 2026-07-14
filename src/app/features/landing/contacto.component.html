@@ -63,13 +63,24 @@
                   (input)="mensaje.set($any($event.target).value)"></textarea>
       </div>
 
-      <a [href]="mailtoUrl()"
-         class="self-start px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-         style="background-color:var(--color-accent)"
-         onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
-         onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-        Enviar mensaje →
-      </a>
+      <!-- reCAPTCHA v2 widget -->
+      <div #recaptchaContainer></div>
+
+      @if (error()) {
+        <p class="text-xs text-red-400 font-mono">{{ error() }}</p>
+      }
+      @if (enviado()) {
+        <p class="text-xs font-mono" style="color:var(--color-accent)">✓ Mensaje enviado correctamente.</p>
+      }
+
+      @if (captchaOk()) {
+        <button (click)="enviar()"
+                [disabled]="enviando()"
+                class="self-start px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-opacity disabled:opacity-50"
+                style="background-color:var(--color-accent)">
+          {{ enviando() ? 'Enviando…' : 'Enviar mensaje →' }}
+        </button>
+      }
     </div>
 
     <!-- Datos directos -->

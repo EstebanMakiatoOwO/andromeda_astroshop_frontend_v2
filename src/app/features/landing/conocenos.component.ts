@@ -58,14 +58,18 @@ export class ConocenosComponent {
   ];
 
   protected readonly verticales = [
-    { tag: 'tienda',       name: 'AstroShop',    accent: BRAND_ACCENTS.shop,    route: '/astroshop',    cta: 'Ir a la tienda',     body: 'Telescopios, cámaras dedicadas, monturas y accesorios de marcas oficiales importados desde EE.UU.' },
-    { tag: 'experiencias', name: 'AstroTurismo', accent: BRAND_ACCENTS.turismo, route: '/astroturismo', cta: 'Ver experiencias',    body: 'Noches de observación, campamentos astronómicos, astrofotografía y charlas bajo los cielos más oscuros.' },
-    { tag: 'domos',        name: 'AstroDome',    accent: BRAND_ACCENTS.dome,    route: '/astrodome',    cta: 'Pedir cotización',    body: 'Planetario móvil itinerante para escuelas, universidades, festivales y eventos corporativos.' },
+    { tag: 'tienda',       name: 'AstroShop',    accent: BRAND_ACCENTS.shop,    route: '/astroshop',    cta: 'Ir a la tienda',     body: 'Telescopios, cámaras dedicadas, monturas y accesorios de marcas oficiales importados desde EE.UU.',       img: '/Banners/S30-PRO-_1_.webp' },
+    { tag: 'experiencias', name: 'AstroTurismo', accent: BRAND_ACCENTS.turismo, route: '/astroturismo', cta: 'Ver experiencias',    body: 'Noches de observación, campamentos astronómicos, astrofotografía y charlas bajo los cielos más oscuros.', img: '/Astroturismo/astroturismo-1.webp' },
+    { tag: 'domos',        name: 'AstroDome',    accent: BRAND_ACCENTS.dome,    route: '/astrodome',    cta: 'Pedir cotización',    body: 'Planetario móvil itinerante para escuelas, universidades, festivales y eventos corporativos.',              img: '/Astrodome/astrodome_dome.webp' },
   ];
 
   protected readonly equipo = [
-    { name: 'Lucía Fernández', role: 'Fundadora · Comercio Exterior',  ico: '👩‍🚀' },
-    { name: 'Carlos Fernández', role: 'Co-fundador · Ing. Industrial',  ico: '🔭' },
+    { name: 'Alfredo González',         role: 'Fundador',        photo: '/Andromeda_team/alfredo.webp' },
+    { name: 'Alejandra Stella',         role: 'Fundadora',       photo: '/Andromeda_team/alejandra.webp' },
+    { name: 'Aitana, Esteban & Anette', role: 'Staff',           photo: '/Andromeda_team/aitana_anette_esteban.webp' },
+    { name: 'Daniela Neve',             role: 'Fotógrafa',       photo: '/Andromeda_team/daniela.webp' },
+    { name: 'Isai',                     role: 'Líder Marketing', photo: '/Andromeda_team/isai.webp' },
+    { name: 'Julio Castillo',           role: 'Camarógrafo',     photo: '/Andromeda_team/julio.webp' },
   ];
 
   protected readonly stats = [
