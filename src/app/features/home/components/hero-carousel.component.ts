@@ -1,5 +1,13 @@
 import { Component, OnInit, OnDestroy, signal, inject, input } from '@angular/core';
-import { BannerService, Banner } from '../../../core/services/banner.service';
+import { BannerService } from '../../../core/services/banner.service';
+
+interface Slide {
+  id:      number;
+  title:   string;
+  desktop: string;
+  mobile:  string;
+  linkUrl: string | null;
+}
 
 @Component({
   selector: 'app-hero-carousel',
@@ -12,36 +20,41 @@ export class HeroCarouselComponent implements OnInit, OnDestroy {
 
   /** Modo offline: pasa rutas de imágenes locales directamente, sin llamar al backend */
   readonly offline = input<boolean>(false);
-  readonly images  = input<string[]>([]);
+  readonly images  = input<({ desktop: string; mobile: string } | string)[]>([]);
 
-  protected readonly banners  = signal<Banner[]>([]);
-  protected readonly current  = signal(0);
-  protected readonly loading  = signal(true);
+  protected readonly slides  = signal<Slide[]>([]);
+  protected readonly current = signal(0);
+  protected readonly loading = signal(true);
 
   private timer: ReturnType<typeof setInterval> | null = null;
 
   ngOnInit(): void {
     if (this.offline()) {
-      const bs: Banner[] = this.images().map((url, i) => ({
-        id: i,
-        title: `Banner ${i + 1}`,
-        imageUrl: url,
+      const ss: Slide[] = this.images().map((img, i) => ({
+        id:      i,
+        title:   `Banner ${i + 1}`,
+        desktop: typeof img === 'string' ? img : img.desktop,
+        mobile:  typeof img === 'string' ? img : img.mobile,
         linkUrl: null,
-        sortOrder: i,
-        isActive: 1,
-        createdAt: '',
       }));
-      this.banners.set(bs);
+      this.slides.set(ss);
       this.loading.set(false);
-      this.startTimer(bs.length);
+      this.startTimer(ss.length);
       return;
     }
 
     this.svc.getBanners().subscribe({
       next: bs => {
-        this.banners.set(bs);
+        const ss: Slide[] = bs.map(b => ({
+          id:      b.id,
+          title:   b.title,
+          desktop: b.imageUrl,
+          mobile:  b.imageUrl,
+          linkUrl: b.linkUrl,
+        }));
+        this.slides.set(ss);
         this.loading.set(false);
-        this.startTimer(bs.length);
+        this.startTimer(ss.length);
       },
       error: () => this.loading.set(false),
     });
@@ -51,7 +64,7 @@ export class HeroCarouselComponent implements OnInit, OnDestroy {
     if (len > 1) {
       this.timer = setInterval(() => {
         this.current.update(i => (i + 1) % len);
-      }, 6000);
+      }, 4000);
     }
   }
 
@@ -60,12 +73,12 @@ export class HeroCarouselComponent implements OnInit, OnDestroy {
   }
 
   protected prev(): void {
-    const len = this.banners().length;
+    const len = this.slides().length;
     this.current.update(i => (i - 1 + len) % len);
   }
 
   protected next(): void {
-    this.current.update(i => (i + 1) % this.banners().length);
+    this.current.update(i => (i + 1) % this.slides().length);
   }
 
   protected goTo(i: number): void {

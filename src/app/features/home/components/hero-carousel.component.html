@@ -1,30 +1,34 @@
 @if (loading()) {
   <div class="bg-surface-2 border-b border-line animate-pulse" style="aspect-ratio:3/2 ; width:100%"></div>
-} @else if (banners().length === 0) {
+} @else if (slides().length === 0) {
   <div class="hidden"></div>
 } @else {
-  <div class="relative overflow-hidden border-b border-line w-full bg-black select-none aspect-3/2 md:aspect-16/5"
+  <div class="relative overflow-hidden border-b border-line w-full bg-black select-none aspect-9/16 md:aspect-16/5"
        (touchstart)="onTouchStart($event)"
        (touchend)="onTouchEnd($event)">
 
     <!-- Imágenes: todas renderizadas, fade con opacity -->
-    @for (banner of banners(); track banner.id; let i = $index) {
+    @for (slide of slides(); track slide.id; let i = $index) {
       <div class="absolute inset-0 transition-opacity duration-500"
            [style.opacity]="i === current() ? '1' : '0'">
-        @if (banner.linkUrl) {
-          <a [href]="banner.linkUrl" class="block w-full h-full">
-            <img [src]="banner.imageUrl" [alt]="banner.title"
-                 class="w-full h-full object-cover" />
+        @if (slide.linkUrl) {
+          <a [href]="slide.linkUrl" class="block w-full h-full">
+            <picture class="w-full h-full">
+              <source media="(max-width: 767px)" [attr.srcset]="slide.mobile" />
+              <img [src]="slide.desktop" [alt]="slide.title" class="w-full h-full object-cover" />
+            </picture>
           </a>
         } @else {
-          <img [src]="banner.imageUrl" [alt]="banner.title"
-               class="w-full h-full object-cover" />
+          <picture class="block w-full h-full">
+            <source media="(max-width: 767px)" [attr.srcset]="slide.mobile" />
+            <img [src]="slide.desktop" [alt]="slide.title" class="w-full h-full object-cover" />
+          </picture>
         }
       </div>
     }
 
     <!-- Flechas (solo sm+) -->
-    @if (banners().length > 1) {
+    @if (slides().length > 1) {
       <button (click)="prev()"
               class="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full
                      border border-white/30 bg-black/30 backdrop-blur-sm
@@ -40,7 +44,7 @@
 
       <!-- Dots -->
       <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-        @for (banner of banners(); track banner.id; let i = $index) {
+        @for (slide of slides(); track slide.id; let i = $index) {
           <button (click)="goTo(i)"
                   class="h-2.5 rounded-full transition-all duration-300 border-none cursor-pointer bg-white"
                   [style.width]="i === current() ? '28px' : '10px'"

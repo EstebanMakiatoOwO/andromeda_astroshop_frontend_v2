@@ -15,11 +15,11 @@ export class AstroshopPageComponent {
   protected readonly accent = BRAND_ACCENTS.shop;
 
   protected readonly banners = [
-    '/Banners/BAADER.webp',
-    '/Banners/NUEVO-SPRIT-EDX.webp',
-    '/Banners/OPTOLONG-10_.webp',
-    '/Banners/S30-PRO-_1_.webp',
-    '/Banners/BANNER-5.webp',
+    { desktop: '/Banners/BAADER.webp',          mobile: '/Banners/BAADER_mobile.webp' },
+    { desktop: '/Banners/NUEVO-SPRIT-EDX.webp', mobile: '/Banners/NUEVO-SPRIT-EDX_mobile.webp' },
+    { desktop: '/Banners/OPTOLONG-10_.webp',    mobile: '/Banners/OPTOLONG-10_mobile.webp' },
+    { desktop: '/Banners/S30-PRO-_1_.webp',     mobile: '/Banners/S30-PRO-_1_mobile.webp' },
+    { desktop: '/Banners/BANNER-5.webp',         mobile: '/Banners/BANNER-5_mobile.webp' },
   ];
 
   protected readonly categories = [
