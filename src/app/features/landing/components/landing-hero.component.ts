@@ -24,7 +24,7 @@ export class LandingHeroComponent {
   accent    = input<string>(BRAND_ACCENTS.base);
   dark      = input(true);
   minHeight = input(340);
-  stars     = input(80);
+  stars     = input(35);
   ctas      = input<string[]>([]);
 
   ctaClick  = output<number>();

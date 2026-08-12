@@ -47,11 +47,16 @@ export class HomeComponent implements OnInit {
   protected readonly isLoadingArticles = signal(true);
 
   ngOnInit(): void {
-    if (!this.storeConfig.ecommerceEnabled()) {
-      this.router.navigateByUrl('/conocenos', { replaceUrl: true });
-      return;
-    }
+    this.storeConfig.load().subscribe(enabled => {
+      if (!enabled) {
+        this.router.navigateByUrl('/conocenos', { replaceUrl: true });
+        return;
+      }
+      this.loadHomeData();
+    });
+  }
 
+  private loadHomeData(): void {
     this.productsService.getPopular(12).subscribe({
       next:  p  => { this.popularProducts.set(p); this.isLoadingPopular.set(false); },
       error: () => this.isLoadingPopular.set(false),

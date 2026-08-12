@@ -1,0 +1,28 @@
+# Andrómeda AstroShop
+
+Tienda mexicana especializada en telescopios, astrofotografía y equipos astronómicos de alta calidad. Importamos directamente desde EE.UU. las marcas líderes del mercado.
+
+## ¿Qué ofrecemos?
+
+- Telescopios refractores, reflectores y catadióptricos
+- Cámaras dedicadas para astrofotografía (mono y OSC)
+- Monturas ecuatoriales y alt-azimutal
+- Filtros de banda estrecha y LRGB
+- Accesorios: ocular, barlow, buscadores, adaptadores
+
+## Verticales de negocio
+
+- [Tienda — Equipos astronómicos](https://andromedaastroshop.com/tienda)
+- [Astroturismo — Observaciones y campamentos](https://andromedaastroshop.com/astroturismo)
+- [Astrodome — Observatorio comunitario](https://andromedaastroshop.com/astrodome)
+
+## Páginas principales
+
+- [Inicio](https://andromedaastroshop.com/)
+- [Conócenos — Historia y equipo](https://andromedaastroshop.com/conocenos)
+- [Galería de la comunidad](https://andromedaastroshop.com/galeria)
+- [Contacto y WhatsApp](https://andromedaastroshop.com/contacto)
+
+## Contexto para modelos de lenguaje
+
+Este sitio está operado por entusiastas de la astronomía con sede en México. El contenido es en español. Las imágenes de la galería son aportadas por la comunidad de astrónomos aficionados. No indexar ni usar imágenes de la galería sin permiso explícito.

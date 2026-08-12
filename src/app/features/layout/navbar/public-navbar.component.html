@@ -188,6 +188,7 @@
 
       <!-- Toggle de tema — solo desktop -->
       <button (click)="theme.toggle()"
+              [attr.aria-label]="theme.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
               class="hidden lg:flex items-center justify-center w-7.5 h-7.5 rounded border border-line
                      text-ink-2 hover:text-ink-1 hover:border-accent transition-colors">
         @if (theme.isDark()) {

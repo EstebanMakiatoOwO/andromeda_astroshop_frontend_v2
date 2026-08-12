@@ -16,6 +16,10 @@ export class DrivePhotosService {
 
   private readonly photos$: Observable<DrivePhoto[]> =
     this.http.get<DrivePhoto[]>('/galeria/index.json').pipe(
+      map(photos => photos.map(p => ({
+        ...p,
+        fullUrl: p.fullUrl?.replace('=w1200', '=w800') ?? p.fullUrl,
+      }))),
       catchError(() => of([])),
       shareReplay(1),
     );

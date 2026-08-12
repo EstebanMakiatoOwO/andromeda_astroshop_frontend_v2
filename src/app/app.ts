@@ -15,8 +15,10 @@ export class App implements OnInit {
   private readonly storeConfig = inject(StoreConfigService);
 
   ngOnInit(): void {
-    if (this.storeConfig.ecommerceEnabled()) {
-      this.cart.load().subscribe();
-    }
+    this.storeConfig.load().subscribe(enabled => {
+      if (enabled) {
+        this.cart.load().subscribe();
+      }
+    });
   }
 }

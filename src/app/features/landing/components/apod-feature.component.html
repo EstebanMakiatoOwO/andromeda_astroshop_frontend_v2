@@ -41,7 +41,7 @@
           <img [src]="photo()!.fullUrl"
                [alt]="photo()!.name"
                class="w-full h-full object-cover absolute inset-0 transition-transform duration-300 group-hover:scale-105"
-               loading="lazy" />
+               loading="eager" fetchpriority="high" />
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
             <span class="opacity-0 group-hover:opacity-100 transition-opacity text-white text-3xl">⊕</span>
           </div>

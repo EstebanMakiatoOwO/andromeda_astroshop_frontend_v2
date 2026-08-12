@@ -29,9 +29,11 @@ export class PublicLayoutComponent implements OnInit {
   protected readonly categories = signal<PublicCategory[]>([]);
 
   ngOnInit(): void {
-    if (this.storeConfig.ecommerceEnabled()) {
-      this.categoriesService.getTree().subscribe(cats => this.categories.set(cats));
-    }
+    this.storeConfig.load().subscribe(enabled => {
+      if (enabled) {
+        this.categoriesService.getTree().subscribe(cats => this.categories.set(cats));
+      }
+    });
 
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),

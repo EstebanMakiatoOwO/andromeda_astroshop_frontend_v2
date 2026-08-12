@@ -20,8 +20,11 @@ export const appConfig: ApplicationConfig = {
     { provide: AUTH_SERVICE_TOKEN, useExisting: AuthService },
     { provide: LOCALE_ID, useValue: 'es' },
     {
+      // Dispara la carga del config lo antes posible sin bloquear el primer render:
+      // bloquear el bootstrap en este fetch retrasaba el LCP en ~1.7s en todas las rutas,
+      // incluidas las que no dependen de él (páginas informativas).
       provide: APP_INITIALIZER,
-      useFactory: (cfg: StoreConfigService) => () => cfg.load(),
+      useFactory: (cfg: StoreConfigService) => () => { cfg.load().subscribe(); },
       deps: [StoreConfigService],
       multi: true,
     },
