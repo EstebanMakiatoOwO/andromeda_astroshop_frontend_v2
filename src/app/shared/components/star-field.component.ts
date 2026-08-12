@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ElementRef, OnInit } from '@angular/core';
 
 interface Star {
   cx: number;
@@ -15,7 +15,7 @@ interface Star {
   standalone: true,
   template: `
     <svg
-      class="absolute inset-0 w-full h-full pointer-events-none"
+      class="absolute inset-0 w-full h-full pointer-events-none z-0"
       viewBox="0 0 100 100"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
@@ -43,10 +43,12 @@ interface Star {
     </svg>
   `,
 })
-export class StarFieldComponent {
+export class StarFieldComponent implements OnInit {
   count = input(60);
   seed  = input(42);
   color = input('white');
+
+  constructor(private readonly host: ElementRef<HTMLElement>) {}
 
   protected readonly stars = computed<Star[]>(() => {
     const rand = this.lcg(this.seed());
@@ -72,5 +74,15 @@ export class StarFieldComponent {
       s = (Math.imul(1664525, s) + 1013904223) | 0;
       return (s >>> 0) / 0xffffffff;
     };
+  }
+
+  ngOnInit(): void {
+    const el = this.host.nativeElement;
+    el.style.position = 'fixed';
+    el.style.inset = '0';
+    el.style.width = '100%';
+    el.style.height = '100%';
+    el.style.pointerEvents = 'none';
+    el.style.zIndex = '0';
   }
 }

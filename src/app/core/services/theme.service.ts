@@ -24,6 +24,6 @@ export class ThemeService {
   }
 
   private loadTheme(): Theme {
-    return (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? 'dark';
+    return (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? 'light';
   }
 }

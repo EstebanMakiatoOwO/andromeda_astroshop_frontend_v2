@@ -264,48 +264,50 @@
          (click)="$event.stopPropagation()">
       <div class="max-w-2xl mx-auto px-4 py-4 flex flex-col gap-4">
 
-        <!-- Search -->
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Buscar productos…"
-            [value]="searchQuery()"
-            (input)="onSearchInput($any($event.target).value)"
-            (keydown.escape)="clearSearch()"
-            class="w-full h-9 pl-3 pr-8 rounded-lg border border-line bg-surface-3
-                   text-sm text-ink-1 placeholder-ink-3
-                   focus:outline-none focus:border-accent transition-colors"
-          />
-          @if (isSearching()) {
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5
-                         border-2 border-accent border-t-transparent rounded-full animate-spin"></span>
-          } @else if (searchQuery()) {
-            <button (click)="clearSearch()"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-ink-3
-                           hover:text-ink-1 transition-colors text-sm leading-none">✕</button>
-          }
-        </div>
-
-        <!-- Resultados de búsqueda -->
-        @if (showDropdown() && searchResults().length > 0) {
-          <ul class="rounded-xl border border-line bg-surface-3 overflow-hidden">
-            @for (product of searchResults(); track product.id) {
-              <li class="flex items-center gap-3 px-3 py-2.5 border-b border-line last:border-0">
-                <div class="w-9 h-9 rounded-lg bg-surface-4 shrink-0 overflow-hidden">
-                  @if (product.images.length > 0) {
-                    <img [src]="product.images[0] | assetUrl" [alt]="product.name"
-                         class="w-full h-full object-cover" />
-                  }
-                </div>
-                <div class="flex flex-col gap-0.5 min-w-0 flex-1">
-                  <span class="text-xs text-ink-1 font-medium truncate">{{ product.name }}</span>
-                </div>
-                <span class="text-xs font-bold text-ink-1 shrink-0">
-                  {{ formatPrice(product) }}
-                </span>
-              </li>
+        <!-- Search — solo cuando ecommerce está activo -->
+        @if (storeConfig.ecommerceEnabled()) {
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Buscar productos…"
+              [value]="searchQuery()"
+              (input)="onSearchInput($any($event.target).value)"
+              (keydown.escape)="clearSearch()"
+              class="w-full h-9 pl-3 pr-8 rounded-lg border border-line bg-surface-3
+                     text-sm text-ink-1 placeholder-ink-3
+                     focus:outline-none focus:border-accent transition-colors"
+            />
+            @if (isSearching()) {
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5
+                           border-2 border-accent border-t-transparent rounded-full animate-spin"></span>
+            } @else if (searchQuery()) {
+              <button (click)="clearSearch()"
+                      class="absolute right-3 top-1/2 -translate-y-1/2 text-ink-3
+                             hover:text-ink-1 transition-colors text-sm leading-none">✕</button>
             }
-          </ul>
+          </div>
+
+          <!-- Resultados de búsqueda -->
+          @if (showDropdown() && searchResults().length > 0) {
+            <ul class="rounded-xl border border-line bg-surface-3 overflow-hidden">
+              @for (product of searchResults(); track product.id) {
+                <li class="flex items-center gap-3 px-3 py-2.5 border-b border-line last:border-0">
+                  <div class="w-9 h-9 rounded-lg bg-surface-4 shrink-0 overflow-hidden">
+                    @if (product.images.length > 0) {
+                      <img [src]="product.images[0] | assetUrl" [alt]="product.name"
+                           class="w-full h-full object-cover" />
+                    }
+                  </div>
+                  <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                    <span class="text-xs text-ink-1 font-medium truncate">{{ product.name }}</span>
+                  </div>
+                  <span class="text-xs font-bold text-ink-1 shrink-0">
+                    {{ formatPrice(product) }}
+                  </span>
+                </li>
+              }
+            </ul>
+          }
         }
 
         <!-- Nav links — 2 columnas en tablet -->
@@ -340,19 +342,21 @@
         <!-- Acciones inferiores -->
         <div class="flex flex-wrap gap-2 items-center">
 
-          <!-- Divisa -->
-          <button (click)="currency.toggle()"
-                  class="flex items-center h-8 rounded border border-line overflow-hidden
-                         text-[11px] font-mono transition-colors hover:border-accent">
-            <span class="px-2.5 py-1 transition-colors"
-                  [class.bg-accent]="currency.isMxn()"
-                  [class.text-white]="currency.isMxn()"
-                  [class.text-ink-3]="!currency.isMxn()">MXN</span>
-            <span class="px-2.5 py-1 transition-colors"
-                  [class.bg-accent]="!currency.isMxn()"
-                  [class.text-white]="!currency.isMxn()"
-                  [class.text-ink-3]="currency.isMxn()">USD</span>
-          </button>
+          <!-- Divisa — solo cuando ecommerce está activo -->
+          @if (storeConfig.ecommerceEnabled()) {
+            <button (click)="currency.toggle()"
+                    class="flex items-center h-8 rounded border border-line overflow-hidden
+                           text-[11px] font-mono transition-colors hover:border-accent">
+              <span class="px-2.5 py-1 transition-colors"
+                    [class.bg-accent]="currency.isMxn()"
+                    [class.text-white]="currency.isMxn()"
+                    [class.text-ink-3]="!currency.isMxn()">MXN</span>
+              <span class="px-2.5 py-1 transition-colors"
+                    [class.bg-accent]="!currency.isMxn()"
+                    [class.text-white]="!currency.isMxn()"
+                    [class.text-ink-3]="currency.isMxn()">USD</span>
+            </button>
+          }
 
           <!-- Tema -->
           <button (click)="theme.toggle()"
@@ -392,7 +396,7 @@
                            hover:border-error transition-colors">
               Salir
             </button>
-          } @else {
+          } @else if (storeConfig.ecommerceEnabled()) {
             <a routerLink="/login"
                class="py-1.5 px-4 rounded-lg border border-line text-sm text-ink-2
                       hover:text-ink-1 hover:border-accent transition-colors">

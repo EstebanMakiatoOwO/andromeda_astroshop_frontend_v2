@@ -1,7 +1,8 @@
+<app-star-field [count]="120" [seed]="1337" [color]="starColor()" />
+
 <app-public-navbar [categories]="categories()" />
 
-<main class="pt-14">
+<div #scrollContainer class="pt-14 relative z-10">
   <router-outlet />
-</main>
-
-<app-public-footer />
+  <app-public-footer />
+</div>
