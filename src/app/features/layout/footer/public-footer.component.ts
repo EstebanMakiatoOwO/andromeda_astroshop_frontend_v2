@@ -13,6 +13,7 @@ import { ThemeService } from '../../../core/services/theme.service';
                       ? '/Astroshop/IMAGOTIPO-AndromedaSHOP-BLANCO.webp'
                       : '/Astroshop/IMAGOTIPO-AndromedaSHOP-COLOR.webp'"
              alt="Andromeda AstroShop"
+             width="200" height="200" loading="lazy"
              style="height:200px; width:auto; object-fit:contain" />
         <div class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs text-ink-3">
           <a routerLink="/conocenos"  class="hover:text-ink-2 transition-colors">Sobre nosotros</a>

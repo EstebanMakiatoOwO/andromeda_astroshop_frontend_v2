@@ -49,13 +49,19 @@ export class ContactoComponent implements AfterViewInit {
   ];
 
   ngAfterViewInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
     const tryRender = () => {
       if ((window as any).grecaptcha?.render) {
         this.widgetId = (window as any).grecaptcha.render(
           this.recaptchaContainer.nativeElement,
           {
-            sitekey:          RECAPTCHA_KEY,
-            callback:         () => this.captchaOk.set(true),
+            sitekey:            RECAPTCHA_KEY,
+            callback:           () => this.captchaOk.set(true),
             'expired-callback': () => this.captchaOk.set(false),
           }
         );

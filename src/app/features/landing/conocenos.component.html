@@ -67,6 +67,7 @@
            [style.border-top]="'3px solid ' + v.accent">
           <div class="aspect-video overflow-hidden">
             <img [src]="v.img" [alt]="v.name"
+                 width="480" height="270" loading="lazy"
                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
           </div>
           <div class="flex flex-col gap-2 p-5 flex-1">
@@ -95,6 +96,7 @@
       <div class="flex flex-col items-center text-center gap-3">
         @if (p.photo) {
           <img [src]="p.photo" [alt]="p.name"
+               width="128" height="128" loading="lazy"
                class="w-32 h-32 rounded-full object-cover border-2 border-line" />
         } @else {
           <div class="w-32 h-32 rounded-full bg-surface-3 border-2 border-line flex items-center justify-center text-xl font-bold text-ink-2">

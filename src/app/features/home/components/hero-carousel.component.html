@@ -15,13 +15,17 @@
           <a [href]="slide.linkUrl" class="block w-full h-full">
             <picture class="w-full h-full">
               <source media="(max-width: 767px)" [attr.srcset]="slide.mobile" />
-              <img [src]="slide.desktop" [alt]="slide.title" class="w-full h-full object-cover" />
+              <img [src]="slide.desktop" [alt]="slide.title"
+                   [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+                   class="w-full h-full object-cover" />
             </picture>
           </a>
         } @else {
           <picture class="block w-full h-full">
             <source media="(max-width: 767px)" [attr.srcset]="slide.mobile" />
-            <img [src]="slide.desktop" [alt]="slide.title" class="w-full h-full object-cover" />
+            <img [src]="slide.desktop" [alt]="slide.title"
+                 [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+                 class="w-full h-full object-cover" />
           </picture>
         }
       </div>

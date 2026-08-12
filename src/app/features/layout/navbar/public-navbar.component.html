@@ -10,6 +10,7 @@
                       ? '/Astroshop/IMAGOTIPO-AndromedaSHOP-BLANCO.webp'
                       : '/Astroshop/IMAGOTIPO-AndromedaSHOP-COLOR.webp'"
              alt="Andromeda AstroShop"
+             width="120" height="120"
              style="height:120px; width:auto; object-fit:contain" />
       </a>
 
@@ -239,6 +240,9 @@
       <!-- Hamburger — móvil y tablet -->
       <button
         (click)="toggleMobileMenu(); $event.stopPropagation()"
+        [attr.aria-label]="mobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+        aria-controls="mobile-menu"
+        [attr.aria-expanded]="mobileMenuOpen()"
         class="lg:hidden w-8 h-8 flex flex-col items-center justify-center gap-1.5
                rounded text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
         <span class="block w-5 h-px bg-current transition-all"
@@ -316,6 +320,16 @@
               <a href="#"
                  class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
                 {{ cat.name }}
+              </a>
+            }
+          </nav>
+        } @else {
+          <nav class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+            @for (link of landingLinks; track link.path) {
+              <a [routerLink]="link.path"
+                 routerLinkActive="text-accent bg-accent-soft font-medium"
+                 class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
+                {{ link.label }}
               </a>
             }
           </nav>
