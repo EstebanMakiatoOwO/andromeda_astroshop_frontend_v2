@@ -9,11 +9,13 @@ import { ThemeService } from '../../core/services/theme.service';
 import { PublicNavbarComponent } from './navbar/public-navbar.component';
 import { PublicFooterComponent } from './footer/public-footer.component';
 import { StarFieldComponent } from '../../shared/components/star-field.component';
+import { PhotoLightboxComponent } from '../../shared/components/photo-lightbox.component';
+import { PhotoLightboxService } from '../../core/services/photo-lightbox.service';
 
 @Component({
   selector: 'app-public-layout',
   standalone: true,
-  imports: [RouterOutlet, PublicNavbarComponent, PublicFooterComponent, StarFieldComponent],
+  imports: [RouterOutlet, PublicNavbarComponent, PublicFooterComponent, StarFieldComponent, PhotoLightboxComponent],
   templateUrl: './public-layout.component.html',
 })
 export class PublicLayoutComponent implements OnInit {
@@ -24,6 +26,7 @@ export class PublicLayoutComponent implements OnInit {
   private readonly destroyRef        = inject(DestroyRef);
   protected readonly storeConfig     = inject(StoreConfigService);
   protected readonly theme           = inject(ThemeService);
+  protected readonly lightbox        = inject(PhotoLightboxService);
 
   protected readonly starColor = computed(() => this.theme.isDark() ? 'white' : '#1e1b4b');
   protected readonly categories = signal<PublicCategory[]>([]);

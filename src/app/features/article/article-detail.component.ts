@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Article } from '../../core/models/article.model';
@@ -9,6 +9,10 @@ import { switchMap } from 'rxjs';
   selector: 'app-article-detail',
   standalone: true,
   imports: [RouterLink],
+  // El contenido de .article-content viene de [innerHTML] (HTML crudo del back,
+  // no pasa por el compilador de plantillas), así que necesita estilos sin
+  // scoping para poder alcanzarlo.
+  encapsulation: ViewEncapsulation.None,
   template: `
     <div class="max-w-3xl mx-auto px-4 md:px-8 py-10 md:py-16">
 
@@ -62,20 +66,47 @@ import { switchMap } from 'rxjs';
     </div>
   `,
   styles: [`
-    .article-content :global(h1),
-    .article-content :global(h2),
-    .article-content :global(h3) {
+    .article-content h1,
+    .article-content h2,
+    .article-content h3 {
       font-weight: 700;
       color: var(--color-ink-1);
       margin-top: 1.5rem;
       margin-bottom: 0.5rem;
     }
-    .article-content :global(h2) { font-size: 1.25rem; }
-    .article-content :global(h3) { font-size: 1.1rem; }
-    .article-content :global(p)  { margin-bottom: 1rem; }
-    .article-content :global(ul),
-    .article-content :global(ol) { padding-left: 1.5rem; margin-bottom: 1rem; }
-    .article-content :global(li) { margin-bottom: 0.25rem; }
+    .article-content h2 { font-size: 1.25rem; }
+    .article-content h3 { font-size: 1.1rem; }
+    .article-content p  { margin-bottom: 1rem; }
+    .article-content ul,
+    .article-content ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    .article-content li { margin-bottom: 0.25rem; }
+    .article-content table {
+      display: block;
+      overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1.5rem;
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: none;
+      font-size: 0.85rem;
+    }
+    .article-content th,
+    .article-content td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--color-line);
+      text-align: left;
+      vertical-align: top;
+    }
+    .article-content th {
+      background: var(--color-surface-2);
+      color: var(--color-ink-1);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .article-content tbody tr:nth-child(even) {
+      background: var(--color-surface-2);
+    }
   `],
 })
 export class ArticleDetailComponent implements OnInit {

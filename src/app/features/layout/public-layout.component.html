@@ -6,3 +6,7 @@
   <router-outlet />
   <app-public-footer />
 </main>
+
+@defer (when lightbox.photo()) {
+  <app-photo-lightbox />
+}

@@ -1,6 +1,7 @@
-import { Component, HostListener, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DrivePhotosService, DrivePhoto } from '../../../core/services/drive-photos.service';
+import { PhotoLightboxService } from '../../../core/services/photo-lightbox.service';
 import { BRAND_ACCENTS } from './landing-hero.component';
 
 @Component({
@@ -11,6 +12,7 @@ import { BRAND_ACCENTS } from './landing-hero.component';
 export class ApodFeatureComponent implements OnInit {
   private readonly theme  = inject(ThemeService);
   private readonly drive  = inject(DrivePhotosService);
+  protected readonly lightbox = inject(PhotoLightboxService);
 
   variant = input<'hero' | 'band'>('hero');
 
@@ -18,7 +20,6 @@ export class ApodFeatureComponent implements OnInit {
   protected readonly accent  = BRAND_ACCENTS.base;
   protected readonly photo   = signal<DrivePhoto | null>(null);
   protected readonly loading   = signal(true);
-  protected readonly lightbox  = signal(false);
 
   protected readonly today = new Date().toLocaleDateString('es-AR', {
     day: '2-digit', month: 'short', year: 'numeric',
@@ -32,17 +33,10 @@ export class ApodFeatureComponent implements OnInit {
   }
 
   protected openLightbox(): void {
-    this.lightbox.set(true);
-    document.body.style.overflow = 'hidden';
+    if (this.photo()) {
+      this.lightbox.open(this.photo()!, `hoy · ${this.today} · foto del día`);
+    }
   }
-
-  protected closeLightbox(): void {
-    this.lightbox.set(false);
-    document.body.style.overflow = '';
-  }
-
-  @HostListener('document:keydown.escape')
-  protected onEscape(): void { this.closeLightbox(); }
 
   protected formatDate(iso: string): string {
     return new Date(iso).toLocaleDateString('es-AR', {

@@ -18,7 +18,9 @@ export class DrivePhotosService {
     this.http.get<DrivePhoto[]>('/galeria/index.json').pipe(
       map(photos => photos.map(p => ({
         ...p,
-        fullUrl: p.fullUrl?.replace('=w1200', '=w800') ?? p.fullUrl,
+        // =w700 alcanza para la tarjeta "foto del día"; el lightbox pide una
+        // versión más grande por su cuenta (ver photo-lightbox.component.ts).
+        fullUrl: p.fullUrl?.replace('=w1200', '=w700') ?? p.fullUrl,
       }))),
       catchError(() => of([])),
       shareReplay(1),
