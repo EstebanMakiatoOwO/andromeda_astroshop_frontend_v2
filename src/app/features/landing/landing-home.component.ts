@@ -4,6 +4,7 @@ import { Brand } from '../../core/models/brand.model';
 import { Article } from '../../core/models/article.model';
 import { BrandsService } from '../../core/services/brands.service';
 import { ArticlesService } from '../../core/services/articles.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { HeroCarouselComponent } from '../home/components/hero-carousel.component';
 import { BrandsSectionComponent } from '../home/components/brands-section.component';
 import { EditorialSectionComponent } from '../home/components/editorial-section.component';
@@ -17,6 +18,7 @@ import { EditorialSectionComponent } from '../home/components/editorial-section.
 export class LandingHomeComponent implements OnInit {
   private readonly brandsService   = inject(BrandsService);
   private readonly articlesService = inject(ArticlesService);
+  protected readonly theme         = inject(ThemeService);
 
   protected readonly brands           = signal<Brand[]>([]);
   protected readonly articles         = signal<Article[]>([]);

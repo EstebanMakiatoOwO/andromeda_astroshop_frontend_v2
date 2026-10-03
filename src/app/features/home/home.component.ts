@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PublicProduct } from '../../core/models/public-product.model';
 import { Brand } from '../../core/models/brand.model';
 import { Article } from '../../core/models/article.model';
@@ -8,6 +8,7 @@ import { BrandsService } from '../../core/services/brands.service';
 import { ArticlesService } from '../../core/services/articles.service';
 import { PublicAuthService } from '../../core/services/public-auth.service';
 import { StoreConfigService } from '../../core/services/store-config.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { HeroCarouselComponent } from './components/hero-carousel.component';
 import { LoyaltyBannerComponent } from './components/loyalty-banner.component';
 import { ProductCarouselComponent } from './components/product-carousel.component';
@@ -20,6 +21,7 @@ import { LandingHomeComponent } from '../landing/landing-home.component';
   selector: 'app-home',
   standalone: true,
   imports: [
+    RouterLink,
     LandingHomeComponent,
     HeroCarouselComponent,
     LoyaltyBannerComponent,
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit {
   private readonly articlesService = inject(ArticlesService);
   protected readonly auth          = inject(PublicAuthService);
   protected readonly storeConfig   = inject(StoreConfigService);
+  protected readonly theme         = inject(ThemeService);
 
   protected readonly popularProducts  = signal<PublicProduct[]>([]);
   protected readonly newProducts      = signal<PublicProduct[]>([]);

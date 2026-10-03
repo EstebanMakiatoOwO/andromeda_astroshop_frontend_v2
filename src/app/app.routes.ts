@@ -72,6 +72,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/landing/astrodome-page.component').then(m => m.AstrodomePageComponent),
       },
       {
+        path: 'rancho',
+        loadComponent: () => import('./features/landing/rancho-colaboracion.component').then(m => m.RanchoColaboracionComponent),
+      },
+      {
         path: 'catalogo',
         canActivate: [ecommerceGuard],
         loadComponent: () => import('./features/catalog/catalog.component').then(m => m.CatalogComponent),

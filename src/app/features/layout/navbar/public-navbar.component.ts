@@ -37,6 +37,7 @@ export class PublicNavbarComponent {
     { path: '/astroshop',    label: 'AstroShop' },
     { path: '/astroturismo', label: 'AstroTurismo' },
     { path: '/astrodome',    label: 'AstroDome' },
+    { path: '/rancho',       label: 'Rancho La Concepción' },
     { path: '/guias',        label: 'Guías' },
     { path: '/galeria',      label: 'Galería' },
     { path: '/contacto',     label: 'Contacto' },
