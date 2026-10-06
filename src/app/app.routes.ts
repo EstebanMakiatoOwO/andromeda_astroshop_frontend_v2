@@ -1,5 +1,13 @@
 import { Routes } from '@angular/router';
 import { ecommerceGuard } from './core/guards/ecommerce.guard';
+// Eager: shell + the two real entry pages ("/" redirects to /conocenos when
+// ecommerce is off). Lazy-loading them chained main.js → layout chunk →
+// page chunk → shared deps, adding ~2s of render delay on slow 4G. As
+// static imports they land in the initial bundle and get <link rel=modulepreload>
+// in index.html, so the browser fetches them in parallel from the first byte.
+import { PublicLayoutComponent } from './features/layout/public-layout.component';
+import { HomeComponent } from './features/home/home.component';
+import { ConocenosComponent } from './features/landing/conocenos.component';
 
 export const routes: Routes = [
   {
@@ -24,11 +32,11 @@ export const routes: Routes = [
   },
   {
     path: '',
-    loadComponent: () => import('./features/layout/public-layout.component').then(m => m.PublicLayoutComponent),
+    component: PublicLayoutComponent,
     children: [
       {
         path: '',
-        loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+        component: HomeComponent,
       },
       {
         path: 'productos/:id',
@@ -45,7 +53,7 @@ export const routes: Routes = [
       },
       {
         path: 'conocenos',
-        loadComponent: () => import('./features/landing/conocenos.component').then(m => m.ConocenosComponent),
+        component: ConocenosComponent,
       },
       {
         path: 'contacto',

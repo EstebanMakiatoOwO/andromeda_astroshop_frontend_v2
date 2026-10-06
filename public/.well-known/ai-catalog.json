@@ -1,0 +1,10 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Andrómeda AstroShop",
+    "identifier": "andromedaastroshop.com",
+    "documentationUrl": "https://andromedaastroshop.com/llms.txt",
+    "logoUrl": "https://andromedaastroshop.com/android-chrome-512x512.png"
+  },
+  "entries": []
+}
