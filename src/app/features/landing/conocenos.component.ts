@@ -7,13 +7,14 @@ import { ThemeService } from '../../core/services/theme.service';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { TiltDirective } from '../../shared/directives/tilt.directive';
 import { CountUpComponent } from '../../shared/components/count-up.component';
+import { RanchoTeaserComponent } from './components/rancho-teaser.component';
 
 @Component({
   selector: 'app-conocenos',
   standalone: true,
   imports: [
     RouterLink, LandingHeroComponent, LandingSectionHeadComponent, ApodFeatureComponent,
-    RevealDirective, TiltDirective, CountUpComponent,
+    RevealDirective, TiltDirective, CountUpComponent, RanchoTeaserComponent,
   ],
   templateUrl: './conocenos.component.html',
 })

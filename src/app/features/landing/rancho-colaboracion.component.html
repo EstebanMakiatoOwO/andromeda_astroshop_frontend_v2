@@ -29,30 +29,85 @@
   </div>
 
   <p class="text-sm text-ink-2 leading-relaxed max-w-2xl mx-auto text-center mb-10">
-    Ubicado en el corazón de la Sierra San Pedro Mártir, Baja California, Rancho La Concepción es el primer hospedaje
-    de cielos oscuros en México, diseñado para proteger la oscuridad natural y certificado bajo estándares DarkSky.
+    Ubicado en el corazón de la Sierra San Pedro Mártir, Baja California, Rancho La Concepción es el primer alojamiento
+    en México reconocido como DarkSky Approved Lodging por DarkSky International, diseñado para proteger la oscuridad
+    natural y ofrecer una experiencia bajo uno de los cielos más limpios del país.
   </p>
 
-  <!-- Noches astronómicas -->
-  <div class="rounded-2xl border p-7 md:p-8 mb-14" style="border-color:var(--color-accent); background:var(--color-accent-soft)">
-    <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// ya es una realidad</p>
-    <h2 class="text-xl font-bold mb-3" style="color:var(--color-accent)">Ahora hacemos Noches Astronómicas en Rancho La Concepción</h2>
-    <p class="text-sm leading-relaxed mb-5" style="color:var(--color-accent)">
-      Andrómeda AstroShop y Rancho La Concepción se unieron para llevar la observación astronómica directamente
-      a uno de los cielos más oscuros y limpios de México. Cada velada incluye:
+  <!-- Expediciones astrofotográficas -->
+  <div appReveal class="rounded-2xl border p-7 md:p-8 mb-14" style="border-color:var(--color-accent); background:var(--color-accent-soft)">
+    <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// en colaboración</p>
+    <h2 class="text-xl font-bold mb-3" style="color:var(--color-accent)">Expediciones astrofotográficas en Rancho La Concepción</h2>
+    <p class="text-sm leading-relaxed mb-6" style="color:var(--color-accent)">
+      Andrómeda AstroShop trabaja en colaboración con Rancho La Concepción: durante <strong>junio, julio, agosto y septiembre</strong>
+      realizamos expediciones astrofotográficas en el rancho, bajo uno de los cielos más oscuros de México.
     </p>
-    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm" style="color:var(--color-accent)">
-      <li class="flex gap-2"><span>✦</span> Telescopios y binoculares de Andrómeda AstroShop en sitio</li>
-      <li class="flex gap-2"><span>✦</span> Guía astronómica para identificar planetas, constelaciones y objetos de cielo profundo</li>
-      <li class="flex gap-2"><span>✦</span> Observación bajo un cielo certificado DarkSky</li>
-      <li class="flex gap-2"><span>✦</span> Hospedaje en alguna de las tres cabañas del rancho</li>
-    </ul>
+    <p class="text-sm font-semibold mb-3" style="color:var(--color-accent)">
+      ¿Quieres saber más acerca de las fechas de las expediciones astrofotográficas 2027? Consúltalas aquí:
+    </p>
+    <a [href]="expedicionesUrl"
+       target="_blank"
+       rel="noopener"
+       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
+       style="background-color:var(--color-accent)"
+       onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+       onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+      Consultar fechas 2027 por WhatsApp
+    </a>
   </div>
 
-  <!-- Qué incluye la colaboración -->
+  <!-- Experiencia Andrómeda -->
+  <div class="mb-14">
+    <div appReveal class="text-center mb-8">
+      <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// experiencia andrómeda</p>
+      <h2 class="text-2xl font-bold text-ink-1 mb-3">Beneficios exclusivos para la comunidad Andrómeda</h2>
+      <p class="text-sm text-ink-2 max-w-xl mx-auto">
+        Si reservas tu estancia en el rancho como cliente de Andrómeda AstroShop, obtienes estos beneficios con el código:
+      </p>
+      <div class="mt-4 inline-flex items-center gap-3 rounded-xl border border-line bg-surface-2 pl-5 pr-2 py-2">
+        <span class="font-mono text-lg font-bold tracking-widest text-ink-1">{{ codigo }}</span>
+        <button type="button" (click)="copiarCodigo()"
+                class="px-3 py-1.5 rounded-lg text-xs font-medium border border-line text-ink-2 hover:border-accent hover:text-accent transition-colors">
+          {{ copiado() ? '¡Copiado!' : 'Copiar' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (b of beneficios; track b.title; let i = $index) {
+        <div appReveal [appRevealDelay]="i * 100" class="rounded-xl border border-line bg-surface-2 p-6 flex flex-col gap-3">
+          <h3 class="font-semibold text-ink-1">{{ b.title }}</h3>
+          <p class="text-xs text-ink-3 leading-relaxed">{{ b.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Cómo reservar -->
+  <div appReveal class="rounded-2xl border border-line bg-surface-2 p-8 text-center mb-14">
+    <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// cómo reservar</p>
+    <h3 class="font-bold text-ink-1 mb-2">Reserva directamente con Rancho La Concepción</h3>
+    <p class="text-sm text-ink-2 max-w-xl mx-auto" [class.mb-5]="ranchoReservasWhatsapp">
+      Contacta a César Guerrero, director de Rancho La Concepción, y menciona el código
+      <span class="font-mono font-semibold text-ink-1">{{ codigo }}</span> para obtener los beneficios de la Experiencia Andrómeda.
+    </p>
+    @if (ranchoReservasWhatsapp) {
+      <a [href]="reservaUrl"
+         target="_blank"
+         rel="noopener"
+         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
+         style="background-color:var(--color-accent)"
+         onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
+         onmouseleave="this.style.backgroundColor='var(--color-accent)'">
+        Reservar con César por WhatsApp
+      </a>
+    }
+  </div>
+
+  <!-- Lo que ofrece el rancho -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-    @for (d of destacados; track d.title) {
-      <div class="rounded-xl border border-line bg-surface-2 p-6 flex flex-col gap-3">
+    @for (d of destacados; track d.title; let i = $index) {
+      <div appReveal [appRevealDelay]="i * 100" class="rounded-xl border border-line bg-surface-2 p-6 flex flex-col gap-3">
         <h3 class="font-semibold text-ink-1">{{ d.title }}</h3>
         <p class="text-xs text-ink-3 leading-relaxed">{{ d.desc }}</p>
       </div>
@@ -72,20 +127,6 @@
         </div>
       }
     </div>
-  </div>
-
-  <div class="rounded-2xl border border-line bg-surface-2 p-8 text-center">
-    <h3 class="font-bold text-ink-1 mb-2">¿Quieres vivir esta experiencia?</h3>
-    <p class="text-xs text-ink-3 mb-5">Escríbenos para conocer más sobre esta colaboración.</p>
-    <a href="https://wa.me/524427151880?text=Hola,%20me%20interesa%20la%20colaboraci%C3%B3n%20con%20Rancho%20La%20Concepci%C3%B3n."
-       target="_blank"
-       rel="noopener"
-       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-colors"
-       style="background-color:var(--color-accent)"
-       onmouseenter="this.style.backgroundColor='var(--color-accent-hover)'"
-       onmouseleave="this.style.backgroundColor='var(--color-accent)'">
-      Más información por WhatsApp
-    </a>
   </div>
 
 </div>
