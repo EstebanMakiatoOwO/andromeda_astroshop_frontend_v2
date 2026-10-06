@@ -4,11 +4,17 @@ import { LandingHeroComponent, BRAND_ACCENTS } from './components/landing-hero.c
 import { LandingSectionHeadComponent } from './components/landing-section-head.component';
 import { ApodFeatureComponent } from './components/apod-feature.component';
 import { ThemeService } from '../../core/services/theme.service';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { TiltDirective } from '../../shared/directives/tilt.directive';
+import { CountUpComponent } from '../../shared/components/count-up.component';
 
 @Component({
   selector: 'app-conocenos',
   standalone: true,
-  imports: [RouterLink, LandingHeroComponent, LandingSectionHeadComponent, ApodFeatureComponent],
+  imports: [
+    RouterLink, LandingHeroComponent, LandingSectionHeadComponent, ApodFeatureComponent,
+    RevealDirective, TiltDirective, CountUpComponent,
+  ],
   templateUrl: './conocenos.component.html',
 })
 export class ConocenosComponent {

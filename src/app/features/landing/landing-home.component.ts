@@ -8,11 +8,16 @@ import { ThemeService } from '../../core/services/theme.service';
 import { HeroCarouselComponent } from '../home/components/hero-carousel.component';
 import { BrandsSectionComponent } from '../home/components/brands-section.component';
 import { EditorialSectionComponent } from '../home/components/editorial-section.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { TiltDirective } from '../../shared/directives/tilt.directive';
 
 @Component({
   selector: 'app-landing-home',
   standalone: true,
-  imports: [RouterLink, HeroCarouselComponent, BrandsSectionComponent, EditorialSectionComponent],
+  imports: [
+    RouterLink, HeroCarouselComponent, BrandsSectionComponent, EditorialSectionComponent,
+    RevealDirective, TiltDirective,
+  ],
   templateUrl: './landing-home.component.html',
 })
 export class LandingHomeComponent implements OnInit {

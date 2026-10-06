@@ -16,6 +16,8 @@ import { CategoryTabsSectionComponent } from './components/category-tabs-section
 import { EditorialSectionComponent } from './components/editorial-section.component';
 import { BrandsSectionComponent } from './components/brands-section.component';
 import { LandingHomeComponent } from '../landing/landing-home.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { TiltDirective } from '../../shared/directives/tilt.directive';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +31,8 @@ import { LandingHomeComponent } from '../landing/landing-home.component';
     CategoryTabsSectionComponent,
     EditorialSectionComponent,
     BrandsSectionComponent,
+    RevealDirective,
+    TiltDirective,
   ],
   templateUrl: './home.component.html',
 })

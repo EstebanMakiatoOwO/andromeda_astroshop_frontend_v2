@@ -7,7 +7,7 @@ import { ThemeService } from '../../../core/services/theme.service';
   standalone: true,
   imports: [RouterLink],
   template: `
-    <footer class="border-t border-line bg-surface-2 mt-16">
+    <footer class="border-t border-line bg-surface-2">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-12 flex flex-col items-center gap-5 md:gap-6">
         <img [src]="theme.isDark()
                       ? '/Astroshop/IMAGOTIPO-AndromedaSHOP-BLANCO.webp'

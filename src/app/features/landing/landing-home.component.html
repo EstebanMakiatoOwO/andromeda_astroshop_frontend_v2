@@ -3,7 +3,7 @@
 
 <!-- Las 3 marcas Andromeda -->
 <section class="max-w-7xl mx-auto px-4 md:px-6 py-16">
-  <div class="text-center mb-10">
+  <div appReveal class="text-center mb-10">
     <p class="text-xs font-mono text-accent uppercase tracking-widest mb-2">Nuestro universo</p>
     <h2 class="text-2xl md:text-3xl font-bold text-ink-1">El ecosistema Andromeda</h2>
     <p class="mt-3 text-sm text-ink-3 max-w-xl mx-auto">
@@ -13,9 +13,9 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-    <a routerLink="/astroshop"
+    <a routerLink="/astroshop" appReveal appTilt
        class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
-              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              hover:border-accent transition-all duration-300 hover:shadow-xl">
       <div class="h-40 bg-gradient-to-br from-violet-900/40 to-surface-3 flex items-center justify-center">
         <svg class="w-14 h-14 text-violet-400/60" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
@@ -36,9 +36,9 @@
       </div>
     </a>
 
-    <a routerLink="/astroturismo"
+    <a routerLink="/astroturismo" appReveal [appRevealDelay]="100" appTilt
        class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
-              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              hover:border-accent transition-all duration-300 hover:shadow-xl">
       <div class="h-40 bg-gradient-to-br from-blue-900/40 to-surface-3 flex items-center justify-center">
         <svg class="w-14 h-14 text-blue-400/60" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,9 +59,9 @@
       </div>
     </a>
 
-    <a routerLink="/astrodome"
+    <a routerLink="/astrodome" appReveal [appRevealDelay]="200" appTilt
        class="group rounded-2xl border border-line bg-surface-2 overflow-hidden
-              hover:border-accent transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              hover:border-accent transition-all duration-300 hover:shadow-xl">
       <div class="h-40 bg-gradient-to-br from-indigo-900/40 to-surface-3 flex items-center justify-center">
         <svg class="w-14 h-14 text-indigo-400/60" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
@@ -87,7 +87,9 @@
 
 <!-- Colaboración: Rancho La Concepción -->
 <section class="max-w-5xl mx-auto px-4 md:px-6 pb-16">
-  <div class="rounded-2xl border border-line bg-surface-2 overflow-hidden grid grid-cols-1 md:grid-cols-[1fr_1.3fr]">
+  <div appReveal appTilt
+       class="rounded-2xl border border-line bg-surface-2 overflow-hidden grid grid-cols-1 md:grid-cols-[1fr_1.3fr]
+              transition-all duration-300 hover:shadow-lg hover:border-accent">
     <div class="h-44 md:h-auto flex items-center justify-center p-6 bg-surface-3">
       <img [src]="theme.isDark() ? '/RanchoLaConcepcion/rancho_logo.webp' : '/RanchoLaConcepcion/rancho_logo_black.webp'"
            alt="Rancho La Concepción"

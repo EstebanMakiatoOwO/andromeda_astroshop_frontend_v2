@@ -149,3 +149,88 @@
   pointer-events: none;
   border: 1px dashed color-mix(in oklch, var(--color-accent) 25%, transparent);
 }
+
+/* ── Scroll-reveal (appReveal directive) ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  /* Hint the compositor only while animating — a page can have 20+ of
+     these (team grid, timeline, stats...), and holding a GPU layer per
+     element after it has settled wastes memory, especially on Android. */
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  /* will-change is cleared by the directive once the transition actually
+     ends (see reveal.directive.ts) — clearing it here, mid-transition,
+     would risk dropping the compositor layer before the animation finishes. */
+}
+
+/* ── Skeleton shimmer (replaces plain animate-pulse where used) ── */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--color-surface-3) 30%,
+    var(--color-surface-4) 50%,
+    var(--color-surface-3) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ── Page transitions (Router withViewTransitions) ── */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: warp-out 0.25s cubic-bezier(0.4, 0, 1, 1) both;
+  }
+  ::view-transition-new(root) {
+    animation: warp-in 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* "Warp speed" page transition: outgoing page rushes toward the viewer and
+   blurs away, incoming page emerges from a blurred, zoomed-in state — evokes
+   a hyperspace jump without any extra DOM (pure transform/filter on the
+   browser's captured view-transition snapshots). */
+@keyframes warp-out {
+  to { opacity: 0; transform: scale(1.09); filter: blur(7px); }
+}
+
+@keyframes warp-in {
+  from { opacity: 0; transform: scale(0.94); filter: blur(9px); }
+}
+
+/* Full-viewport `filter: blur()` forces an expensive offscreen compositing
+   pass — fine on a desktop GPU, a frequent frame-drop source on Android.
+   Touch/narrow devices get the same scale+fade "rush" feel, no blur. */
+@media (prefers-reduced-motion: no-preference) and (max-width: 768px),
+       (prefers-reduced-motion: no-preference) and (pointer: coarse) {
+  @keyframes warp-out {
+    to { opacity: 0; transform: scale(1.04); }
+  }
+  @keyframes warp-in {
+    from { opacity: 0; transform: scale(0.97); }
+  }
+}
+
+/* ── Respect reduced-motion: skip reveal/shimmer animation, show content immediately ── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .skeleton-shimmer {
+    animation: none;
+  }
+}

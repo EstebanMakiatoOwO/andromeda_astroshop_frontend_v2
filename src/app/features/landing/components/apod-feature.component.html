@@ -22,9 +22,8 @@
 
     <!-- Skeleton mientras carga -->
     @if (loading()) {
-      <div class="rounded-xl overflow-hidden animate-pulse"
+      <div class="rounded-xl overflow-hidden skeleton-shimmer"
            [style.border]="dark() ? '1px solid oklch(0.32 0.05 275 / 0.6)' : '1px solid var(--color-line)'"
-           [style.background]="dark() ? 'oklch(0.2 0.04 275)' : 'var(--color-surface-3)'"
            style="min-height:320px">
       </div>
     }
