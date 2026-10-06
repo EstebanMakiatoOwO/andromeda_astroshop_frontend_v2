@@ -87,11 +87,13 @@
   <div appReveal class="rounded-2xl border border-line bg-surface-2 p-8 text-center mb-14">
     <p class="font-mono text-xs mb-2" style="color:var(--color-accent)">// cómo reservar</p>
     <h3 class="font-bold text-ink-1 mb-2">Reserva directamente con Rancho La Concepción</h3>
-    <p class="text-sm text-ink-2 max-w-xl mx-auto" [class.mb-5]="ranchoReservasWhatsapp">
-      Contacta a César Guerrero, director de Rancho La Concepción, y menciona el código
+    <p class="text-sm text-ink-2 max-w-xl mx-auto mb-4">
+      Contacta a César Guerrero, director de Rancho La Concepción, <strong class="text-ink-1">dile que vas de parte de
+      Andrómeda AstroShop</strong> y menciona el código
       <span class="font-mono font-semibold text-ink-1">{{ codigo }}</span> para obtener los beneficios de la Experiencia Andrómeda.
     </p>
     @if (ranchoReservasWhatsapp) {
+      <p class="font-mono text-base font-semibold text-ink-1 mb-5">{{ ranchoTelefonoVisible }}</p>
       <a [href]="reservaUrl"
          target="_blank"
          rel="noopener"

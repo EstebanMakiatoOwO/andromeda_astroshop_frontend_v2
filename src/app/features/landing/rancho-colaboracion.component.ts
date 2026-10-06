@@ -16,9 +16,10 @@ export class RanchoColaboracionComponent {
   protected readonly codigo = 'ANDROMEDA20';
   protected readonly copiado = signal(false);
 
-  /** WhatsApp de César Guerrero (reservas del rancho), formato wa.me sin "+": p. ej. "5216461234567".
-   *  Mientras sea null no se muestra el botón de reservar. */
-  protected readonly ranchoReservasWhatsapp: string | null = null;
+  /** WhatsApp de César Guerrero (reservas del rancho), formato wa.me sin "+".
+   *  Si se pone en null se oculta el botón de reservar. */
+  protected readonly ranchoReservasWhatsapp: string | null = '5216461882271';
+  protected readonly ranchoTelefonoVisible = '+52 1 646 188 2271';
 
   protected readonly expedicionesUrl =
     'https://wa.me/524427151880?text=' +
@@ -26,7 +27,7 @@ export class RanchoColaboracionComponent {
 
   protected get reservaUrl(): string {
     return `https://wa.me/${this.ranchoReservasWhatsapp}?text=` +
-      encodeURIComponent(`Hola César, quiero reservar en Rancho La Concepción con el código ${this.codigo} (Experiencia Andrómeda).`);
+      encodeURIComponent(`Hola César, vengo de parte de Andrómeda AstroShop. Quiero reservar en Rancho La Concepción con el código ${this.codigo} (Experiencia Andrómeda).`);
   }
 
   protected readonly beneficios = [
