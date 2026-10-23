@@ -14,14 +14,12 @@ import { ProductCarouselComponent } from './components/product-carousel.componen
 import { CategoryTabsSectionComponent } from './components/category-tabs-section.component';
 import { EditorialSectionComponent } from './components/editorial-section.component';
 import { BrandsSectionComponent } from './components/brands-section.component';
-import { LandingHomeComponent } from '../landing/landing-home.component';
 import { RanchoTeaserComponent } from '../landing/components/rancho-teaser.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    LandingHomeComponent,
     HeroCarouselComponent,
     LoyaltyBannerComponent,
     ProductCarouselComponent,

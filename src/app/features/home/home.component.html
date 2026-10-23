@@ -38,6 +38,8 @@
 
 } @else {
 
-  <app-landing-home />
+  <!-- Mientras carga /v1/config (o antes de redirigir a /conocenos) no se pinta nada:
+       antes se mostraba landing-home y su carrusel parpadeaba en móvil. -->
+  <div class="min-h-screen"></div>
 
 }

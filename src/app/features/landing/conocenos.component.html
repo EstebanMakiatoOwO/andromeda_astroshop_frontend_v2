@@ -5,16 +5,40 @@
   [dark]="false"
 />
 
+<!-- Las 3 verticales -->
+<section class="bg-surface-2 border-t border-b border-line">
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+    <app-landing-section-head kicker="// qué hacemos" title="Tres formas de acercarte al cielo" />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      @for (v of verticales; track v.name; let i = $index) {
+        <a [routerLink]="v.route" appReveal [appRevealDelay]="i * 100" appTilt
+           class="rounded-xl border border-line bg-surface-1 overflow-hidden flex flex-col group
+                  transition-all duration-300 hover:shadow-xl"
+           [style.border-top]="'3px solid ' + v.accent">
+          <div class="aspect-video overflow-hidden">
+            <img [src]="v.img" [alt]="v.name"
+                 width="480" height="270" loading="lazy"
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+          </div>
+          <div class="flex flex-col gap-2 p-5 flex-1">
+            <span class="font-mono text-xs" [style.color]="v.accent">// {{ v.tag }}</span>
+            <h3 class="text-base font-bold text-ink-1">{{ v.name }}</h3>
+            <p class="text-xs text-ink-2 leading-relaxed flex-1">{{ v.body }}</p>
+            <span class="font-mono text-xs mt-1" [style.color]="v.accent">
+              {{ v.cta }} →
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
 @defer (on idle) {
   <app-apod-feature variant="band" />
 } @placeholder {
   <div style="min-height:520px" class="border-b border-line bg-surface-2"></div>
 }
-
-<!-- Colaboración: Rancho La Concepción -->
-<section class="max-w-5xl mx-auto px-4 md:px-8 pt-10">
-  <app-rancho-teaser />
-</section>
 
 <!-- Historia · timeline -->
 <section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
@@ -69,35 +93,6 @@
   </div>
 </section>
 
-<!-- Las 3 verticales -->
-<section class="bg-surface-2 border-t border-b border-line">
-  <div class="max-w-5xl mx-auto px-4 md:px-8 py-16">
-    <app-landing-section-head kicker="// qué hacemos" title="Tres formas de acercarte al cielo" />
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      @for (v of verticales; track v.name; let i = $index) {
-        <a [routerLink]="v.route" appReveal [appRevealDelay]="i * 100" appTilt
-           class="rounded-xl border border-line bg-surface-1 overflow-hidden flex flex-col group
-                  transition-all duration-300 hover:shadow-xl"
-           [style.border-top]="'3px solid ' + v.accent">
-          <div class="aspect-video overflow-hidden">
-            <img [src]="v.img" [alt]="v.name"
-                 width="480" height="270" loading="lazy"
-                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-          </div>
-          <div class="flex flex-col gap-2 p-5 flex-1">
-            <span class="font-mono text-xs" [style.color]="v.accent">// {{ v.tag }}</span>
-            <h3 class="text-base font-bold text-ink-1">{{ v.name }}</h3>
-            <p class="text-xs text-ink-2 leading-relaxed flex-1">{{ v.body }}</p>
-            <span class="font-mono text-xs mt-1" [style.color]="v.accent">
-              {{ v.cta }} →
-            </span>
-          </div>
-        </a>
-      }
-    </div>
-  </div>
-</section>
-
 <!-- Equipo -->
 <section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
   <app-landing-section-head
@@ -145,4 +140,9 @@
       }
     </div>
   </div>
+</section>
+
+<!-- Colaboración: Rancho La Concepción -->
+<section class="max-w-5xl mx-auto px-4 md:px-8 py-16">
+  <app-rancho-teaser />
 </section>
