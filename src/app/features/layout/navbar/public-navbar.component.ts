@@ -1,7 +1,7 @@
 import { Component, DestroyRef, HostListener, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Subject, debounceTime, distinctUntilChanged, filter, of, switchMap } from 'rxjs';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Subject, debounceTime, distinctUntilChanged, filter, map, of, switchMap } from 'rxjs';
 import { PublicCategory } from '../../../core/models/public-category.model';
 import { PublicProduct } from '../../../core/models/public-product.model';
 import { LoyaltyAccount } from '../../../core/models/loyalty.model';
@@ -31,6 +31,25 @@ export class PublicNavbarComponent {
   protected readonly storeConfig   = inject(StoreConfigService);
 
   categories = input<PublicCategory[]>([]);
+
+  private readonly router = inject(Router);
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(e => e.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  /**
+   * The site is two "pages": the store (home "/", catalog, products, cart) and Andrómeda
+   * (Conócenos, AstroTurismo…). Each one gets its own navbar, with a link to jump to the other.
+   */
+  protected readonly inStore = computed(() => {
+    if (!this.storeConfig.ecommerceEnabled()) return false;
+    const path = this.currentUrl().split(/[?#]/)[0];
+    return path === '/' || ['/catalogo', '/productos', '/carrito'].some(p => path === p || path.startsWith(p + '/'));
+  });
 
   protected readonly landingLinks = [
     { path: '/conocenos',    label: 'Conócenos' },

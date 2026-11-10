@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:real": "ng serve --configuration real",
     "build": "ng build",
     "postbuild": "node scripts/preload-initial-chunks.mjs",
     "watch": "ng build --watch --configuration development",

@@ -1,11 +1,20 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap, switchMap, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, tap, switchMap, of, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Cart, CartItem } from '../models/cart.model';
 
 const GUEST_TOKEN_KEY = 'astroshop_guest_cart_token';
 const AUTH_TOKEN_KEY  = 'astroshop_public_token';
+
+/**
+ * 404 on a guest-cart call: the cart behind the stored token no longer exists (cleaned up by
+ * Magento, or created against another backend — `npm start` and `start:real` share localStorage
+ * on localhost:4200).
+ */
+function isMissingCart(err: unknown): boolean {
+  return err instanceof HttpErrorResponse && err.status === 404;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapItem(i: any): CartItem {
@@ -45,7 +54,8 @@ export class CartService {
   private readonly _cart = signal<Cart>(EMPTY);
 
   readonly items       = computed(() => this._cart().items);
-  readonly count       = computed(() => this._cart().itemCount);
+  // Units, not lines: two of the same telescope count as 2 (the API's itemCount counts lines)
+  readonly count       = computed(() => this._cart().items.reduce((n, i) => n + i.qty, 0));
   readonly subtotal    = computed(() => this._cart().subtotalMxn);
   readonly subtotalUsd = computed(() => this._cart().subtotalUsd);
   readonly isEmpty     = computed(() => this._cart().itemCount === 0);
@@ -72,7 +82,12 @@ export class CartService {
     const token = this.guestToken;
     if (token) {
       return this.http.get<Cart>(`${this.base}/guest-cart/${token}`).pipe(
-        tap(r => this._cart.set(mapCart(r)))
+        tap(r => this._cart.set(mapCart(r))),
+        catchError(err => {
+          if (!isMissingCart(err)) return throwError(() => err);
+          this.clearLocal();
+          return of(EMPTY);
+        }),
       );
     }
     return of(EMPTY);
@@ -88,8 +103,19 @@ export class CartService {
     }
     const token = this.guestToken;
     if (token) {
-      return this.guestAdd(token, productId, qty);
+      // Stale token: start a fresh guest cart and retry once
+      return this.guestAdd(token, productId, qty).pipe(
+        catchError(err => {
+          if (!isMissingCart(err)) return throwError(() => err);
+          this.clearLocal();
+          return this.newGuestCartAndAdd(productId, qty);
+        }),
+      );
     }
+    return this.newGuestCartAndAdd(productId, qty);
+  }
+
+  private newGuestCartAndAdd(productId: number, qty: number): Observable<Cart> {
     return this.http.post<Cart>(`${this.base}/guest-cart`, {}).pipe(
       tap(r => { if (r.cartToken) localStorage.setItem(GUEST_TOKEN_KEY, r.cartToken); }),
       switchMap(r => this.guestAdd(r.cartToken!, productId, qty))
@@ -114,7 +140,9 @@ export class CartService {
       ? this.http.put<Cart>(`${this.base}/cart/items/${id}`, { qty: newQty })
       : this.http.put<Cart>(`${this.base}/guest-cart/${this.guestToken}/items/${id}`, { qty: newQty });
 
-    save$.pipe(tap(r => this._cart.set(mapCart(r)))).subscribe();
+    save$.pipe(tap(r => this._cart.set(mapCart(r)))).subscribe({
+      error: err => { if (isMissingCart(err)) this.load().subscribe(); },
+    });
   }
 
   // ─── Remove ───────────────────────────────────────────────────────────────
@@ -124,7 +152,9 @@ export class CartService {
       ? this.http.delete<Cart>(`${this.base}/cart/items/${id}`)
       : this.http.delete<Cart>(`${this.base}/guest-cart/${this.guestToken}/items/${id}`);
 
-    del$.pipe(tap(r => this._cart.set(mapCart(r)))).subscribe();
+    del$.pipe(tap(r => this._cart.set(mapCart(r)))).subscribe({
+      error: err => { if (isMissingCart(err)) this.load().subscribe(); },
+    });
   }
 
   // ─── Clear ────────────────────────────────────────────────────────────────

@@ -23,13 +23,21 @@
       <!-- Qty -->
       <div class="flex items-center border border-line rounded-lg overflow-hidden">
         <button (click)="qtyChange.emit(-1)"
+                [disabled]="item().qty <= 1"
                 class="w-8 h-8 flex items-center justify-center text-ink-2
-                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base">−</button>
+                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base
+                       disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent">−</button>
         <span class="w-8 text-center text-sm font-medium text-ink-1">{{ item().qty }}</span>
         <button (click)="qtyChange.emit(1)"
+                [disabled]="item().qty >= item().stock"
+                [attr.title]="item().qty >= item().stock ? 'No hay más unidades disponibles' : null"
                 class="w-8 h-8 flex items-center justify-center text-ink-2
-                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base">+</button>
+                       hover:text-ink-1 hover:bg-surface-3 transition-colors text-base
+                       disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent">+</button>
       </div>
+      @if (item().qty >= item().stock) {
+        <span class="text-[11px] text-warn font-mono">máx. {{ item().stock }} disponible{{ item().stock === 1 ? '' : 's' }}</span>
+      }
 
       <button (click)="removed.emit()"
               class="text-[11px] text-ink-3 hover:text-error transition-colors font-mono">

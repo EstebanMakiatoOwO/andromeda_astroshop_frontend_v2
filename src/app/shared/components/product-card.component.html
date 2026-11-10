@@ -1,4 +1,4 @@
-<a [routerLink]="['/productos', product().id]"
+<a [routerLink]="['/productos', product().slug ?? product().id]"
    class="flex flex-col gap-2 cursor-pointer transition-transform duration-200 hover:-translate-y-1"
    (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 

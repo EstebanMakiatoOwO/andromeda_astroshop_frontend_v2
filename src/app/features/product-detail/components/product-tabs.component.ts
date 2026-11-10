@@ -1,11 +1,12 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { PublicProduct } from '../../../core/models/public-product.model';
 import { ProductReviewsComponent } from './product-reviews.component';
+import { RichDescriptionDirective } from '../../../shared/directives/rich-description.directive';
 
 @Component({
   selector: 'app-product-tabs',
   standalone: true,
-  imports: [ProductReviewsComponent],
+  imports: [ProductReviewsComponent, RichDescriptionDirective],
   templateUrl: './product-tabs.component.html',
 })
 export class ProductTabsComponent {
@@ -18,6 +19,13 @@ export class ProductTabsComponent {
     { id: 'shipping', label: 'Envíos y devoluciones' },
   ];
   protected readonly activeTab = signal('desc');
+
+  // Descripción en HTML (secciones <details> o plantilla .asd) ya filtrada por el backend;
+  // RichDescriptionDirective la pinta y le da el comportamiento (pestañas, modales, zoom).
+  protected readonly descHtml = computed(() => {
+    const text = (this.product().longDescription ?? '').trim();
+    return /<[a-z][\s\S]*>/i.test(text) ? text : null;
+  });
 
   // Split long description on bullet char → [intro, bullet1, bullet2, ...]
   protected readonly descParts = computed(() => {

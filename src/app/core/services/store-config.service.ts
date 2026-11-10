@@ -16,8 +16,11 @@ export class StoreConfigService {
   /** Dispara (una sola vez) y cachea la carga del config. Nunca falla. */
   load(): Observable<boolean> {
     if (!this.loaded$) {
-      this.loaded$ = this.http
-        .get<boolean[]>(`${environment.apiBase}/api/v1/config`)
+      // environment.real.ts fuerza el catálogo en local sin tocar el config de producción
+      const config$ = environment.forceEcommerce
+        ? of([true])
+        : this.http.get<boolean[]>(`${environment.apiBase}/api/v1/config`);
+      this.loaded$ = config$
         .pipe(
           map(cfg => cfg[0] ?? true),
           catchError(() => of(false)),

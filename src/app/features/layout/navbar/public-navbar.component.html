@@ -5,7 +5,7 @@
     <div class="max-w-7xl mx-auto px-4 lg:px-6 h-18 flex items-center gap-3 lg:gap-4">
 
       <!-- Logo -->
-      <a href="/" class="shrink-0">
+      <a [routerLink]="inStore() ? '/' : '/conocenos'" class="shrink-0">
         <img [src]="theme.isDark()
                       ? '/Astroshop/IMAGOTIPO-AndromedaSHOP-BLANCO.webp'
                       : '/Astroshop/IMAGOTIPO-AndromedaSHOP-COLOR.webp'"
@@ -15,10 +15,14 @@
       </a>
 
       <!-- Nav links — solo desktop -->
-      @if (storeConfig.ecommerceEnabled()) {
+      @if (inStore()) {
         <nav class="hidden lg:flex items-center gap-0.5 ml-2"
              (mouseenter)="openMega()"
              (mouseleave)="scheduleMegaClose()">
+          <a routerLink="/conocenos"
+             class="px-3 py-1.5 mr-1 rounded text-xs text-ink-3 hover:text-ink-1 hover:bg-surface-3 transition-colors border-r border-line">
+            ← Andrómeda
+          </a>
           <a routerLink="/catalogo"
              routerLinkActive #rla="routerLinkActive"
              class="px-3 py-1.5 rounded text-xs transition-colors"
@@ -57,8 +61,20 @@
 
       <div class="flex-1"></div>
 
-      <!-- Search — solo desktop, solo cuando ecommerce está activo -->
-      @if (storeConfig.ecommerceEnabled()) {
+      <!-- En las páginas de Andrómeda: botón para ir a la tienda (si está activa) -->
+      @if (!inStore() && storeConfig.ecommerceEnabled()) {
+        <a routerLink="/"
+           class="hidden lg:inline-flex items-center gap-1.5 h-7.5 px-3 rounded text-xs font-medium
+                  bg-accent text-white hover:bg-accent-hover transition-colors">
+          Tienda →
+          @if (cartService.count() > 0) {
+            <span class="font-mono">🛒 {{ cartService.count() }}</span>
+          }
+        </a>
+      }
+
+      <!-- Search — solo desktop, solo en la tienda -->
+      @if (inStore()) {
         <div class="hidden lg:block relative" (click)="$event.stopPropagation()">
           <input
             type="text"
@@ -178,7 +194,7 @@
             </div>
           }
         </div>
-      } @else if (storeConfig.ecommerceEnabled()) {
+      } @else if (inStore()) {
         <a routerLink="/login"
            class="hidden lg:inline-flex items-center h-7.5 px-3 rounded border border-line text-xs text-ink-2
                   hover:text-ink-1 hover:border-accent transition-colors">
@@ -211,7 +227,7 @@
       </button>
 
       <!-- Toggle de divisa — solo cuando ecommerce está activo -->
-      @if (storeConfig.ecommerceEnabled()) {
+      @if (inStore()) {
         <button (click)="currency.toggle()"
                 class="hidden lg:flex items-center h-7.5 rounded border border-line overflow-hidden
                        text-[11px] font-mono transition-colors hover:border-accent">
@@ -227,7 +243,7 @@
       }
 
       <!-- Cart — solo cuando ecommerce está activo -->
-      @if (storeConfig.ecommerceEnabled()) {
+      @if (inStore()) {
         <a routerLink="/carrito"
            class="h-7.5 px-3 rounded border border-line text-xs text-ink-2
                   hover:text-ink-1 hover:border-accent transition-colors flex items-center gap-1.5">
@@ -266,7 +282,7 @@
       <div class="max-w-2xl mx-auto px-4 py-4 flex flex-col gap-4">
 
         <!-- Search — solo cuando ecommerce está activo -->
-        @if (storeConfig.ecommerceEnabled()) {
+        @if (inStore()) {
           <div class="relative">
             <input
               type="text"
@@ -312,8 +328,12 @@
         }
 
         <!-- Nav links — 2 columnas en tablet -->
-        @if (storeConfig.ecommerceEnabled()) {
+        @if (inStore()) {
           <nav class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+            <a routerLink="/conocenos"
+               class="px-3 py-2.5 rounded-lg text-sm text-ink-3 hover:text-ink-1 hover:bg-surface-3 transition-colors sm:col-span-2">
+              ← Volver a Andrómeda
+            </a>
             <a routerLink="/catalogo"
                routerLinkActive="text-accent bg-accent-soft font-medium"
                class="px-3 py-2.5 rounded-lg text-sm text-ink-2 hover:text-ink-1 hover:bg-surface-3 transition-colors">
@@ -335,6 +355,12 @@
                 {{ link.label }}
               </a>
             }
+            @if (storeConfig.ecommerceEnabled()) {
+              <a routerLink="/"
+                 class="px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-accent hover:bg-accent-hover transition-colors sm:col-span-2 text-center">
+                Ir a la tienda →
+              </a>
+            }
           </nav>
         }
 
@@ -344,7 +370,7 @@
         <div class="flex flex-wrap gap-2 items-center">
 
           <!-- Divisa — solo cuando ecommerce está activo -->
-          @if (storeConfig.ecommerceEnabled()) {
+          @if (inStore()) {
             <button (click)="currency.toggle()"
                     class="flex items-center h-8 rounded border border-line overflow-hidden
                            text-[11px] font-mono transition-colors hover:border-accent">
@@ -397,7 +423,7 @@
                            hover:border-error transition-colors">
               Salir
             </button>
-          } @else if (storeConfig.ecommerceEnabled()) {
+          } @else if (inStore()) {
             <a routerLink="/login"
                class="py-1.5 px-4 rounded-lg border border-line text-sm text-ink-2
                       hover:text-ink-1 hover:border-accent transition-colors">

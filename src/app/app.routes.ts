@@ -39,7 +39,7 @@ export const routes: Routes = [
         component: HomeComponent,
       },
       {
-        path: 'productos/:id',
+        path: 'productos/:slug',
         canActivate: [ecommerceGuard],
         loadComponent: () => import('./features/product-detail/product-detail.component').then(m => m.ProductDetailComponent),
       },

@@ -107,15 +107,17 @@
             </small>
           </div>
 
-          <!-- Loyalty -->
-          <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg border"
-               style="background:var(--color-accent-soft);
-                      border-color:color-mix(in oklch,var(--color-accent) 25%,transparent)">
-            <span class="text-sm" style="color:var(--color-accent)">★</span>
-            <small class="text-xs font-medium" style="color:var(--color-accent)">
-              Sumas {{ loyaltyPts().toLocaleString('es-MX') }} puntos con esta compra
-            </small>
-          </div>
+          <!-- Loyalty — solo usuarios autenticados -->
+          @if (auth.isAuthenticated()) {
+            <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg border"
+                 style="background:var(--color-accent-soft);
+                        border-color:color-mix(in oklch,var(--color-accent) 25%,transparent)">
+              <span class="text-sm" style="color:var(--color-accent)">★</span>
+              <small class="text-xs font-medium" style="color:var(--color-accent)">
+                Sumas {{ loyaltyPts().toLocaleString('es-MX') }} puntos con esta compra
+              </small>
+            </div>
+          }
 
           <!-- Cantidad + CTAs -->
           <div class="flex gap-2">
@@ -126,8 +128,10 @@
                              hover:text-ink-1 hover:bg-surface-3 transition-colors">−</button>
               <span class="w-9 text-center text-sm font-medium text-ink-1">{{ qty() }}</span>
               <button (click)="incQty()"
+                      [disabled]="qty() >= maxAddable()"
                       class="w-9 h-10 flex items-center justify-center text-ink-2
-                             hover:text-ink-1 hover:bg-surface-3 transition-colors">+</button>
+                             hover:text-ink-1 hover:bg-surface-3 transition-colors
+                             disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent">+</button>
             </div>
             <!-- Comprar ahora -->
             <button (click)="onBuyNow()"
@@ -141,9 +145,17 @@
             </button>
           </div>
 
+          <!-- Subtotal según la cantidad elegida -->
+          @if (qty() > 1) {
+            <div class="flex items-baseline justify-between px-1 text-sm">
+              <span class="text-ink-3">Subtotal ({{ qty() }} piezas)</span>
+              <span class="font-semibold text-ink-1">{{ qtySubtotal() }}</span>
+            </div>
+          }
+
           <!-- Agregar al carrito -->
           <button (click)="onAddToCart()"
-                  [disabled]="adding()"
+                  [disabled]="adding() || maxAddable() === 0"
                   class="h-10 rounded-lg border text-sm transition-colors"
                   [class.border-accent]="added()"
                   [class.bg-accent-soft]="added()"
@@ -153,8 +165,16 @@
                   [class.hover:border-accent]="!added()"
                   [class.hover:text-ink-1]="!added()"
                   [class.disabled:opacity-50]="true">
-            {{ added() ? '✓ Agregado al carrito' : adding() ? 'Agregando…' : 'Agregar al carrito' }}
+            {{ added() ? '✓ Agregado al carrito' : adding() ? 'Agregando…' : maxAddable() === 0 ? 'Ya tienes todas las unidades en tu carrito' : 'Agregar al carrito' }}
           </button>
+          @if (cartError()) {
+            <p class="text-xs text-error">{{ cartError() }}</p>
+          } @else if (inCart() > 0) {
+            <p class="text-xs text-ink-3">
+              Tienes {{ inCart() }} en tu carrito ·
+              {{ maxAddable() === 0 ? 'no quedan más disponibles' : 'puedes agregar hasta ' + maxAddable() + ' más' }}
+            </p>
+          }
 
         </div>
 
@@ -166,7 +186,7 @@
             </p>
             <div class="flex flex-col gap-2">
               @for (p of youMayLike(); track p.id) {
-                <a [routerLink]="['/productos', p.id]"
+                <a [routerLink]="['/productos', p.slug ?? p.id]"
                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-3 transition-colors group">
                   <div class="w-12 h-12 rounded-lg bg-surface-3 shrink-0 overflow-hidden border border-line">
                     @if (p.image) {
@@ -220,7 +240,7 @@
         <h2 class="text-base font-semibold text-ink-1 mb-6">También te puede interesar</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           @for (p of relatedProducts(); track p.id) {
-            <a [routerLink]="['/productos', p.id]"
+            <a [routerLink]="['/productos', p.slug ?? p.id]"
                class="flex flex-col rounded-xl border border-line bg-surface-2
                       hover:border-accent transition-colors overflow-hidden cursor-pointer">
               <div class="aspect-square bg-surface-3 overflow-hidden">

@@ -105,6 +105,11 @@ export class PublicProductsService {
     return this.http.get<ApiResponse<any>>(`${this.base}/${id}`).pipe(map(r => mapProduct(r.data)));
   }
 
+  getProductBySlug(slug: string): Observable<PublicProduct> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/slug/${encodeURIComponent(slug)}`)
+      .pipe(map(r => mapProduct(r.data)));
+  }
+
   search(name: string): Observable<PublicProduct[]> {
     const params = new HttpParams().set('name', name);
     return this.http.get<ApiResponse<any[]>>(`${this.base}/search`, { params })

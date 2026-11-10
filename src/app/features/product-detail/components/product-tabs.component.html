@@ -15,7 +15,9 @@
 
 <!-- Descripción -->
 @if (activeTab() === 'desc') {
-  @if (descParts().length === 0) {
+  @if (descHtml(); as html) {
+    <div class="product-description" [appRichDescription]="html"></div>
+  } @else if (descParts().length === 0) {
     <p class="text-sm text-ink-3 italic">Sin descripción disponible.</p>
   } @else {
     <div class="flex flex-col gap-6 max-w-3xl">

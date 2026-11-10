@@ -1,0 +1,18 @@
+{
+  "/api": {
+    "target": "https://api.andromedaastroshop.com",
+    "pathRewrite": { "^/api/v1": "/rest/V1/astroshop" },
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/media": {
+    "target": "https://api.andromedaastroshop.com",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/images": {
+    "target": "https://api.andromedaastroshop.com",
+    "secure": true,
+    "changeOrigin": true
+  }
+}

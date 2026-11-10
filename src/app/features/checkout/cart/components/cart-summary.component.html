@@ -89,8 +89,8 @@
   </div>
   <p class="text-[10px] text-ink-3 -mt-2">Envío calculado en el siguiente paso</p>
 
-  <!-- Puntos que ganará con esta compra -->
-  @if (loyaltyPts() > 0) {
+  <!-- Puntos que ganará con esta compra — solo usuarios autenticados -->
+  @if (auth.isAuthenticated() && loyaltyPts() > 0) {
     <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
          style="background:var(--color-accent-soft)">
       <span style="color:var(--color-accent)">★</span>
