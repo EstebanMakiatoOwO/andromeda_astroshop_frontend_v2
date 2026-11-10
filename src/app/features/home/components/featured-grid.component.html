@@ -1,0 +1,41 @@
+<section class="max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-14">
+  <div class="flex flex-wrap items-end justify-between gap-2 mb-6">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl md:text-2xl font-bold text-ink-1">{{ title() }}</h2>
+      @if (subtitle()) {
+        <small class="text-xs text-ink-3">{{ subtitle() }}</small>
+      }
+    </div>
+    <a routerLink="/catalogo" class="font-mono text-xs hover:underline" style="color:var(--color-accent)">
+      catálogo completo →
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+        <div class="flex flex-col gap-2">
+          <div class="aspect-square rounded-xl bg-surface-3 skeleton-shimmer"></div>
+          <div class="h-3 w-2/3 rounded bg-surface-3 skeleton-shimmer"></div>
+          <div class="h-3 w-1/3 rounded bg-surface-3 skeleton-shimmer"></div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
+      @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+
+    @if (total() > products().length) {
+      <div class="flex justify-center mt-10">
+        <a routerLink="/catalogo"
+           class="inline-flex items-center gap-2 h-11 px-6 rounded-lg text-sm font-medium text-white
+                  bg-accent hover:bg-accent-hover transition-colors">
+          Ver los {{ total() }} productos →
+        </a>
+      </div>
+    }
+  }
+</section>

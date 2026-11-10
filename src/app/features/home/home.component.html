@@ -2,19 +2,34 @@
 
   <app-hero-carousel />
 
-  <app-category-tabs-section />
+  <app-store-highlights />
+
+  @if (categoryTiles().length > 1) {
+    <app-category-tiles [tiles]="categoryTiles()" />
+  }
+
+  <app-featured-grid
+    title="Productos destacados"
+    subtitle="Equipo listo para tu próxima noche de observación"
+    [products]="featuredProducts()"
+    [total]="catalog()?.total ?? 0"
+    [loading]="isLoadingCatalog()"
+  />
 
   @if (!auth.isAuthenticated()) {
     <app-loyalty-banner />
   }
 
-  <app-product-carousel
-    title="Lo más buscado"
-    subtitle="Los favoritos de nuestra comunidad"
-    [products]="popularProducts()"
-  />
+  <!-- Carruseles solo cuando tienen suficientes productos para no verse vacíos -->
+  @if (popularProducts().length >= 4) {
+    <app-product-carousel
+      title="Lo más buscado"
+      subtitle="Los favoritos de nuestra comunidad"
+      [products]="popularProducts()"
+    />
+  }
 
-  @if (isLoadingNew() || newProducts().length > 0) {
+  @if (newProducts().length >= 4) {
     <div class="bg-surface-2 border-t border-b border-line">
       <app-product-carousel
         title="Recién llegados"

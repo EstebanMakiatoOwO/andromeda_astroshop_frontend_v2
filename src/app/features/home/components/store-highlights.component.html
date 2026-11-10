@@ -1,0 +1,32 @@
+<section class="border-b border-line bg-surface-2">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    @for (item of items; track item.title) {
+      <div class="flex items-center gap-3">
+        <span class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-accent-soft text-accent">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            @switch (item.icon) {
+              @case ('truck') {
+                <path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/>
+                <circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>
+              }
+              @case ('lock') {
+                <rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+              }
+              @case ('shield') {
+                <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>
+              }
+              @case ('star') {
+                <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>
+              }
+            }
+          </svg>
+        </span>
+        <div class="flex flex-col min-w-0">
+          <span class="text-sm font-semibold text-ink-1 leading-tight">{{ item.title }}</span>
+          <span class="text-xs text-ink-3 leading-snug">{{ item.text }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>
