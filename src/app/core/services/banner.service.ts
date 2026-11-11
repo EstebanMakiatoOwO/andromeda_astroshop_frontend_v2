@@ -7,6 +7,8 @@ export interface Banner {
   id: number;
   title: string;
   imageUrl: string;
+  /** Vertical image for phones; null → use imageUrl */
+  mobileImageUrl: string | null;
   linkUrl: string | null;
   sortOrder: number;
   isActive: number;
@@ -16,6 +18,7 @@ export interface Banner {
 export interface BannerRequest {
   title: string;
   imageUrl: string;
+  mobileImageUrl?: string | null;
   linkUrl?: string | null;
   sortOrder?: number;
   isActive?: number;

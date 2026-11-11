@@ -49,7 +49,7 @@ export class HeroCarouselComponent implements OnInit, OnDestroy {
           id:      b.id,
           title:   b.title,
           desktop: b.imageUrl,
-          mobile:  b.imageUrl,
+          mobile:  b.mobileImageUrl || b.imageUrl,
           linkUrl: b.linkUrl,
         }));
         this.slides.set(ss);
