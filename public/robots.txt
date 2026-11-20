@@ -1,0 +1,11 @@
+# Andrómeda AstroShop
+# Cloudflare antepone su política de bots de IA (managed robots.txt);
+# estas reglas se suman a la de "User-agent: *".
+
+User-agent: *
+Allow: /
+Disallow: /carrito
+Disallow: /checkout/
+Disallow: /login
+Disallow: /check-email
+Disallow: /verify-email
