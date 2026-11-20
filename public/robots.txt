@@ -9,3 +9,5 @@ Disallow: /checkout/
 Disallow: /login
 Disallow: /check-email
 Disallow: /verify-email
+
+Sitemap: https://andromedaastroshop.com/sitemap.xml
